@@ -4,7 +4,10 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { submitAssessment } from "@/lib/actions/assessment-submission";
-import { isLocalOnlyAssessmentCaseStudy } from "@/lib/assessments/constants";
+import {
+  isLocalOnlyAssessmentCaseStudy,
+  STANDALONE_PRACTICE_CASE_STUDY_ID,
+} from "@/lib/assessments/constants";
 import { prepareFlowsheetTemplate } from "@/lib/assessments/flowsheet";
 import { buildFlowsheetExportRows } from "@/lib/assessments/flowsheet-export";
 import { exportFlowsheetAssessmentPdf } from "@/lib/assessments/flowsheet-pdf";
@@ -257,12 +260,11 @@ export function AssessmentRunner({
               {template.description}
             </p>
           )}
-          <div className="mt-2 flex gap-2">
-            <Badge variant="secondary">{document.status}</Badge>
-            {meta?.dirty && document.status !== "submitted" && (
-              <Badge variant="outline">Autosaved locally</Badge>
-            )}
-          </div>
+          {caseStudyId !== STANDALONE_PRACTICE_CASE_STUDY_ID && (
+            <div className="mt-2 flex gap-2">
+              <Badge variant="secondary">{document.status}</Badge>
+            </div>
+          )}
           {meta?.syncError && (
             <p className="text-destructive mt-1 text-sm">{meta.syncError}</p>
           )}
