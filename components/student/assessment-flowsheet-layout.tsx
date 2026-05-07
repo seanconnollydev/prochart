@@ -28,11 +28,6 @@ import { AssessmentFlowsheetInfoPanel } from "@/components/student/assessment-fl
 import { AssessmentFlowsheetMultiselect } from "@/components/student/assessment-flowsheet-multiselect";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -40,7 +35,7 @@ import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowRight01Icon, SearchIcon } from "@hugeicons/core-free-icons";
+import { SearchIcon } from "@hugeicons/core-free-icons";
 
 type Props = {
   template: AssessmentTemplate;
@@ -350,60 +345,16 @@ export function AssessmentFlowsheetLayout({
             className="flex flex-col gap-0.5 p-2"
             aria-label="Assessment categories"
           >
-            {filteredRoots.map((r) => {
-              const childGroups = groups.filter(
-                (g) => g.parentGroupId === r.id,
-              );
-              if (childGroups.length === 0) {
-                return (
-                  <button
-                    key={r.id}
-                    type="button"
-                    onClick={() => handleRailClick(r.id)}
-                    className="hover:bg-muted text-foreground rounded-md px-2 py-1.5 text-left text-xs leading-tight transition-colors"
-                  >
-                    {r.label}
-                  </button>
-                );
-              }
-              return (
-                <Collapsible key={r.id} defaultOpen>
-                  <div className="flex items-center gap-0.5">
-                    <CollapsibleTrigger
-                      className="hover:bg-muted text-muted-foreground hover:text-foreground flex size-7 shrink-0 items-center justify-center rounded-md"
-                      aria-label={`Expand ${r.label}`}
-                    >
-                      <HugeiconsIcon
-                        icon={ArrowRight01Icon}
-                        className="size-3.5"
-                        strokeWidth={2}
-                      />
-                    </CollapsibleTrigger>
-                    <button
-                      type="button"
-                      onClick={() => handleRailClick(r.id)}
-                      className="hover:bg-muted text-foreground min-w-0 flex-1 rounded-md px-1.5 py-1.5 text-left text-xs leading-tight transition-colors"
-                    >
-                      {r.label}
-                    </button>
-                  </div>
-                  <CollapsibleContent>
-                    <div className="border-border/60 ml-3 flex flex-col gap-0.5 border-l pl-2">
-                      {childGroups.map((c) => (
-                        <button
-                          key={c.id}
-                          type="button"
-                          onClick={() => scrollToGroup(c.id)}
-                          className="hover:bg-muted text-foreground rounded-md px-2 py-1 text-left text-[11px] leading-tight transition-colors"
-                        >
-                          {c.label}
-                        </button>
-                      ))}
-                    </div>
-                  </CollapsibleContent>
-                </Collapsible>
-              );
-            })}
+            {filteredRoots.map((r) => (
+              <button
+                key={r.id}
+                type="button"
+                onClick={() => handleRailClick(r.id)}
+                className="hover:bg-muted text-foreground rounded-md px-2 py-1.5 text-left text-xs leading-tight transition-colors"
+              >
+                {r.label}
+              </button>
+            ))}
           </nav>
         </ScrollArea>
       </aside>
