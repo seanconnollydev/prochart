@@ -80,11 +80,12 @@ function FlowsheetItemTableRow({
 }) {
   const selId = `flowsheet-${item.id}`;
   const wdlDef = getTemplateStoredWdlDefinition(item);
-  const showWdlInfo = Boolean(wdlDef);
+  const hasPanelChoices = flowsheetMultiselectChoicesForItem(item).length > 0;
+  const showInfoPanelTrigger = Boolean(wdlDef) || hasPanelChoices;
   const wdlGateCombo = isFlowsheetWdlXComboboxItem(item);
   const reserveForIcon =
     item.responseType === "choice" ||
-    (item.responseType === "multiChoice" && showWdlInfo);
+    (item.responseType === "multiChoice" && showInfoPanelTrigger);
   const labelPl =
     indentLevel <= 0 ? "pl-3" : indentLevel === 1 ? "pl-8" : "pl-11";
   const valuePl =
@@ -122,7 +123,7 @@ function FlowsheetItemTableRow({
       <TableCell className={cn("align-top py-1 pr-3", valuePl)}>
         <FlowsheetValueWithWdl
           reserveIconSpace={reserveForIcon}
-          showWdl={showWdlInfo}
+          showWdl={showInfoPanelTrigger}
           ariaLabel={`View row information for ${item.prompt}`}
           onOpenInfo={() => onOpenInfoPanel(item.id)}
         >
