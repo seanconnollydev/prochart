@@ -41,6 +41,9 @@ export function AssessmentFlowsheetInfoPanel({
   setResponse,
   onClose,
 }: Props) {
+  const trimmedDefinition = definition?.trim() ?? "";
+  const hasWdlDefinition = trimmedDefinition !== "";
+
   return (
     <aside
       className={cn(
@@ -51,7 +54,7 @@ export function AssessmentFlowsheetInfoPanel({
       )}
       aria-hidden={!open}
     >
-      {item && definition ? (
+      {item ? (
         <div className="flex min-h-0 min-w-[min(22rem,40vw)] flex-1 flex-col">
           <div className="border-b px-3 py-2.5">
             <div className="flex items-start justify-between gap-2">
@@ -142,19 +145,27 @@ export function AssessmentFlowsheetInfoPanel({
                             );
                           })}
                         </div>
-                        <Separator className="mb-3" />
+                        {hasWdlDefinition ? (
+                          <Separator className="mb-3" />
+                        ) : null}
                       </>
                     );
                   })()
                 : null}
-              <p className="text-muted-foreground mb-2 text-[10px] font-medium tracking-wide uppercase">
-                Row information
-              </p>
-              <ul className="text-foreground list-disc space-y-1.5 pl-4 text-xs leading-relaxed">
-                {segmentWdlDefinitionText(definition).map((segment, i) => (
-                  <li key={i}>{segment}</li>
-                ))}
-              </ul>
+              {hasWdlDefinition ? (
+                <>
+                  <p className="text-muted-foreground mb-2 text-[10px] font-medium leading-snug">
+                    Within Defined Limits (WDL) =
+                  </p>
+                  <ul className="text-foreground list-disc space-y-1.5 pl-4 text-xs leading-relaxed">
+                    {segmentWdlDefinitionText(trimmedDefinition).map(
+                      (segment, i) => (
+                        <li key={i}>{segment}</li>
+                      ),
+                    )}
+                  </ul>
+                </>
+              ) : null}
             </div>
           </ScrollArea>
         </div>

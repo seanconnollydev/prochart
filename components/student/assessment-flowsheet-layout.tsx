@@ -14,7 +14,7 @@ import {
   findSectionRollupGate,
   flowsheetMultiselectChoicesForItem,
   getFlowsheetItemIdsToClearWhenLeavingException,
-  getWdlDefinitionForItem,
+  getTemplateStoredWdlDefinition,
   isFlowsheetExceptionSelected,
   isFlowsheetMultiselectPresentationItem,
   isFlowsheetWdlGateItem,
@@ -79,7 +79,7 @@ function FlowsheetItemTableRow({
   indentLevel?: number;
 }) {
   const selId = `flowsheet-${item.id}`;
-  const wdlDef = getWdlDefinitionForItem(item);
+  const wdlDef = getTemplateStoredWdlDefinition(item);
   const showWdlInfo = Boolean(wdlDef);
   const wdlGateCombo = isFlowsheetWdlXComboboxItem(item);
   const reserveForIcon =
@@ -253,7 +253,7 @@ export function AssessmentFlowsheetLayout({
     ? items.find((i) => i.id === infoPanelItemId)
     : undefined;
   const infoPanelDefinition =
-    infoPanelItem && getWdlDefinitionForItem(infoPanelItem);
+    infoPanelItem && getTemplateStoredWdlDefinition(infoPanelItem);
   const infoPanelPathLine = infoPanelItem
     ? groupPathLabels(groups, infoPanelItem.groupId).join(" → ")
     : "";

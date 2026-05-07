@@ -321,8 +321,8 @@ export function flowsheetOrderedItemsForGroup(
 }
 
 /**
- * Narrative shown in the WDL info panel: gate rows use non-exception choice label(s);
- * other choice rows use text after `WDL =` on a matching choice.
+ * Text after `WDL =` in a choice label, or the full label if absent.
+ * Used by {@link getWdlDefinitionForItem} for gate rows and legacy slots.
  */
 function narrativeAfterWdlEquals(label: string): string {
   const t = label.trim();
@@ -333,7 +333,13 @@ function narrativeAfterWdlEquals(label: string): string {
   return t;
 }
 
-export function getWdlDefinitionForItem(item: AssessmentItem): string | null {
+/**
+ * WDL narrative stored on the template (`x_wdlListDefinition`, section aggregate).
+ * Flowsheet sidebar uses this—not gate choice labels—for “Within Defined Limits” copy.
+ */
+export function getTemplateStoredWdlDefinition(
+  item: AssessmentItem,
+): string | null {
   if (
     (item.responseType === "multiChoice" || item.responseType === "choice") &&
     typeof item.x_wdlListDefinition === "string" &&
@@ -347,6 +353,18 @@ export function getWdlDefinitionForItem(item: AssessmentItem): string | null {
     item.x_flowsheetSectionAggregateWdlDefinition.trim() !== ""
   ) {
     return item.x_flowsheetSectionAggregateWdlDefinition.trim();
+  }
+  return null;
+}
+
+/**
+ * Full WDL narrative for an item: template fields first, then gate choice labels,
+ * then legacy `WDL =` choice rows.
+ */
+export function getWdlDefinitionForItem(item: AssessmentItem): string | null {
+  const fromTemplate = getTemplateStoredWdlDefinition(item);
+  if (fromTemplate) {
+    return fromTemplate;
   }
   if (isFlowsheetWdlGateItem(item)) {
     const parts = (item.choices ?? [])
