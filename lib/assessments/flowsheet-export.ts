@@ -1,11 +1,13 @@
 import {
   buildFlowsheetBlocks,
+  coerceFlowsheetMultiselectValue,
   FLOWSHEET_EXCEPTION_CHOICE_ID,
   findSectionRollupGate,
   isFlowsheetExceptionSelected,
   isFlowsheetWdlDetailChoiceItem,
   isFlowsheetWdlXComboboxItem,
   segmentFlowsheetRowItems,
+  stripFlowsheetMultiselectWdlSlotIds,
 } from "@/lib/assessments/flowsheet";
 import type {
   AssessmentItem,
@@ -56,19 +58,15 @@ function choiceDisplay(
     }
     return "WDL";
   }
-  if (Array.isArray(raw)) {
-    const ids = raw.filter((x): x is string => typeof x === "string");
-    if (ids.length === 0) {
-      return "—";
-    }
-    const parts = ids.map((id) => flowsheetChoiceIdExportLabel(item, id));
-    return parts.length > 0 ? parts.join(", ") : "—";
-  }
-  const id = typeof raw === "string" ? raw : "";
-  if (!id) {
+  const ids = stripFlowsheetMultiselectWdlSlotIds(
+    item,
+    coerceFlowsheetMultiselectValue(raw),
+  );
+  if (ids.length === 0) {
     return "—";
   }
-  return flowsheetChoiceIdExportLabel(item, id);
+  const parts = ids.map((id) => flowsheetChoiceIdExportLabel(item, id));
+  return parts.length > 0 ? parts.join(", ") : "—";
 }
 
 function multiChoiceDisplay(
@@ -76,7 +74,10 @@ function multiChoiceDisplay(
   responses: Record<string, AssessmentItemResponse>,
 ): string {
   const raw = responses[item.id]?.value;
-  const ids = Array.isArray(raw) ? raw : [];
+  const ids = stripFlowsheetMultiselectWdlSlotIds(
+    item,
+    coerceFlowsheetMultiselectValue(raw),
+  );
   if (ids.length === 0) {
     return "—";
   }

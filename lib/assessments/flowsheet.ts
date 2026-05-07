@@ -27,8 +27,8 @@ export function isFlowsheetWdlXComboboxItem(item: AssessmentItem): boolean {
 }
 
 /**
- * Epic-style compact combobox row: exactly one choice begins with `WDL=` plus at least one other
- * option (e.g. NV/MSK flattened `choice` details). Prompt does not end with ` WDL` (that's a gate row).
+ * Epic-style detail row: leaf `choice` with WDL narrative on `x_wdlListDefinition` (not in choices),
+ * or legacy template with exactly one `WDL=`… choice plus exceptions.
  */
 export function isFlowsheetWdlDetailChoiceItem(item: AssessmentItem): boolean {
   if (item.responseType !== "choice") {
@@ -36,6 +36,13 @@ export function isFlowsheetWdlDetailChoiceItem(item: AssessmentItem): boolean {
   }
   if (isFlowsheetWdlGateItem(item)) {
     return false;
+  }
+  const def =
+    typeof item.x_wdlListDefinition === "string"
+      ? item.x_wdlListDefinition.trim()
+      : "";
+  if (def !== "") {
+    return (item.choices ?? []).length >= 1;
   }
   const cs = item.choices ?? [];
   let wdlSlotCount = 0;
@@ -66,22 +73,41 @@ export function coerceFlowsheetMultiselectValue(raw: unknown): string[] {
   return [];
 }
 
-/** Choice list shown in multiselect (WDL=`…` collapsed to label `WDL` for Epic-style detail rows). */
+/** @deprecated Legacy: choice ids whose labels used a `WDL=` row; modern templates use {@link AssessmentItem.x_wdlListDefinition} instead. */
+export function flowsheetWdlSlotChoiceIds(item: AssessmentItem): Set<string> {
+  const out = new Set<string>();
+  for (const c of item.choices ?? []) {
+    if (WDL_EQUALS_PREFIX.test(c.label)) {
+      out.add(c.id);
+    }
+  }
+  return out;
+}
+
+/** Remove WDL-slot choice ids from stored multiselect values (those options are not in the UI). */
+export function stripFlowsheetMultiselectWdlSlotIds(
+  item: AssessmentItem,
+  ids: string[],
+): string[] {
+  const drop = flowsheetWdlSlotChoiceIds(item);
+  return ids.filter((id) => !drop.has(id));
+}
+
+/**
+ * Multiselect options: exception labels only. Drops any legacy `WDL=`… choice rows (prefer
+ * `x_wdlListDefinition` on the item instead).
+ */
 export function flowsheetMultiselectChoicesForItem(item: AssessmentItem): AssessmentChoice[] {
+  const withoutWdlSlot = (cs: AssessmentChoice[]) =>
+    cs.filter((ch) => !WDL_EQUALS_PREFIX.test(ch.label));
+
   if (item.responseType === "multiChoice") {
-    return item.choices ?? [];
+    return withoutWdlSlot(item.choices ?? []);
   }
   if (item.responseType !== "choice" || isFlowsheetWdlGateItem(item)) {
     return [];
   }
-  const cs = item.choices ?? [];
-  if (isFlowsheetWdlDetailChoiceItem(item)) {
-    return cs.map((ch) => ({
-      ...ch,
-      label: WDL_EQUALS_PREFIX.test(ch.label) ? "WDL" : ch.label,
-    }));
-  }
-  return [...cs];
+  return withoutWdlSlot(item.choices ?? []);
 }
 
 export function gateHasExceptionChoice(item: AssessmentItem): boolean {

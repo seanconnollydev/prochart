@@ -55,7 +55,7 @@ export type AssessmentItem = {
   x_flowsheetSectionRollup?: boolean;
   /** Flowsheet: full subsection WDL narrative from workbook `Sub WDL` aggregate row (side panel when set). */
   x_flowsheetSectionAggregateWdlDefinition?: string;
-  /** Flowsheet: WDL definition body for `multiChoice` exception rows (from `WDL=…` list choice; no `WDL` suffix in prompt). */
+  /** Flowsheet: WDL narrative for multiselect exception rows (not stored as a `WDL=` choice). */
   x_wdlListDefinition?: string;
   [key: string]: unknown;
 };

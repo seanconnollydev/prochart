@@ -8,6 +8,7 @@ import {
   isFlowsheetMultiselectPresentationItem,
   isFlowsheetWdlGateItem,
   segmentWdlDefinitionText,
+  stripFlowsheetMultiselectWdlSlotIds,
 } from "@/lib/assessments/flowsheet";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -88,8 +89,11 @@ export function AssessmentFlowsheetInfoPanel({
                     if (panelChoices.length === 0) {
                       return null;
                     }
-                    const selectedIds = coerceFlowsheetMultiselectValue(
-                      responses[item.id]?.value,
+                    const selectedIds = stripFlowsheetMultiselectWdlSlotIds(
+                      item,
+                      coerceFlowsheetMultiselectValue(
+                        responses[item.id]?.value,
+                      ),
                     );
                     return (
                       <>
@@ -118,7 +122,13 @@ export function AssessmentFlowsheetInfoPanel({
                                     } else {
                                       next.delete(ch.id);
                                     }
-                                    setResponse(item.id, [...next]);
+                                    setResponse(
+                                      item.id,
+                                      stripFlowsheetMultiselectWdlSlotIds(
+                                        item,
+                                        [...next],
+                                      ),
+                                    );
                                   }}
                                   className="mt-0.5"
                                 />

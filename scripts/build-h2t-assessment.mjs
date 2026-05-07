@@ -77,6 +77,33 @@ function narrativeAfterWdlEquals(label) {
   return t;
 }
 
+/** Strip `WDL=` prefixes from workbook aggregate lines; join into side-panel narrative. */
+function normalizeAggregateWdlNarrative(raw) {
+  const parts = String(raw)
+    .split(/\n\n/)
+    .map((s) => narrativeAfterWdlEquals(s.trim()))
+    .filter((s) => s.length > 0);
+  return parts.join("\n\n");
+}
+
+/**
+ * Label for the non-X gate `choice` (stored without `WDL=`; UI shows “WDL” only on the combobox).
+ * @param {string[]} wdlLabels from partition
+ * @param {string} firstPlainFallback first raw list cell when no `WDL=` line
+ * @param {string} [aggregateNarrativeRaw] subsection aggregate when gate row has no WDL line
+ */
+function gateWdlChoiceLabel(wdlLabels, firstPlainFallback, aggregateNarrativeRaw) {
+  const primary =
+    wdlLabels[0] ?? (firstPlainFallback ? `WDL= ${firstPlainFallback}` : "");
+  let body = narrativeAfterWdlEquals(primary);
+  if (!body && aggregateNarrativeRaw) {
+    const firstPara =
+      String(aggregateNarrativeRaw).split(/\n\n/).find((line) => line.trim()) ?? "";
+    body = narrativeAfterWdlEquals(firstPara.trim());
+  }
+  return body || "Within defined limits";
+}
+
 const LICENSE_NOTICE =
   "This document created by NKBDS H2T Task Force is licensed under the Creative Commons Attribution Non-Commercial Share Alike 4.0 International License in January, 2020. To view a summary of the license, go to https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode";
 
@@ -214,7 +241,7 @@ for (const key of sortedKeys) {
   }
   aggregateWdlNarrativeByPair.set(
     `${bodySystem}\u0000${bodySub}`,
-    parts.join("\n\n"),
+    normalizeAggregateWdlNarrative(parts.join("\n\n")),
   );
 }
 
@@ -297,13 +324,15 @@ function pushWdlCluster(bodySystem, bodySub, primaryConceptRow, wdlLKeys) {
   const rawChoices = byConcept.get(primaryKey).choices;
   const { wdl } = partitionWdlChoices(rawChoices);
   const firstPlain = String(rawChoices[0] ?? "").trim();
-  const primaryWdlLabel = wdl[0] ?? (firstPlain ? `WDL= ${firstPlain}` : "");
   const cr = primaryKey.split("\u0000")[2];
   const gateId = itemId(
     bodySystem,
     bodySub,
     `${cr}\0section_rollup`,
   );
+  const pairKey = `${bodySystem}\u0000${bodySub}`;
+  const aggregateNarrative = aggregateWdlNarrativeByPair.get(pairKey);
+  const gateChoiceLabel = gateWdlChoiceLabel(wdl, firstPlain, aggregateNarrative);
 
   const gate = {
     id: gateId,
@@ -314,13 +343,11 @@ function pushWdlCluster(bodySystem, bodySub, primaryConceptRow, wdlLKeys) {
     definedLimits: { type: "none" },
     choices: [
       {
-        id: choiceId(gateId, primaryWdlLabel, 0),
-        label: primaryWdlLabel,
+        id: choiceId(gateId, gateChoiceLabel, 0),
+        label: gateChoiceLabel,
       },
     ],
   };
-  const pairKey = `${bodySystem}\u0000${bodySub}`;
-  const aggregateNarrative = aggregateWdlNarrativeByPair.get(pairKey);
   if (aggregateNarrative) {
     gate.x_flowsheetSectionAggregateWdlDefinition = aggregateNarrative;
   }
@@ -433,13 +460,22 @@ function pushNvMskBlock() {
       `${NV_MSK_ROLLUP_CONCEPT}\0section_rollup`,
     );
     const primaryWdlFromPartition = partitionWdlChoices(rawChoicesRollup);
-    let primaryWdlLabel =
-      primaryWdlFromPartition.wdl[0] ??
-      (String(rawChoicesRollup[0] ?? "").trim()
-        ? `WDL= ${String(rawChoicesRollup[0]).trim()}`
-        : "");
+    const wdlRollup = primaryWdlFromPartition.wdl;
+    const firstPlainRollup = String(rawChoicesRollup[0] ?? "").trim();
+    const rollupPairKey = rollupKey.split("\u0000").slice(0, 2).join("\u0000");
+    const narrative = aggregateWdlNarrativeByPair.get(rollupPairKey);
+    const gateChoiceLabel = gateWdlChoiceLabel(
+      wdlRollup,
+      firstPlainRollup,
+      narrative ?? rawChoicesRollup.join("\n\n"),
+    );
     const gateCr = rollupKey.split("\u0000")[2].trimEnd();
-    if (!primaryWdlLabel) {
+    if (
+      gateChoiceLabel === "Within defined limits" &&
+      !narrative &&
+      wdlRollup.length === 0 &&
+      !firstPlainRollup
+    ) {
       throw new Error(
         `[h2t] NeuroVascular/Musculoskeletal rollup row has empty WDL / list choices`,
       );
@@ -451,15 +487,13 @@ function pushNvMskBlock() {
       responseType: "choice",
       x_flowsheetSectionRollup: true,
       definedLimits: { type: "none" },
-      choices: [{ id: choiceId(gateId, primaryWdlLabel, 0), label: primaryWdlLabel }],
+      choices: [{ id: choiceId(gateId, gateChoiceLabel, 0), label: gateChoiceLabel }],
     };
-    const narrative = aggregateWdlNarrativeByPair.get(
-      rollupKey.split("\u0000").slice(0, 2).join("\u0000"),
-    );
     if (narrative) {
       gate.x_flowsheetSectionAggregateWdlDefinition = narrative;
     } else if (primaryWdlFromPartition.exc.length >= 1) {
-      gate.x_flowsheetSectionAggregateWdlDefinition = rawChoicesRollup.join("\n\n");
+      gate.x_flowsheetSectionAggregateWdlDefinition =
+        normalizeAggregateWdlNarrative(rawChoicesRollup.join("\n\n"));
     }
     items.push(gate);
     keyEmitted.add(rollupKey);
@@ -468,15 +502,27 @@ function pushNvMskBlock() {
   for (const sub of extremitySubs) {
     const extGatePrompt = `${sub} WDL`;
     const extGateId = itemId(NV_MSK_SYSTEM, sub, `${sub}\0nvmsk_extremity_gate`);
-    const extMiniWdl = "WDL= ";
-    items.push({
+    const extPairKey = `${NV_MSK_SYSTEM}\u0000${sub}`;
+    const extAgg = aggregateWdlNarrativeByPair.get(extPairKey) ?? "";
+    const extGateChoiceLabel = gateWdlChoiceLabel([], "", extAgg);
+    /** @type {Record<string, unknown>} */
+    const extGate = {
       id: extGateId,
       groupId: gid,
       prompt: extGatePrompt,
       responseType: "choice",
       definedLimits: { type: "none" },
-      choices: [{ id: choiceId(extGateId, extMiniWdl, 0), label: extMiniWdl }],
-    });
+      choices: [
+        {
+          id: choiceId(extGateId, extGateChoiceLabel, 0),
+          label: extGateChoiceLabel,
+        },
+      ],
+    };
+    if (extAgg) {
+      extGate.x_wdlListDefinition = extAgg;
+    }
+    items.push(extGate);
 
     /** @type {string[]} keys for this extremity, sheet order */
     const subKeys = sortedKeys.filter((kk) => {
@@ -516,16 +562,10 @@ function pushNvMskBlock() {
       }
 
       if (wdl.length >= 1 && exc.length >= 1) {
-        const choiceObjs = [
-          ...wdl.map((label, idx) => ({
-            id: choiceId(mid, label, idx),
-            label,
-          })),
-          ...exc.map((label, idx) => ({
-            id: choiceId(mid, `${label}\0exc`, idx + wdl.length),
-            label,
-          })),
-        ];
+        const choiceObjs = exc.map((label, idx) => ({
+          id: choiceId(mid, label, idx),
+          label,
+        }));
         items.push({
           id: mid,
           groupId: gid,
@@ -551,18 +591,10 @@ function pushNvMskBlock() {
             .split(/\n\n/)
             .find((line) => String(line).trim() !== "") ?? "";
         const wdlListDef = narrativeAfterWdlEquals(firstAgg.trim());
-        const firstSlotLabel = WDL_EQUALS_PREFIX.test(firstAgg)
-          ? firstAgg.trim()
-          : firstAgg.trim() !== ""
-            ? `WDL= ${firstAgg.trim()}`
-            : "WDL= ";
-        const choiceObjs = [
-          { id: choiceId(mid, firstSlotLabel, 0), label: firstSlotLabel },
-          ...exc.map((label, idx) => ({
-            id: choiceId(mid, `${label}\0exc`, idx + 1),
-            label,
-          })),
-        ];
+        const choiceObjs = exc.map((label, idx) => ({
+          id: choiceId(mid, label, idx),
+          label,
+        }));
         items.push({
           id: mid,
           groupId: gid,
