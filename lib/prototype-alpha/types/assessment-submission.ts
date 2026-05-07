@@ -12,6 +12,8 @@ export type AssessmentResponseValue =
 
 export type AssessmentItemResponse = {
   value?: AssessmentResponseValue;
+  /** Optional student note on this item (flowsheet info panel); one per item. */
+  x_comment?: string;
   [key: string]: unknown;
 };
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import type { AssessmentItem } from "@/lib/prototype-alpha/types/assessment-template";
 import type { AssessmentItemResponse } from "@/lib/prototype-alpha/types/assessment-submission";
 import {
@@ -14,9 +15,130 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Cancel01Icon } from "@hugeicons/core-free-icons";
+import { Cancel01Icon, QuillWrite02Icon } from "@hugeicons/core-free-icons";
+
+const COMMENT_MAX_LENGTH = 2000;
+
+function InfoPanelCommentSection({
+  item,
+  responses,
+  setItemComment,
+}: {
+  item: AssessmentItem;
+  responses: Record<string, AssessmentItemResponse>;
+  setItemComment: (itemId: string, comment: string | undefined) => void;
+}) {
+  const [commentEditing, setCommentEditing] = useState(false);
+  const [commentDraft, setCommentDraft] = useState("");
+
+  const storedCommentRaw = responses[item.id]?.x_comment;
+  const storedComment =
+    typeof storedCommentRaw === "string" ? storedCommentRaw.trim() : "";
+  const hasStoredComment = storedComment.length > 0;
+
+  const commentFieldId = `flowsheet-info-comment-${item.id}`;
+
+  function beginAddComment() {
+    setCommentDraft("");
+    setCommentEditing(true);
+  }
+
+  function beginEditComment() {
+    setCommentDraft(storedComment);
+    setCommentEditing(true);
+  }
+
+  function saveComment() {
+    setItemComment(item.id, commentDraft);
+    setCommentEditing(false);
+    setCommentDraft("");
+  }
+
+  function cancelCommentEdit() {
+    setCommentEditing(false);
+    setCommentDraft("");
+  }
+
+  return (
+    <div className="border-border bg-background/80 shrink-0 border-t px-3 py-3 backdrop-blur-sm">
+      <h2 className="text-muted-foreground mb-2 text-[10px] font-medium tracking-wide uppercase">
+        Comment
+      </h2>
+      {commentEditing ? (
+        <div className="space-y-2">
+          <Label htmlFor={commentFieldId} className="sr-only">
+            Comment for {item.prompt}
+          </Label>
+          <Textarea
+            id={commentFieldId}
+            rows={3}
+            maxLength={COMMENT_MAX_LENGTH}
+            value={commentDraft}
+            onChange={(e) => setCommentDraft(e.target.value)}
+            className="min-h-[72px] resize-y px-2 py-1.5 text-xs"
+          />
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-muted-foreground text-[10px] tabular-nums">
+              {commentDraft.length}/{COMMENT_MAX_LENGTH}
+            </p>
+            <div className="flex shrink-0 gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-8 text-xs"
+                onClick={cancelCommentEdit}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                className="h-8 text-xs"
+                onClick={saveComment}
+              >
+                Save
+              </Button>
+            </div>
+          </div>
+        </div>
+      ) : hasStoredComment ? (
+        <div className="space-y-2">
+          <div className="border-border bg-muted/40 flex gap-2 rounded-md border px-2.5 py-2">
+            <p className="text-foreground min-w-0 flex-1 whitespace-pre-wrap text-xs leading-snug">
+              {storedComment}
+            </p>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-sm"
+              className="text-muted-foreground hover:text-foreground shrink-0"
+              aria-label="Edit comment"
+              onClick={beginEditComment}
+            >
+              <HugeiconsIcon icon={QuillWrite02Icon} strokeWidth={2} />
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="h-8 w-full text-xs"
+            onClick={beginAddComment}
+          >
+            Add comment
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+}
 
 type Props = {
   open: boolean;
@@ -24,10 +146,8 @@ type Props = {
   definition: string | null;
   pathLine: string;
   responses: Record<string, AssessmentItemResponse>;
-  setResponse: (
-    itemId: string,
-    value: AssessmentItemResponse["value"],
-  ) => void;
+  setResponse: (itemId: string, value: AssessmentItemResponse["value"]) => void;
+  setItemComment: (itemId: string, comment: string | undefined) => void;
   onClose: () => void;
 };
 
@@ -38,6 +158,7 @@ export function AssessmentFlowsheetInfoPanel({
   pathLine,
   responses,
   setResponse,
+  setItemComment,
   onClose,
 }: Props) {
   const trimmedDefinition = definition?.trim() ?? "";
@@ -172,6 +293,13 @@ export function AssessmentFlowsheetInfoPanel({
               ) : null}
             </div>
           </div>
+
+          <InfoPanelCommentSection
+            key={item.id}
+            item={item}
+            responses={responses}
+            setItemComment={setItemComment}
+          />
         </div>
       ) : null}
     </aside>

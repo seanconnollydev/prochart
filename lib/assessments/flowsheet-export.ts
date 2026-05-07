@@ -124,6 +124,19 @@ function formatItemValue(
   }
 }
 
+function exportValueDisplayWithComment(
+  item: AssessmentItem,
+  responses: Record<string, AssessmentItemResponse>,
+): string {
+  const main = formatItemValue(item, responses);
+  const raw = responses[item.id]?.x_comment;
+  const c = typeof raw === "string" ? raw.trim() : "";
+  if (!c) {
+    return main;
+  }
+  return `${main}\n\nComment: ${c}`;
+}
+
 export function buildFlowsheetExportRows(
   template: AssessmentTemplate,
   responses: Record<string, AssessmentItemResponse>,
@@ -156,7 +169,7 @@ export function buildFlowsheetExportRows(
       out.push({
         kind: "item",
         prompt: promptForRow(sectionGate),
-        valueDisplay: formatItemValue(sectionGate, responses),
+        valueDisplay: exportValueDisplayWithComment(sectionGate, responses),
         indent: 0,
       });
     }
@@ -167,7 +180,7 @@ export function buildFlowsheetExportRows(
           out.push({
             kind: "item",
             prompt: promptForRow(seg.gate),
-            valueDisplay: formatItemValue(seg.gate, responses),
+            valueDisplay: exportValueDisplayWithComment(seg.gate, responses),
             indent: sectionBodyIndent,
           });
           if (isFlowsheetExceptionSelected(responses, seg.gate.id)) {
@@ -175,7 +188,7 @@ export function buildFlowsheetExportRows(
               out.push({
                 kind: "item",
                 prompt: promptForRow(d),
-                valueDisplay: formatItemValue(d, responses),
+                valueDisplay: exportValueDisplayWithComment(d, responses),
                 indent: sectionBodyIndent + 1,
               });
             }
@@ -185,7 +198,7 @@ export function buildFlowsheetExportRows(
             out.push({
               kind: "item",
               prompt: promptForRow(d),
-              valueDisplay: formatItemValue(d, responses),
+              valueDisplay: exportValueDisplayWithComment(d, responses),
               indent: sectionBodyIndent,
             });
           }

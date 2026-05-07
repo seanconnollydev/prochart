@@ -48,6 +48,10 @@ function hasMeaningfulResponses(
   responses: Record<string, AssessmentItemResponse>,
 ): boolean {
   for (const r of Object.values(responses)) {
+    const c = r?.x_comment;
+    if (typeof c === "string" && c.trim() !== "") {
+      return true;
+    }
     const v = r?.value;
     if (v === true || v === false) {
       return true;
@@ -201,6 +205,29 @@ export function AssessmentRunner({
     });
   }
 
+  function setItemComment(itemId: string, comment: string | undefined) {
+    setDocument((d) => {
+      const prev = { ...(d.responses[itemId] ?? {}) };
+      const trimmed = comment?.trim();
+      if (trimmed) {
+        prev.x_comment = trimmed;
+      } else {
+        delete prev.x_comment;
+      }
+      const nextResponses = { ...d.responses };
+      if (Object.keys(prev).length === 0) {
+        delete nextResponses[itemId];
+      } else {
+        nextResponses[itemId] = prev;
+      }
+      return {
+        ...d,
+        responses: nextResponses,
+        updatedAt: nowIso(),
+      };
+    });
+  }
+
   function handleResetConfirm() {
     setSyncError(null);
     setDocument((d) => ({ ...d, responses: {} }));
@@ -306,6 +333,7 @@ export function AssessmentRunner({
             template={template}
             responses={document.responses}
             setResponse={setResponse}
+            setItemComment={setItemComment}
           />
         </div>
       ) : layout === "worksheet" ? (

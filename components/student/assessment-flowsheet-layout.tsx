@@ -50,6 +50,7 @@ type Props = {
     value: AssessmentItemResponse["value"],
     clearItemIds?: string[],
   ) => void;
+  setItemComment: (itemId: string, comment: string | undefined) => void;
   /** Merged onto the root layout wrapper (e.g. height constraints from the parent page). */
   className?: string;
 };
@@ -233,6 +234,7 @@ export function AssessmentFlowsheetLayout({
   template: templateRaw,
   responses,
   setResponse,
+  setItemComment,
   className,
 }: Props) {
   const template = useMemo(
@@ -505,6 +507,7 @@ export function AssessmentFlowsheetLayout({
           pathLine={infoPanelPathLine}
           responses={responses}
           setResponse={setResponse}
+          setItemComment={setItemComment}
           onClose={() => setInfoPanelItemId(null)}
         />
       </div>
