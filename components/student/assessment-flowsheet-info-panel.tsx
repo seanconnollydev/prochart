@@ -42,6 +42,7 @@ export function AssessmentFlowsheetInfoPanel({
 }: Props) {
   const trimmedDefinition = definition?.trim() ?? "";
   const hasWdlDefinition = trimmedDefinition !== "";
+  const wdlSegments = segmentWdlDefinitionText(trimmedDefinition);
 
   return (
     <aside
@@ -156,13 +157,17 @@ export function AssessmentFlowsheetInfoPanel({
                   <p className="text-muted-foreground mb-2 text-[10px] font-medium leading-snug">
                     Within Defined Limits (WDL) =
                   </p>
-                  <ul className="text-foreground list-disc space-y-1.5 pl-4 text-xs leading-relaxed">
-                    {segmentWdlDefinitionText(trimmedDefinition).map(
-                      (segment, i) => (
+                  {wdlSegments.length === 1 ? (
+                    <p className="text-foreground text-xs leading-relaxed">
+                      {wdlSegments[0]}
+                    </p>
+                  ) : (
+                    <ul className="text-foreground list-disc space-y-1.5 pl-4 text-xs leading-relaxed">
+                      {wdlSegments.map((segment, i) => (
                         <li key={i}>{segment}</li>
-                      ),
-                    )}
-                  </ul>
+                      ))}
+                    </ul>
+                  )}
                 </>
               ) : null}
             </div>

@@ -387,21 +387,27 @@ export function getWdlDefinitionForItem(item: AssessmentItem): string | null {
   return null;
 }
 
-/** Split definition copy into bullet segments (paragraph breaks, then semicolons). */
+/** Split definition copy into bullet segments (paragraph breaks, then ". " sentence boundaries). */
 export function segmentWdlDefinitionText(text: string): string[] {
   const t = text.trim();
   const paragraphs = t.split(/\n\s*\n/).map((s) => s.trim()).filter(Boolean);
   const chunks = paragraphs.length > 1 ? paragraphs : [t];
   const out: string[] = [];
   for (const chunk of chunks) {
-    const bySemi = chunk
-      .split(";")
+    const bySentence = chunk
+      .split(/\.\s+/)
       .map((s) => s.trim())
       .filter(Boolean);
-    if (bySemi.length > 1) {
-      out.push(...bySemi);
-    } else {
+    if (bySentence.length <= 1) {
       out.push(chunk);
+    } else {
+      for (let i = 0; i < bySentence.length; i++) {
+        let seg = bySentence[i];
+        if (i < bySentence.length - 1 && !/\.$/.test(seg)) {
+          seg += ".";
+        }
+        out.push(seg);
+      }
     }
   }
   return out.length > 0 ? out : [t];
