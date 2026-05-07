@@ -36,12 +36,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -95,8 +90,7 @@ function FlowsheetItemTableRow({
     item.responseType === "choice" && wdlGateCombo
       ? (item.choices ?? []).map((ch) => ({
           ...ch,
-          label:
-            ch.id === FLOWSHEET_EXCEPTION_CHOICE_ID ? "X" : "WDL",
+          label: ch.id === FLOWSHEET_EXCEPTION_CHOICE_ID ? "X" : "WDL",
         }))
       : [];
 
@@ -118,16 +112,9 @@ function FlowsheetItemTableRow({
           className="text-foreground text-xs leading-snug font-normal"
         >
           {item.prompt}
-          {wdlGateCombo && (
-            <span className="text-muted-foreground ml-1.5 text-[10px]">
-              (WDL / X)
-            </span>
-          )}
         </Label>
       </TableCell>
-      <TableCell
-        className={cn("min-w-0 align-top py-1 pr-3", valuePl)}
-      >
+      <TableCell className={cn("min-w-0 align-top py-1 pr-3", valuePl)}>
         <FlowsheetValueWithWdl
           reserveIconSpace={reserveForIcon}
           showWdl={showInfoPanelTrigger}

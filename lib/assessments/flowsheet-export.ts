@@ -20,11 +20,7 @@ export type FlowsheetExportRow =
   | { kind: "item"; prompt: string; valueDisplay: string; indent: number };
 
 function promptForRow(item: AssessmentItem): string {
-  let p = item.prompt;
-  if (isFlowsheetWdlXComboboxItem(item)) {
-    p += " (WDL / X)";
-  }
-  return p;
+  return item.prompt;
 }
 
 const WDL_EQUALS_EXPORT = /^\s*WDL\s*=\s*/i;
@@ -37,7 +33,10 @@ function flowsheetChoiceIdExportLabel(
   if (!ch) {
     return id;
   }
-  if (isFlowsheetWdlDetailChoiceItem(item) && WDL_EQUALS_EXPORT.test(ch.label)) {
+  if (
+    isFlowsheetWdlDetailChoiceItem(item) &&
+    WDL_EQUALS_EXPORT.test(ch.label)
+  ) {
     return "WDL";
   }
   return ch.label;
@@ -135,8 +134,7 @@ export function buildFlowsheetExportRows(
   const out: FlowsheetExportRow[] = [];
 
   for (const block of blocks) {
-    const groupLabel =
-      groups.find((g) => g.id === block.groupId)?.label ?? "";
+    const groupLabel = groups.find((g) => g.id === block.groupId)?.label ?? "";
     const sectionGate = findSectionRollupGate(
       block.groupId,
       groupLabel,
@@ -146,14 +144,11 @@ export function buildFlowsheetExportRows(
       ? block.items.filter((i) => i.id !== sectionGate.id)
       : block.items;
     const sectionExpanded =
-      !sectionGate ||
-      isFlowsheetExceptionSelected(responses, sectionGate.id);
+      !sectionGate || isFlowsheetExceptionSelected(responses, sectionGate.id);
     const rowSegments = segmentFlowsheetRowItems(bodyItems);
-    const sectionBodyIndent =
-      Boolean(sectionGate) && sectionExpanded ? 1 : 0;
+    const sectionBodyIndent = Boolean(sectionGate) && sectionExpanded ? 1 : 0;
 
-    const pathLine =
-      block.path.length > 0 ? block.path.join(" → ") : "—";
+    const pathLine = block.path.length > 0 ? block.path.join(" → ") : "—";
 
     out.push({ kind: "section", pathLine });
 
