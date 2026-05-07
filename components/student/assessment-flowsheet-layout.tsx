@@ -107,7 +107,12 @@ function FlowsheetItemTableRow({
         isFlowsheetWdlGateItem(item) && "bg-muted/20",
       )}
     >
-      <TableCell className={cn("align-top py-1 pr-2", labelPl)}>
+      <TableCell
+        className={cn(
+          "min-w-0 align-top break-words py-1 pr-2 whitespace-normal",
+          labelPl,
+        )}
+      >
         <Label
           htmlFor={selId}
           className="text-foreground text-xs leading-snug font-normal"
@@ -120,7 +125,9 @@ function FlowsheetItemTableRow({
           )}
         </Label>
       </TableCell>
-      <TableCell className={cn("align-top py-1 pr-3", valuePl)}>
+      <TableCell
+        className={cn("min-w-0 align-top py-1 pr-3", valuePl)}
+      >
         <FlowsheetValueWithWdl
           reserveIconSpace={reserveForIcon}
           showWdl={showInfoPanelTrigger}
@@ -453,7 +460,7 @@ export function AssessmentFlowsheetLayout({
                   <TableRow className="bg-muted/80 hover:bg-muted/80 border-b-0">
                     <TableCell
                       colSpan={2}
-                      className="text-foreground py-1.5 text-xs font-semibold tracking-wide uppercase"
+                      className="text-foreground min-w-0 break-words py-1.5 text-xs font-semibold tracking-wide whitespace-normal uppercase"
                     >
                       {pathLine}
                     </TableCell>
