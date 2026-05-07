@@ -13,7 +13,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -49,14 +48,14 @@ export function AssessmentFlowsheetInfoPanel({
       className={cn(
         "border-border bg-muted/10 flex min-h-0 flex-col border-l transition-[width] duration-200 ease-out",
         open
-          ? "sticky top-4 max-h-[calc(100dvh-10rem)] w-[min(22rem,40vw)] shrink-0 self-start"
+          ? "sticky top-4 h-full max-h-[calc(100dvh-10rem)] min-h-0 w-[min(22rem,40vw)] shrink-0 overflow-hidden"
           : "w-0 shrink-0 overflow-hidden border-l-0",
       )}
       aria-hidden={!open}
     >
       {item ? (
-        <div className="flex min-h-0 min-w-[min(22rem,40vw)] flex-1 flex-col">
-          <div className="border-b px-3 py-2.5">
+        <div className="flex h-full min-h-0 min-w-[min(22rem,40vw)] flex-1 flex-col overflow-hidden">
+          <div className="border-b px-3 py-2.5 shrink-0">
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
                 <p className="text-muted-foreground line-clamp-2 text-[10px] leading-tight">
@@ -83,7 +82,7 @@ export function AssessmentFlowsheetInfoPanel({
               </p>
             ) : null}
           </div>
-          <ScrollArea className="min-h-0 flex-1">
+          <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
             <div className="p-3">
               {isFlowsheetMultiselectPresentationItem(item)
                 ? (() => {
@@ -167,7 +166,7 @@ export function AssessmentFlowsheetInfoPanel({
                 </>
               ) : null}
             </div>
-          </ScrollArea>
+          </div>
         </div>
       ) : null}
     </aside>

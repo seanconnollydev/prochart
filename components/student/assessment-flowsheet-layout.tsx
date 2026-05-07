@@ -406,7 +406,7 @@ export function AssessmentFlowsheetLayout({
         </ScrollArea>
       </aside>
 
-      <div className="flex min-h-0 min-w-0 flex-1">
+      <div className="flex h-full min-h-0 min-w-0 flex-1">
         <div className="bg-background min-w-0 flex-1 overflow-auto">
           <Table className="table-fixed">
             {blocks.map((block) => {
