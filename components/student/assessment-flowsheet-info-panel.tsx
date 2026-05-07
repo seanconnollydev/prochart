@@ -3,6 +3,9 @@
 import type { AssessmentItem } from "@/lib/prototype-alpha/types/assessment-template";
 import type { AssessmentItemResponse } from "@/lib/prototype-alpha/types/assessment-submission";
 import {
+  coerceFlowsheetMultiselectValue,
+  flowsheetMultiselectChoicesForItem,
+  isFlowsheetMultiselectPresentationItem,
   isFlowsheetWdlGateItem,
   segmentWdlDefinitionText,
 } from "@/lib/assessments/flowsheet";
@@ -78,14 +81,16 @@ export function AssessmentFlowsheetInfoPanel({
           </div>
           <ScrollArea className="min-h-0 flex-1">
             <div className="p-3">
-              {item.responseType === "multiChoice" &&
-              (item.choices?.length ?? 0) > 0
+              {isFlowsheetMultiselectPresentationItem(item)
                 ? (() => {
-                    const selectedIds = Array.isArray(
+                    const panelChoices =
+                      flowsheetMultiselectChoicesForItem(item);
+                    if (panelChoices.length === 0) {
+                      return null;
+                    }
+                    const selectedIds = coerceFlowsheetMultiselectValue(
                       responses[item.id]?.value,
-                    )
-                      ? (responses[item.id]?.value as string[])
-                      : [];
+                    );
                     return (
                       <>
                         <p className="text-muted-foreground mb-2 text-[10px] font-medium tracking-wide uppercase">
@@ -96,7 +101,7 @@ export function AssessmentFlowsheetInfoPanel({
                           role="group"
                           aria-label={`Options for ${item.prompt}`}
                         >
-                          {(item.choices ?? []).map((ch) => {
+                          {panelChoices.map((ch) => {
                             const checked = selectedIds.includes(ch.id);
                             return (
                               <div

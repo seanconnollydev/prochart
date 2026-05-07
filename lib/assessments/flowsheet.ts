@@ -47,6 +47,43 @@ export function isFlowsheetWdlDetailChoiceItem(item: AssessmentItem): boolean {
   return wdlSlotCount === 1 && cs.length >= 2;
 }
 
+/** Flowsheet grid + panel: multiselect UI for `multiChoice` and leaf (non-gate) `choice` rows. */
+export function isFlowsheetMultiselectPresentationItem(item: AssessmentItem): boolean {
+  return (
+    item.responseType === "multiChoice" ||
+    (item.responseType === "choice" && !isFlowsheetWdlGateItem(item))
+  );
+}
+
+/** Normalize stored response for multiselect rows (legacy single `string` or `string[]`). */
+export function coerceFlowsheetMultiselectValue(raw: unknown): string[] {
+  if (Array.isArray(raw)) {
+    return raw.filter((x): x is string => typeof x === "string");
+  }
+  if (typeof raw === "string" && raw !== "") {
+    return [raw];
+  }
+  return [];
+}
+
+/** Choice list shown in multiselect (WDL=`…` collapsed to label `WDL` for Epic-style detail rows). */
+export function flowsheetMultiselectChoicesForItem(item: AssessmentItem): AssessmentChoice[] {
+  if (item.responseType === "multiChoice") {
+    return item.choices ?? [];
+  }
+  if (item.responseType !== "choice" || isFlowsheetWdlGateItem(item)) {
+    return [];
+  }
+  const cs = item.choices ?? [];
+  if (isFlowsheetWdlDetailChoiceItem(item)) {
+    return cs.map((ch) => ({
+      ...ch,
+      label: WDL_EQUALS_PREFIX.test(ch.label) ? "WDL" : ch.label,
+    }));
+  }
+  return [...cs];
+}
+
 export function gateHasExceptionChoice(item: AssessmentItem): boolean {
   return (item.choices ?? []).some((c) => c.id === FLOWSHEET_EXCEPTION_CHOICE_ID);
 }

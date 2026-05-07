@@ -27,24 +27,10 @@ function promptForRow(item: AssessmentItem): string {
 
 const WDL_EQUALS_EXPORT = /^\s*WDL\s*=\s*/i;
 
-function choiceDisplay(
+function flowsheetChoiceIdExportLabel(
   item: AssessmentItem,
-  responses: Record<string, AssessmentItemResponse>,
+  id: string,
 ): string {
-  const raw = responses[item.id]?.value;
-  const id = typeof raw === "string" ? raw : "";
-  if (isFlowsheetWdlXComboboxItem(item)) {
-    if (id === FLOWSHEET_EXCEPTION_CHOICE_ID) {
-      return "X";
-    }
-    if (!id) {
-      return "—";
-    }
-    return "WDL";
-  }
-  if (!id) {
-    return "—";
-  }
   const ch = (item.choices ?? []).find((c) => c.id === id);
   if (!ch) {
     return id;
@@ -53,6 +39,36 @@ function choiceDisplay(
     return "WDL";
   }
   return ch.label;
+}
+
+function choiceDisplay(
+  item: AssessmentItem,
+  responses: Record<string, AssessmentItemResponse>,
+): string {
+  const raw = responses[item.id]?.value;
+  if (isFlowsheetWdlXComboboxItem(item)) {
+    const id = typeof raw === "string" ? raw : "";
+    if (id === FLOWSHEET_EXCEPTION_CHOICE_ID) {
+      return "X";
+    }
+    if (!id) {
+      return "—";
+    }
+    return "WDL";
+  }
+  if (Array.isArray(raw)) {
+    const ids = raw.filter((x): x is string => typeof x === "string");
+    if (ids.length === 0) {
+      return "—";
+    }
+    const parts = ids.map((id) => flowsheetChoiceIdExportLabel(item, id));
+    return parts.length > 0 ? parts.join(", ") : "—";
+  }
+  const id = typeof raw === "string" ? raw : "";
+  if (!id) {
+    return "—";
+  }
+  return flowsheetChoiceIdExportLabel(item, id);
 }
 
 function multiChoiceDisplay(

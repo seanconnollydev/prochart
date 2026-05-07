@@ -9,12 +9,14 @@ import type { AssessmentItemResponse } from "@/lib/prototype-alpha/types/assessm
 import { groupPathLabels } from "@/lib/assessments/group-path";
 import {
   buildFlowsheetBlocks,
+  coerceFlowsheetMultiselectValue,
   FLOWSHEET_EXCEPTION_CHOICE_ID,
   findSectionRollupGate,
+  flowsheetMultiselectChoicesForItem,
   getFlowsheetItemIdsToClearWhenLeavingException,
   getWdlDefinitionForItem,
   isFlowsheetExceptionSelected,
-  isFlowsheetWdlDetailChoiceItem,
+  isFlowsheetMultiselectPresentationItem,
   isFlowsheetWdlGateItem,
   isFlowsheetWdlXComboboxItem,
   prepareFlowsheetTemplate,
@@ -79,7 +81,6 @@ function FlowsheetItemTableRow({
   const wdlDef = getWdlDefinitionForItem(item);
   const showWdlInfo = Boolean(wdlDef);
   const wdlGateCombo = isFlowsheetWdlXComboboxItem(item);
-  const wdlDetailChoice = isFlowsheetWdlDetailChoiceItem(item);
   const reserveForIcon =
     item.responseType === "choice" ||
     (item.responseType === "multiChoice" && showWdlInfo);
@@ -88,21 +89,13 @@ function FlowsheetItemTableRow({
   const valuePl =
     indentLevel <= 0 ? "pl-2" : indentLevel === 1 ? "pl-7" : "pl-10";
 
-  const WDL_EQUALS_FOR_LABEL = /^\s*WDL\s*=\s*/i;
   const choiceComboboxChoices =
-    item.responseType === "choice"
-      ? wdlGateCombo
-        ? (item.choices ?? []).map((ch) => ({
-            ...ch,
-            label:
-              ch.id === FLOWSHEET_EXCEPTION_CHOICE_ID ? "X" : "WDL",
-          }))
-        : wdlDetailChoice
-          ? (item.choices ?? []).map((ch) => ({
-              ...ch,
-              label: WDL_EQUALS_FOR_LABEL.test(ch.label) ? "WDL" : ch.label,
-            }))
-          : (item.choices ?? [])
+    item.responseType === "choice" && wdlGateCombo
+      ? (item.choices ?? []).map((ch) => ({
+          ...ch,
+          label:
+            ch.id === FLOWSHEET_EXCEPTION_CHOICE_ID ? "X" : "WDL",
+        }))
       : [];
 
   return (
@@ -132,34 +125,28 @@ function FlowsheetItemTableRow({
           ariaLabel={`View row information for ${item.prompt}`}
           onOpenInfo={() => onOpenInfoPanel(item.id)}
         >
-          {item.responseType === "choice" && (
+          {item.responseType === "choice" && wdlGateCombo ? (
             <AssessmentChoiceCombobox
               id={selId}
               label={item.prompt}
               choices={choiceComboboxChoices}
               value={String(responses[item.id]?.value ?? "")}
-              onChange={(v) =>
-                wdlGateCombo
-                  ? onWdlXChoiceChange(item.id, v)
-                  : setResponse(item.id, v)
-              }
+              onChange={(v) => onWdlXChoiceChange(item.id, v)}
               className="w-full min-w-0"
             />
-          )}
-          {item.responseType === "multiChoice" && (
+          ) : null}
+          {isFlowsheetMultiselectPresentationItem(item) ? (
             <AssessmentFlowsheetMultiselect
               id={selId}
               label={item.prompt}
-              choices={item.choices ?? []}
-              value={
-                Array.isArray(responses[item.id]?.value)
-                  ? (responses[item.id]?.value as string[])
-                  : []
-              }
+              choices={flowsheetMultiselectChoicesForItem(item)}
+              value={coerceFlowsheetMultiselectValue(
+                responses[item.id]?.value,
+              )}
               onChange={(ids) => setResponse(item.id, ids)}
               className="w-full min-w-0"
             />
-          )}
+          ) : null}
           {item.responseType === "boolean" && (
             <label className="flex items-center gap-2 text-xs">
               <Checkbox
