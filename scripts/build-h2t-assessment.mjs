@@ -195,9 +195,13 @@ for (const pair of pairs) {
     if (p[0] !== bodySystem || p[1] !== bodySub) {
       continue;
     }
+    const conceptRow = p[2];
     const { choices } = byConcept.get(k);
     const { wdl, exc } = partitionWdlChoices(choices);
     if (wdl.length === 1 && exc.length >= 1) {
+      L.push(k);
+    } else if (conceptRow.endsWith(" WDL") && wdl.length >= 1) {
+      /** Composite section rollup row (WDL narrative only, no exception lines on same concept). */
       L.push(k);
     }
   }
@@ -211,11 +215,21 @@ for (const pair of pairs) {
     const cr = k.split("\u0000")[2];
     return cr.endsWith(" WDL") && cr.replace(/ WDL$/, "") === bodySub;
   });
+  /** Prefer latest sheet-order `* WDL` row when subsection label differs (e.g. Behavioral × Behavior WDL). */
+  const rollupWdlKeys = L.filter((kk) => kk.split("\u0000")[2].endsWith(" WDL"));
+  const rollupPrimaryKey =
+    rollupWdlKeys.length === 0
+      ? null
+      : rollupWdlKeys.reduce((a, b) =>
+          byConcept.get(b).order > byConcept.get(a).order ? b : a,
+        );
   const primaryConceptRow = byConcept.has(preferredKey)
     ? `${bodySub} WDL`
     : primaryWdlSubsectionInL
       ? primaryWdlSubsectionInL.split("\u0000")[2]
-      : L[0].split("\u0000")[2];
+      : rollupPrimaryKey
+        ? rollupPrimaryKey.split("\u0000")[2]
+        : L[0].split("\u0000")[2];
   const head =
     L.find((k) => k.split("\u0000")[2] === primaryConceptRow) ??
     sortedKeys.find((sk) => L.includes(sk)) ??
@@ -332,6 +346,8 @@ function pushWdlCluster(bodySystem, bodySub, primaryConceptRow, wdlLKeys) {
   );
   const pairKey = `${bodySystem}\u0000${bodySub}`;
   const aggregateNarrative = aggregateWdlNarrativeByPair.get(pairKey);
+  const primaryWdlAggregateFallback =
+    wdl.length > 0 ? normalizeAggregateWdlNarrative(wdl.join("\n\n")) : "";
   const gateChoiceLabel = gateWdlChoiceLabel(wdl, firstPlain, aggregateNarrative);
 
   const gate = {
@@ -350,6 +366,8 @@ function pushWdlCluster(bodySystem, bodySub, primaryConceptRow, wdlLKeys) {
   };
   if (aggregateNarrative) {
     gate.x_flowsheetSectionAggregateWdlDefinition = aggregateNarrative;
+  } else if (primaryWdlAggregateFallback) {
+    gate.x_flowsheetSectionAggregateWdlDefinition = primaryWdlAggregateFallback;
   }
   items.push(gate);
 
@@ -357,7 +375,8 @@ function pushWdlCluster(bodySystem, bodySub, primaryConceptRow, wdlLKeys) {
     const conceptRow = k.split("\u0000")[2];
     if (
       conceptRow.endsWith(" WDL") &&
-      conceptRow.replace(/ WDL$/, "") === bodySub
+      (conceptRow.replace(/ WDL$/, "") === bodySub ||
+        conceptRow === primaryConceptRow)
     ) {
       keyEmitted.add(k);
       continue;
