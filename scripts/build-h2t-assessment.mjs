@@ -20,6 +20,11 @@ const outPath = join(outDir, "h2t-head-to-toe.generated.json");
 const TEMPLATE_ID = "h2t_head_to_toe_v1";
 const SCHEMA_VERSION = "assessmentTemplate@0.2";
 
+/** Body system flattened to a single root group + hierarchical gates (see NV/MSK plan). */
+const NV_MSK_SYSTEM = "NeuroVascular/Musculoskeletal";
+/** Concept row label for workbook section rollup (prompt / gate). */
+const NV_MSK_ROLLUP_CONCEPT = "NeuroVascular/Musculoskeletal WDL";
+
 function h16(parts) {
   return createHash("sha256").update(parts.join("\u0001")).digest("hex").slice(0, 16);
 }
@@ -143,6 +148,9 @@ for (const sys of [...systems].sort()) {
 
 for (const pair of [...pairs].sort()) {
   const [bodySystem, bodySub] = pair.split("\u0000");
+  if (bodySystem === NV_MSK_SYSTEM) {
+    continue;
+  }
   groups.push({
     id: grpChild(bodySystem, bodySub),
     label: bodySub,
@@ -359,11 +367,265 @@ function pushWdlCluster(bodySystem, bodySub, primaryConceptRow, wdlLKeys) {
   }
 }
 
+const nvMskRollupPairKey = `${NV_MSK_SYSTEM}\u0000${NV_MSK_ROLLUP_CONCEPT}`;
+
+/**
+ * @param {string} conceptRow
+ * @param {string} bodySub
+ */
+function nvMskIsSubsectionWdlAggregateRow(conceptRow, bodySub) {
+  const cr = conceptRow.trim();
+  if (!cr.endsWith(" WDL")) {
+    return false;
+  }
+  return cr.replace(/ WDL$/, "") === bodySub;
+}
+
+/** Flat NV/MSK: one root group, section rollup → per extremity gates → detail `choice` rows. */
+function pushNvMskBlock() {
+  const gid = grpRoot(NV_MSK_SYSTEM);
+
+  /** Prefer workbook rollup row keyed as (NV/MSK × NeuroVascular/Musculoskeletal WDL × …). */
+  let rollupKey = sortedKeys.find((kk) => {
+    const [bs, sub, cr] = kk.split("\u0000");
+    return (
+      `${bs}\u0000${sub}` === nvMskRollupPairKey &&
+      cr.trim() === NV_MSK_ROLLUP_CONCEPT.trim()
+    );
+  });
+  if (!rollupKey) {
+    rollupKey = sortedKeys.find((kk) => {
+      const [bs, , cr] = kk.split("\u0000");
+      return bs === NV_MSK_SYSTEM && cr.trim() === NV_MSK_ROLLUP_CONCEPT.trim();
+    });
+  }
+
+  /** @type {string[]} extremity subs in workbook order */
+  const extremitySubs = [];
+  /** @type {Set<string>} */
+  const subsSeen = new Set();
+  for (const kk of sortedKeys) {
+    const [bs, sub] = kk.split("\u0000");
+    if (bs !== NV_MSK_SYSTEM) {
+      continue;
+    }
+    if (`${bs}\u0000${sub}` === nvMskRollupPairKey) {
+      continue;
+    }
+    if (!subsSeen.has(sub)) {
+      subsSeen.add(sub);
+      extremitySubs.push(sub);
+    }
+  }
+
+  if (!rollupKey) {
+    throw new Error(
+      `[h2t] Missing NeuroVascular/Musculoskeletal section rollup (${NV_MSK_ROLLUP_CONCEPT})`,
+    );
+  }
+
+  {
+    const [, rollupSub] = rollupKey.split("\u0000");
+    const rawChoicesRollup = byConcept.get(rollupKey).choices;
+    const gateId = itemId(
+      NV_MSK_SYSTEM,
+      rollupSub,
+      `${NV_MSK_ROLLUP_CONCEPT}\0section_rollup`,
+    );
+    const primaryWdlFromPartition = partitionWdlChoices(rawChoicesRollup);
+    let primaryWdlLabel =
+      primaryWdlFromPartition.wdl[0] ??
+      (String(rawChoicesRollup[0] ?? "").trim()
+        ? `WDL= ${String(rawChoicesRollup[0]).trim()}`
+        : "");
+    const gateCr = rollupKey.split("\u0000")[2].trimEnd();
+    if (!primaryWdlLabel) {
+      throw new Error(
+        `[h2t] NeuroVascular/Musculoskeletal rollup row has empty WDL / list choices`,
+      );
+    }
+    const gate = {
+      id: gateId,
+      groupId: gid,
+      prompt: gateCr.endsWith(" WDL") ? gateCr : `${gateCr} WDL`,
+      responseType: "choice",
+      x_flowsheetSectionRollup: true,
+      definedLimits: { type: "none" },
+      choices: [{ id: choiceId(gateId, primaryWdlLabel, 0), label: primaryWdlLabel }],
+    };
+    const narrative = aggregateWdlNarrativeByPair.get(
+      rollupKey.split("\u0000").slice(0, 2).join("\u0000"),
+    );
+    if (narrative) {
+      gate.x_flowsheetSectionAggregateWdlDefinition = narrative;
+    } else if (primaryWdlFromPartition.exc.length >= 1) {
+      gate.x_flowsheetSectionAggregateWdlDefinition = rawChoicesRollup.join("\n\n");
+    }
+    items.push(gate);
+    keyEmitted.add(rollupKey);
+  }
+
+  for (const sub of extremitySubs) {
+    const extGatePrompt = `${sub} WDL`;
+    const extGateId = itemId(NV_MSK_SYSTEM, sub, `${sub}\0nvmsk_extremity_gate`);
+    const extMiniWdl = "WDL= ";
+    items.push({
+      id: extGateId,
+      groupId: gid,
+      prompt: extGatePrompt,
+      responseType: "choice",
+      definedLimits: { type: "none" },
+      choices: [{ id: choiceId(extGateId, extMiniWdl, 0), label: extMiniWdl }],
+    });
+
+    /** @type {string[]} keys for this extremity, sheet order */
+    const subKeys = sortedKeys.filter((kk) => {
+      const [bs, bodySub] = kk.split("\u0000");
+      return bs === NV_MSK_SYSTEM && bodySub === sub;
+    });
+
+    for (const kk of subKeys) {
+      if (keyEmitted.has(kk)) {
+        continue;
+      }
+      const conceptRowRaw = kk.split("\u0000")[2];
+      const conceptTrim = conceptRowRaw.trimEnd();
+      const { choices: rawChoicesRaw } = byConcept.get(kk);
+      const { wdl, exc } = partitionWdlChoices(rawChoicesRaw);
+
+      if (
+        nvMskIsSubsectionWdlAggregateRow(conceptTrim, sub) &&
+        exc.length === 0 &&
+        wdl.length >= 1
+      ) {
+        keyEmitted.add(kk);
+        continue;
+      }
+
+      if (conceptTrim === NV_MSK_ROLLUP_CONCEPT.trim()) {
+        keyEmitted.add(kk);
+        continue;
+      }
+
+      const pairAggKey = `${NV_MSK_SYSTEM}\u0000${sub}`;
+      const mid = itemId(NV_MSK_SYSTEM, sub, `${conceptRowRaw}\0exc_choice`);
+
+      if (conceptTrim.endsWith(" WDL") && wdl.length === 0 && exc.length === 0) {
+        keyEmitted.add(kk);
+        continue;
+      }
+
+      if (wdl.length >= 1 && exc.length >= 1) {
+        const choiceObjs = [
+          ...wdl.map((label, idx) => ({
+            id: choiceId(mid, label, idx),
+            label,
+          })),
+          ...exc.map((label, idx) => ({
+            id: choiceId(mid, `${label}\0exc`, idx + wdl.length),
+            label,
+          })),
+        ];
+        items.push({
+          id: mid,
+          groupId: gid,
+          prompt: conceptTrim.replace(/ WDL$/, ""),
+          responseType: "choice",
+          definedLimits: { type: "none" },
+          choices: choiceObjs,
+          x_wdlListDefinition: narrativeAfterWdlEquals(wdl[0]),
+        });
+        keyEmitted.add(kk);
+        continue;
+      }
+
+      if (wdl.length === 0 && exc.length >= 1) {
+        const agg = aggregateWdlNarrativeByPair.get(pairAggKey);
+        if (!agg) {
+          throw new Error(
+            `[h2t] NV/MSK exception-only row lacks subsection aggregate: ${kk}`,
+          );
+        }
+        const firstAgg =
+          agg
+            .split(/\n\n/)
+            .find((line) => String(line).trim() !== "") ?? "";
+        const wdlListDef = narrativeAfterWdlEquals(firstAgg.trim());
+        const firstSlotLabel = WDL_EQUALS_PREFIX.test(firstAgg)
+          ? firstAgg.trim()
+          : firstAgg.trim() !== ""
+            ? `WDL= ${firstAgg.trim()}`
+            : "WDL= ";
+        const choiceObjs = [
+          { id: choiceId(mid, firstSlotLabel, 0), label: firstSlotLabel },
+          ...exc.map((label, idx) => ({
+            id: choiceId(mid, `${label}\0exc`, idx + 1),
+            label,
+          })),
+        ];
+        items.push({
+          id: mid,
+          groupId: gid,
+          prompt: conceptTrim.replace(/ WDL$/, ""),
+          responseType: "choice",
+          definedLimits: { type: "none" },
+          choices: choiceObjs,
+          x_wdlListDefinition: wdlListDef,
+        });
+        keyEmitted.add(kk);
+        continue;
+      }
+
+      if (conceptTrim.endsWith(" WDL")) {
+        keyEmitted.add(kk);
+        continue;
+      }
+
+      const iid = itemId(NV_MSK_SYSTEM, sub, conceptRowRaw);
+      const choiceObjs = rawChoicesRaw.map((label, idx) => ({
+        id: choiceId(iid, label, idx),
+        label,
+      }));
+      items.push({
+        id: iid,
+        groupId: gid,
+        prompt: conceptTrim,
+        responseType: "choice",
+        definedLimits: { type: "none" },
+        choices: choiceObjs,
+      });
+      keyEmitted.add(kk);
+    }
+  }
+
+  /** Mark rollup pair keys not matched above (sparse rows). */
+  for (const kk of sortedKeys) {
+    const [bs] = kk.split("\u0000");
+    if (bs !== NV_MSK_SYSTEM) {
+      continue;
+    }
+    if (!keyEmitted.has(kk)) {
+      /** No choices or structural skip */
+      keyEmitted.add(kk);
+    }
+  }
+}
+
+let nvmskBlockEmitted = false;
+
 for (const key of sortedKeys) {
+  const [bodySystemPre] = key.split("\u0000");
+  if (bodySystemPre === NV_MSK_SYSTEM && !nvmskBlockEmitted) {
+    pushNvMskBlock();
+    nvmskBlockEmitted = true;
+  }
   if (keyEmitted.has(key)) {
     continue;
   }
   const [bodySystem, bodySub, conceptRow] = key.split("\u0000");
+  if (bodySystem === NV_MSK_SYSTEM) {
+    continue;
+  }
   const pair = `${bodySystem}\u0000${bodySub}`;
   const cl = wdlClusterByPair.get(pair);
   if (cl && cl.L.includes(key) && key !== cl.head) {

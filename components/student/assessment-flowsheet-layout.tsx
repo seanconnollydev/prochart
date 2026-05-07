@@ -14,6 +14,7 @@ import {
   getFlowsheetItemIdsToClearWhenLeavingException,
   getWdlDefinitionForItem,
   isFlowsheetExceptionSelected,
+  isFlowsheetWdlDetailChoiceItem,
   isFlowsheetWdlGateItem,
   isFlowsheetWdlXComboboxItem,
   prepareFlowsheetTemplate,
@@ -77,7 +78,8 @@ function FlowsheetItemTableRow({
   const selId = `flowsheet-${item.id}`;
   const wdlDef = getWdlDefinitionForItem(item);
   const showWdlInfo = Boolean(wdlDef);
-  const wdlXCombobox = isFlowsheetWdlXComboboxItem(item);
+  const wdlGateCombo = isFlowsheetWdlXComboboxItem(item);
+  const wdlDetailChoice = isFlowsheetWdlDetailChoiceItem(item);
   const reserveForIcon =
     item.responseType === "choice" ||
     (item.responseType === "multiChoice" && showWdlInfo);
@@ -85,6 +87,24 @@ function FlowsheetItemTableRow({
     indentLevel <= 0 ? "pl-3" : indentLevel === 1 ? "pl-8" : "pl-11";
   const valuePl =
     indentLevel <= 0 ? "pl-2" : indentLevel === 1 ? "pl-7" : "pl-10";
+
+  const WDL_EQUALS_FOR_LABEL = /^\s*WDL\s*=\s*/i;
+  const choiceComboboxChoices =
+    item.responseType === "choice"
+      ? wdlGateCombo
+        ? (item.choices ?? []).map((ch) => ({
+            ...ch,
+            label:
+              ch.id === FLOWSHEET_EXCEPTION_CHOICE_ID ? "X" : "WDL",
+          }))
+        : wdlDetailChoice
+          ? (item.choices ?? []).map((ch) => ({
+              ...ch,
+              label: WDL_EQUALS_FOR_LABEL.test(ch.label) ? "WDL" : ch.label,
+            }))
+          : (item.choices ?? [])
+      : [];
+
   return (
     <TableRow
       className={cn(
@@ -98,7 +118,7 @@ function FlowsheetItemTableRow({
           className="text-foreground text-xs leading-snug font-normal"
         >
           {item.prompt}
-          {wdlXCombobox && (
+          {wdlGateCombo && (
             <span className="text-muted-foreground ml-1.5 text-[10px]">
               (WDL / X)
             </span>
@@ -116,18 +136,10 @@ function FlowsheetItemTableRow({
             <AssessmentChoiceCombobox
               id={selId}
               label={item.prompt}
-              choices={
-                wdlXCombobox
-                  ? (item.choices ?? []).map((ch) => ({
-                      ...ch,
-                      label:
-                        ch.id === FLOWSHEET_EXCEPTION_CHOICE_ID ? "X" : "WDL",
-                    }))
-                  : (item.choices ?? [])
-              }
+              choices={choiceComboboxChoices}
               value={String(responses[item.id]?.value ?? "")}
               onChange={(v) =>
-                wdlXCombobox
+                wdlGateCombo
                   ? onWdlXChoiceChange(item.id, v)
                   : setResponse(item.id, v)
               }

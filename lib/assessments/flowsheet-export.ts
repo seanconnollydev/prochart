@@ -3,6 +3,7 @@ import {
   FLOWSHEET_EXCEPTION_CHOICE_ID,
   findSectionRollupGate,
   isFlowsheetExceptionSelected,
+  isFlowsheetWdlDetailChoiceItem,
   isFlowsheetWdlXComboboxItem,
   segmentFlowsheetRowItems,
 } from "@/lib/assessments/flowsheet";
@@ -24,6 +25,8 @@ function promptForRow(item: AssessmentItem): string {
   return p;
 }
 
+const WDL_EQUALS_EXPORT = /^\s*WDL\s*=\s*/i;
+
 function choiceDisplay(
   item: AssessmentItem,
   responses: Record<string, AssessmentItemResponse>,
@@ -43,7 +46,13 @@ function choiceDisplay(
     return "—";
   }
   const ch = (item.choices ?? []).find((c) => c.id === id);
-  return ch?.label ?? id;
+  if (!ch) {
+    return id;
+  }
+  if (isFlowsheetWdlDetailChoiceItem(item) && WDL_EQUALS_EXPORT.test(ch.label)) {
+    return "WDL";
+  }
+  return ch.label;
 }
 
 function multiChoiceDisplay(

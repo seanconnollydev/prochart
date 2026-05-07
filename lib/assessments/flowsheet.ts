@@ -12,6 +12,8 @@ export const FLOWSHEET_EXCEPTION_CHOICE_ID = "ch_flowsheet_exception";
 
 export const FLOWSHEET_EXCEPTION_CHOICE_LABEL = "X";
 
+const WDL_EQUALS_PREFIX = /^\s*WDL\s*=\s*/i;
+
 export function isFlowsheetWdlGateItem(item: AssessmentItem): boolean {
   if (item.responseType !== "choice") {
     return false;
@@ -22,6 +24,27 @@ export function isFlowsheetWdlGateItem(item: AssessmentItem): boolean {
 
 export function isFlowsheetWdlXComboboxItem(item: AssessmentItem): boolean {
   return isFlowsheetWdlGateItem(item);
+}
+
+/**
+ * Epic-style compact combobox row: exactly one choice begins with `WDL=` plus at least one other
+ * option (e.g. NV/MSK flattened `choice` details). Prompt does not end with ` WDL` (that's a gate row).
+ */
+export function isFlowsheetWdlDetailChoiceItem(item: AssessmentItem): boolean {
+  if (item.responseType !== "choice") {
+    return false;
+  }
+  if (isFlowsheetWdlGateItem(item)) {
+    return false;
+  }
+  const cs = item.choices ?? [];
+  let wdlSlotCount = 0;
+  for (const c of cs) {
+    if (WDL_EQUALS_PREFIX.test(c.label)) {
+      wdlSlotCount += 1;
+    }
+  }
+  return wdlSlotCount === 1 && cs.length >= 2;
 }
 
 export function gateHasExceptionChoice(item: AssessmentItem): boolean {
@@ -234,8 +257,6 @@ export function flowsheetOrderedItemsForGroup(
   return [gate, ...rest];
 }
 
-const WDL_EQUALS_PREFIX = /^\s*WDL\s*=\s*/i;
-
 /**
  * Narrative shown in the WDL info panel: gate rows use non-exception choice label(s);
  * other choice rows use text after `WDL =` on a matching choice.
@@ -251,7 +272,7 @@ function narrativeAfterWdlEquals(label: string): string {
 
 export function getWdlDefinitionForItem(item: AssessmentItem): string | null {
   if (
-    item.responseType === "multiChoice" &&
+    (item.responseType === "multiChoice" || item.responseType === "choice") &&
     typeof item.x_wdlListDefinition === "string" &&
     item.x_wdlListDefinition.trim() !== ""
   ) {
