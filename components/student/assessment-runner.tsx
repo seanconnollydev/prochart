@@ -46,6 +46,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { FileExportIcon } from "@hugeicons/core-free-icons";
+import { ArrowLeft } from "lucide-react";
 
 function hasMeaningfulResponses(
   responses: Record<string, AssessmentItemResponse>,
@@ -119,6 +120,7 @@ type Props = {
   /** Shown above the title (e.g. author preview). */
   previewBanner?: string;
   backHref?: string;
+  /** Accessible name for the header back control (icon-only). */
   backLabel?: string;
 };
 
@@ -253,21 +255,33 @@ export function AssessmentRunner({
         </p>
       )}
       <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold">{template.title}</h1>
-          {template.description && (
-            <p className="text-muted-foreground mt-1 text-sm">
-              {template.description}
-            </p>
-          )}
-          {caseStudyId !== STANDALONE_PRACTICE_CASE_STUDY_ID && (
-            <div className="mt-2 flex gap-2">
-              <Badge variant="secondary">{document.status}</Badge>
-            </div>
-          )}
-          {meta?.syncError && (
-            <p className="text-destructive mt-1 text-sm">{meta.syncError}</p>
-          )}
+        <div className="flex min-w-0 flex-1 gap-2">
+          <Button
+            asChild
+            variant="ghost"
+            size="icon"
+            className="mt-1 size-9 shrink-0 sm:mt-0.5"
+          >
+            <Link href={backHref} aria-label={backLabel}>
+              <ArrowLeft className="size-4" aria-hidden />
+            </Link>
+          </Button>
+          <div className="min-w-0 flex-1">
+            <h1 className="text-2xl font-semibold break-words">{template.title}</h1>
+            {template.description && (
+              <p className="text-muted-foreground mt-1 text-sm">
+                {template.description}
+              </p>
+            )}
+            {caseStudyId !== STANDALONE_PRACTICE_CASE_STUDY_ID && (
+              <div className="mt-2 flex gap-2">
+                <Badge variant="secondary">{document.status}</Badge>
+              </div>
+            )}
+            {meta?.syncError && (
+              <p className="text-destructive mt-1 text-sm">{meta.syncError}</p>
+            )}
+          </div>
         </div>
         {document.status !== "submitted" ? (
           <div className="flex flex-wrap items-center gap-2">
@@ -457,12 +471,6 @@ export function AssessmentRunner({
           {template.x_licenseNotice}
         </p>
       )}
-
-      <p className="text-muted-foreground text-sm">
-        <Link href={backHref} className="underline">
-          {backLabel}
-        </Link>
-      </p>
     </div>
   );
 }

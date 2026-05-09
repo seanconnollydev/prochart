@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Public_Sans } from "next/font/google";
-import { AppHeader } from "@/components/app-header";
-import { MockDataBanner } from "@/components/mock-data-banner";
 import { ToasterProvider } from "@/components/toaster-provider";
 import "./globals.css";
 import { cn } from "@/lib/utils";
@@ -42,7 +40,6 @@ export default function RootLayout({
       )}
     >
       <body className="bg-background text-foreground flex min-h-full flex-col">
-        <AppHeader />
         <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6">
           {children}
         </main>

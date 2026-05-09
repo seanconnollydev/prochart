@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { getAssessmentTemplateById } from "@/lib/actions/assessment-template";
 import { AssessmentRunner } from "@/components/student/assessment-runner";
 import { STANDALONE_PRACTICE_CASE_STUDY_ID } from "@/lib/assessments/constants";
@@ -17,8 +18,10 @@ export default async function StudentStandaloneAssessmentPage({ params }: Props)
         <p className="text-muted-foreground">
           This assessment is not available.
         </p>
-        <Button asChild variant="outline">
-          <Link href="/student/assessments">Back to assessments</Link>
+        <Button asChild variant="ghost" size="icon" aria-label="Back to assessments">
+          <Link href="/student/assessments">
+            <ArrowLeft className="size-4" aria-hidden />
+          </Link>
         </Button>
       </div>
     );

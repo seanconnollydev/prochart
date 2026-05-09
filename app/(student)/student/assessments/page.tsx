@@ -36,11 +36,6 @@ export default function StudentAssessmentsPage() {
           </Card>
         ))}
       </div>
-      <p className="text-muted-foreground text-sm">
-        <Link href="/student" className="underline">
-          Student workspace
-        </Link>
-      </p>
     </div>
   );
 }
