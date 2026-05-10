@@ -8,8 +8,8 @@ This spec is written to be:
 - **Schema-first**: a versioned case study document format that can evolve toward a public/open format.
 - **Local-first**: progress is always saved in the browser; syncing is explicit and recoverable.
 - **Cost-conscious**: minimize database writes, avoid always-on services, and lean on caching and client-side logic.
-- **Next.js-aligned**: prefer **Next.js Server Actions** for backend operations when needed.
-- **Supabase-backed**: Supabase is the durable store for shared artifacts (published cases, templates, submissions).
+- **Next.js-aligned**: prefer **Next.js Server Actions** for backend operations when a durable backend exists.
+- **Zero durable backend (current Alpha)**: bundled **practice assessments** ship in the repo (e.g. built-in JSON templates); student progress lives in **browser `localStorage` only**. Published case studies, remote templates, and server-side submission persistence are **deferred**.
 - **Navigation**: recommended app shell and Next.js routes are described under **Information architecture** (below).
 
 ## Non-goals (Prototype Alpha)
@@ -36,7 +36,7 @@ This spec is written to be:
   - Encounter/timeline entries (notes, labs, meds, vitals as applicable)
   - Optional attachments/links (no binary upload required for Alpha)
 - Save continuously (local-first).
-- Optionally “Publish” (sync to Supabase) to share the case study.
+- **Publish / shared case library** (deferred): no remote sync in the current Alpha build.
 
 ### Author journey B: Create a case study (prompt-assisted in-form)
 
@@ -52,14 +52,14 @@ This spec is written to be:
   - Define sections/domains
   - Define items/criteria (“Within defined limits” checks) and response types
   - Configure constraints (e.g., expected ranges for vitals, or allowed choices)
-- Save (local-first), optionally publish to Supabase.
+- Save (local-first); optional publish to a durable backend is deferred.
 
-### Student journey D: Complete and submit an assessment
+### Student journey D: Complete a practice assessment
 
-- Open a case study and its associated assessment template.
+- Open **Practice assessments** (`/student/assessments`) and choose a bundled template (e.g. H2T).
 - Fill out the assessment (per item).
 - Autosave progress locally; resumable across reloads.
-- Submit final responses; persist submission to Supabase when available.
+- **Deferred:** case-linked assessments and server-backed “submit” persistence. Current Alpha stores attempts only in **this browser**.
 
 ## Information architecture
 
@@ -69,7 +69,7 @@ This section describes **where** author and student experiences live in the UI a
 
 - **Persona-first areas**: separate **Author** and **Student** workspaces so navigation and mental models stay clear (see Security and data policy for simplest-possible separation).
 - **Deep-linkable artifacts**: case studies, **assessment templates**, and in-progress submissions should be addressable by stable IDs in the URL where it improves recovery and sharing (fits local-first persistence and resumability).
-- **Explicit sync surfaces**: “Publish” and “Submit” remain **deliberate actions** on screens tied to those artifacts—not only in global chrome.
+- **Explicit sync surfaces (when a backend exists)**: “Publish” and server-backed “Submit” should remain deliberate actions tied to their artifacts—not only in global chrome. **Current Alpha** has no remote publish or submit.
 - **Synthetic-data visibility**: persistent or prominent **mock / synthetic data only** messaging at the app shell level (cross-reference Security and data policy).
 
 ### App shell
@@ -101,37 +101,31 @@ flowchart TB
   authorAssess["/author/assessments"]
   authorAssessId["/author/assessments/[templateId]"]
   student["/student"]
-  studentCaseStudies["/student/case-studies"]
-  studentCase["/student/case-studies/[caseStudyId]"]
-  studentAssess["/student/case-studies/[caseStudyId]/assessments/[templateId]"]
+  studentAssessments["/student/assessments"]
+  studentAssessId["/student/assessments/[templateId]"]
   root --> author
   root --> student
   author --> authorCaseStudies
   authorCaseStudies --> authorCase
   author --> authorAssess
   authorAssess --> authorAssessId
-  student --> studentCaseStudies
-  studentCaseStudies --> studentCase
-  studentCase --> studentAssess
+  student --> studentAssessments
+  studentAssessments --> studentAssessId
 ```
 
-- **`/`**: Landing with two clear entry points (**Author workspace**, **Student workspace**).
-- **Author**
-  - `/author`: Author hub (recent drafts, shortcuts to new case study or assessment templates).
-  - `/author/case-studies`: List local and synced case studies (draft vs published reflected in UI as needed).
-  - `/author/case-studies/[caseStudyId]`: **Case study editor**: guided forms (demographics, summary, timeline, attachments); **Generate** / **Improve** per section (journeys A and B); **Publish** action.
-  - `/author/assessments`: List assessment templates; creating new may require or suggest a `caseStudyId` (journey C). Templates may use different formats over time.
-  - `/author/assessments/[templateId]`: Assessment template builder (domains, items, response types, constraints); **Publish** action.
-- **Student**
-  - `/student`: Student hub (resume in-progress work, browse published case studies).
-  - `/student/case-studies`: Browse **published** case studies available to run.
-  - `/student/case-studies/[caseStudyId]`: Read-only case presentation (e.g. timeline).
-  - `/student/case-studies/[caseStudyId]/assessments/[templateId]`: Run an assessment: fill, local autosave, **Submit** (journey D).
+- **Author (journeys A–C; UI may be partial or deferred in minimal builds)**  
+  - `/author`: Author hub (recent drafts, shortcuts).  
+  - `/author/case-studies`, `/author/case-studies/[caseStudyId]`: Case study list and editor.  
+  - `/author/assessments`, `/author/assessments/[templateId]`: Assessment templates.  
+- **Student (current Alpha)**  
+  - **`/student/assessments`**: List **bundled practice assessments** (templates committed in-repo).  
+  - **`/student/assessments/[templateId]`**: Run an assessment with local autosave only.  
+  - **Deferred:** `/student/case-studies` routes (browse published cases, read-only case view, case-scoped assessments) — no durable case catalog in this build.
 
 **Implementation notes**
 
 - Route groups such as `app/(author)/...` and `app/(student)/...` can provide different nested layouts (e.g. author sidebar vs simpler student layout) without changing the URLs above.
-- **Server Actions** for publish and submit align with Architecture constraints; colocate actions with features or place them under `app/actions/` as preferred—feature-local actions are a reasonable default.
+- **Server Actions** may load **bundled** read-only assets (e.g. built-in assessment templates). There is **no** database or Supabase in the current Alpha.
 - Parallel routes and intercepting routes for modal-heavy flows are **optional** and can be deferred (see Open questions).
 
 ### Journey mapping
@@ -141,7 +135,7 @@ flowchart TB
 | **A** (manual case study) | `/author/case-studies`, `/author/case-studies/[caseStudyId]` | Debounced local autosave; **Publish** |
 | **B** (prompt-assisted case study) | Same as A | Structured patch review/apply; provenance; **Publish** |
 | **C** (assessment template for a case) | `/author/case-studies` (select case), `/author/assessments`, `/author/assessments/[templateId]` | Local save; **Publish** template |
-| **D** (complete assessment) | `/student/case-studies`, `/student/case-studies/[caseStudyId]`, `/student/case-studies/[caseStudyId]/assessments/[templateId]` | Local autosave; **Submit** |
+| **D** (practice assessment) | `/student/assessments`, `/student/assessments/[templateId]` | Local autosave only; no remote submit |
 
 ### Future considerations
 
@@ -154,14 +148,14 @@ If draft documents outgrow **localStorage**, the same routes and views apply; on
 
 ## Architecture constraints (implementation guidance, not mandates)
 
-- **Preferred backend shape**: Next.js Server Actions for “publish/sync/submit” operations (see **Information architecture** for how feature routes relate).
+- **Preferred backend shape (when added later)**: Next.js Server Actions (or API routes) for publish/sync/submit; this Alpha has **no** durable backend.
 - **Client-heavy**: editing, validation, and draft autosave run in the browser.
 - **Caching**:
-  - Client caches case study documents/templates by `id` + `updatedAt` (or `contentHash`).
-  - Server-side caching can be used for read-mostly published content (avoid repeated DB reads).
+  - Client caches documents/templates by `id` + `updatedAt` (or `contentHash`) where applicable.
+  - Server-side caching for read-mostly content is irrelevant until a backend exists.
 - **Write minimization**:
-  - Do not write to Supabase on every keystroke.
-  - Prefer explicit “Publish/Sync” events and a small number of background retries.
+  - Avoid network writes on every keystroke.
+  - When a backend exists, prefer explicit publish/sync events (deferred).
 
 ## Data contracts
 
@@ -448,23 +442,17 @@ To keep the schema flexible, timeline entries are intentionally “typed envelop
 - **Prototype Alpha default**: `localStorage` for simplicity.
 - **Fallback/upgrade path** (if drafts become large): `IndexedDB` with the same logical keys.
 
-### Sync model (Supabase)
+### Sync model (deferred — durable backend)
 
-- **Explicit sync events**:
-  - “Publish case study”
-  - “Publish assessment template”
-  - “Submit assessment”
-- **Conflict behavior**:
-  - Prototype Alpha chooses the simplest: server rejects if `updatedAt` is older than server’s `updatedAt` (optimistic concurrency).
-  - Client offers “Reload server version” and preserves local draft copy to avoid data loss.
+When a shared backend is introduced:
+
+- **Explicit sync events** might include: publish case study, publish assessment template, submit assessment (server-backed).
+- **Conflict behavior**: simplest is optimistic concurrency (server rejects stale `updatedAt`); client offers reload and preserves a local draft copy.
 
 ### Caching model
 
-- **Client caching**:
-  - Cache published documents keyed by `id`.
-  - Use `updatedAt` (or a computed `contentHash`) to avoid unnecessary refetch.
-- **Server caching** (optional):
-  - For published, read-mostly case studies and templates, use framework caching to reduce Supabase reads.
+- **Client caching**: cache documents keyed by `id`; use `updatedAt` or `contentHash` to avoid unnecessary work.
+- **Server caching**: relevant only after a read API or database exists.
 
 ## Prompt-assisted authoring (Chrome Prompt API)
 
@@ -525,13 +513,15 @@ Example patch envelope:
   - prompt summary
   - timestamp
 
-## Supabase persistence (Alpha-level)
+## Durable persistence (deferred)
 
-This section describes **what** we need to store, not the exact table design.
+When a database or hosted API exists, expect to store at minimum:
 
-- **Case studies**: store the full `CaseStudyDocument` JSON plus metadata (`id`, `title`, `updatedAt`, `status`, `tags`).
-- **Assessment templates**: store the full `AssessmentTemplate` JSON plus metadata.
-- **Assessment submissions**: store the full `AssessmentSubmission` JSON plus metadata, indexed by `caseStudyId` and `templateId` (and student identity if available).
+- **Case studies**: full `CaseStudyDocument` JSON plus metadata (`id`, `title`, `updatedAt`, `status`, `tags`).
+- **Assessment templates**: full `AssessmentTemplate` JSON plus metadata (or serve from build artifacts only).
+- **Assessment submissions**: full `AssessmentSubmission` JSON plus metadata, indexed by `caseStudyId` and `templateId` (and student identity if available).
+
+**Current Alpha:** none of the above are persisted remotely; assessment templates used in practice mode are **bundled files** in the repository.
 
 ## Security and data policy
 
@@ -554,7 +544,7 @@ This section describes **what** we need to store, not the exact table design.
 
 - Author can create/edit a case study via forms.
 - Author drafts are autosaved locally and recover after refresh.
-- Author can publish/sync a case study to Supabase with a deliberate action.
+- **Deferred:** publish/sync of a case study to a shared backend (no remote store in this Alpha).
 
 ### Prompt-assisted authoring
 
@@ -565,8 +555,8 @@ This section describes **what** we need to store, not the exact table design.
 ### Assessment
 
 - Author can create/configure an `AssessmentTemplate` with multiple items and at least two response types.
-- Student can complete an assessment; progress autosaves locally.
-- Student can submit; submission persists to Supabase (when network available).
+- Student can complete a **practice** assessment; progress autosaves locally in the browser.
+- **Deferred:** server-backed submission or case-linked assessments.
 
 ## Open questions (intentionally deferred)
 

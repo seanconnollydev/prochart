@@ -3,11 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { submitAssessment } from "@/lib/actions/assessment-submission";
-import {
-  isLocalOnlyAssessmentCaseStudy,
-  STANDALONE_PRACTICE_CASE_STUDY_ID,
-} from "@/lib/assessments/constants";
+import { STANDALONE_PRACTICE_CASE_STUDY_ID } from "@/lib/assessments/constants";
 import { prepareFlowsheetTemplate } from "@/lib/assessments/flowsheet";
 import { buildFlowsheetExportRows } from "@/lib/assessments/flowsheet-export";
 import { exportFlowsheetAssessmentPdf } from "@/lib/assessments/flowsheet-pdf";
@@ -129,66 +125,21 @@ export function AssessmentRunner({
   templateId,
   template: templateRaw,
   previewBanner,
-  backHref = `/student/case-studies/${caseStudyId}`,
-  backLabel = "Back to case",
+  backHref = "/student/assessments",
+  backLabel = "Back to practice assessments",
 }: Props) {
   const template = useMemo(
     () => normalizeAssessmentTemplate(templateRaw),
     [templateRaw],
   );
 
-  const { document, meta, setDocument, markSynced, setSyncError, hydrated } =
+  const { document, meta, setDocument, setSyncError, hydrated } =
     useLocalAssessmentSubmission(caseStudyId, templateId);
 
   const [resetDialogOpen, setResetDialogOpen] = useState(false);
   const [flowsheetRemountKey, setFlowsheetRemountKey] = useState(0);
 
-  const clientUpdatedAtForSubmit = useMemo(
-    () => meta?.syncedBasisAt ?? document?.updatedAt ?? "",
-    [meta?.syncedBasisAt, document?.updatedAt],
-  );
-
   const layout = template.x_presentation?.layout ?? "cards";
-
-  const localOnlyAssessment = useMemo(
-    () => isLocalOnlyAssessmentCaseStudy(caseStudyId),
-    [caseStudyId],
-  );
-
-  async function handleSubmit() {
-    if (!document) {
-      return;
-    }
-    if (localOnlyAssessment) {
-      setSyncError(null);
-      toast.success(
-        "Saved on this device. You can keep editing, reset, or leave anytime.",
-      );
-      return;
-    }
-    if (document.status === "submitted") {
-      toast.message("Already submitted.");
-      return;
-    }
-    setSyncError(null);
-    const res = await submitAssessment({
-      document,
-      clientUpdatedAt: clientUpdatedAtForSubmit || document.updatedAt,
-    });
-    if (res.ok) {
-      markSynced(res.updatedAt, res.updatedAt);
-      setDocument((d) => ({
-        ...d,
-        status: "submitted",
-        submittedAt: res.submittedAt,
-        updatedAt: res.updatedAt,
-      }));
-      toast.success("Submitted.");
-    } else {
-      setSyncError(res.message);
-      toast.error(res.message);
-    }
-  }
 
   function setResponse(
     itemId: string,
@@ -299,11 +250,6 @@ export function AssessmentRunner({
                 template={template}
                 responses={document.responses}
               />
-            )}
-            {!localOnlyAssessment && (
-              <Button type="button" onClick={handleSubmit}>
-                Submit
-              </Button>
             )}
           </div>
         ) : (

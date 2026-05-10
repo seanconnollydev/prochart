@@ -8,19 +8,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "build:h2t": "node scripts/build-h2t-assessment.mjs",
-    "supabase:local:start": "supabase start",
-    "supabase:local:stop": "supabase stop",
-    "supabase:local:restart": "supabase stop && supabase start",
-    "supabase:local:status": "supabase status"
+    "build:h2t": "node scripts/build-h2t-assessment.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
     "@hugeicons/core-free-icons": "^4.1.1",
     "@hugeicons/react": "^1.1.6",
     "@radix-ui/react-slot": "^1.2.4",
-    "@supabase/ssr": "^0.10.0",
-    "@supabase/supabase-js": "^2.101.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
@@ -44,7 +38,6 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
-    "supabase": "^2.84.10",
     "tailwindcss": "^4",
     "typescript": "^5",
     "xlsx": "^0.18.5"
