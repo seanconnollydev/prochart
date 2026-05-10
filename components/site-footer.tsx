@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 
 const GNU_AGPL_URL = "https://www.gnu.org/licenses/agpl-3.0.html";
-const GNU_AGPL_FULL_TEXT_URL = "https://www.gnu.org/licenses/agpl-3.0.txt";
 
 export function SiteFooter({ className }: { className?: string }) {
   return (

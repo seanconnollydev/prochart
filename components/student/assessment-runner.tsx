@@ -16,7 +16,7 @@ import {
 import type { AssessmentItemResponse } from "@/lib/prototype-alpha/types/assessment-submission";
 import { AssessmentFlowsheetLayout } from "@/components/student/assessment-flowsheet-layout";
 import { AssessmentWorksheetLayout } from "@/components/student/assessment-worksheet-layout";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -39,9 +39,16 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { LicenseNoticeProse } from "@/lib/format/linkify-plain-text";
+import { cn } from "@/lib/utils";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { FileExportIcon } from "@hugeicons/core-free-icons";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, InfoIcon } from "lucide-react";
 
 function hasMeaningfulResponses(
   responses: Record<string, AssessmentItemResponse>,
@@ -105,6 +112,30 @@ function FlowsheetPdfExportButton({
     >
       <HugeiconsIcon icon={FileExportIcon} strokeWidth={2} className="size-4" />
     </Button>
+  );
+}
+
+function FlowsheetLicenseNoticePopover({ notice }: { notice: string }) {
+  return (
+    <Popover>
+      <PopoverTrigger
+        className={cn(
+          buttonVariants({ variant: "ghost", size: "icon" }),
+          "text-muted-foreground shrink-0",
+        )}
+        aria-label="License and attribution"
+      >
+        <InfoIcon className="size-4" aria-hidden />
+      </PopoverTrigger>
+      <PopoverContent
+        className="max-w-md w-[min(100vw-2rem,28rem)] gap-3 py-3"
+        align="end"
+        side="bottom"
+        sideOffset={4}
+      >
+        <LicenseNoticeProse text={notice} />
+      </PopoverContent>
+    </Popover>
   );
 }
 
@@ -236,6 +267,9 @@ export function AssessmentRunner({
         </div>
         {document.status !== "submitted" ? (
           <div className="flex flex-wrap items-center gap-2">
+            {layout === "flowsheet" && template.licenseNotice ? (
+              <FlowsheetLicenseNoticePopover notice={template.licenseNotice} />
+            ) : null}
             <Button
               type="button"
               variant="outline"
@@ -254,6 +288,9 @@ export function AssessmentRunner({
           </div>
         ) : (
           <div className="flex flex-wrap items-center gap-2">
+            {layout === "flowsheet" && template.licenseNotice ? (
+              <FlowsheetLicenseNoticePopover notice={template.licenseNotice} />
+            ) : null}
             <Badge>Submitted</Badge>
             {layout === "flowsheet" && (
               <FlowsheetPdfExportButton
@@ -412,11 +449,11 @@ export function AssessmentRunner({
         </div>
       )}
 
-      {template.licenseNotice && (
-        <p className="text-muted-foreground border-t pt-4 text-xs leading-relaxed">
-          {template.licenseNotice}
-        </p>
-      )}
+      {template.licenseNotice && layout !== "flowsheet" ? (
+        <div className="border-t pt-4">
+          <LicenseNoticeProse text={template.licenseNotice} />
+        </div>
+      ) : null}
     </div>
   );
 }

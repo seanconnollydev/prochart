@@ -41,7 +41,7 @@ export default function RootLayout({
       )}
     >
       <body className="bg-background text-foreground flex min-h-full flex-col">
-        <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6">
+        <main className="mx-auto w-full max-w-6xl flex-1 px-4 pt-6">
           {children}
         </main>
         <SiteFooter />
