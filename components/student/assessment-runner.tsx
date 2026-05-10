@@ -178,7 +178,10 @@ export function AssessmentRunner({
     clearItemIds?: string[],
   ) {
     setDocument((d) => {
-      const nextResponses = { ...d.responses, [itemId]: { ...d.responses[itemId], value } };
+      const nextResponses = {
+        ...d.responses,
+        [itemId]: { ...d.responses[itemId], value },
+      };
       for (const id of clearItemIds ?? []) {
         if (id !== itemId) {
           delete nextResponses[id];
@@ -230,7 +233,13 @@ export function AssessmentRunner({
   const groups = template.groups ?? [];
 
   return (
-    <div className="space-y-6">
+    <div
+      className={cn(
+        layout !== "flowsheet" && "space-y-6",
+        layout === "flowsheet" &&
+          "flex min-h-0 flex-1 flex-col gap-6",
+      )}
+    >
       {previewBanner && (
         <p className="bg-muted text-muted-foreground rounded-md border px-3 py-2 text-sm">
           {previewBanner}
@@ -249,7 +258,9 @@ export function AssessmentRunner({
             </Link>
           </Button>
           <div className="min-w-0 flex-1">
-            <h1 className="text-2xl font-semibold break-words">{template.title}</h1>
+            <h1 className="text-2xl font-semibold break-words">
+              {template.title}
+            </h1>
             {template.description && (
               <p className="text-muted-foreground mt-1 text-sm">
                 {template.description}
@@ -308,7 +319,8 @@ export function AssessmentRunner({
           <AlertDialogHeader>
             <AlertDialogTitle>Start over?</AlertDialogTitle>
             <AlertDialogDescription>
-              This clears all answers for this assessment. This cannot be undone.
+              This clears all answers for this assessment. This cannot be
+              undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -325,7 +337,7 @@ export function AssessmentRunner({
       </AlertDialog>
 
       {layout === "flowsheet" ? (
-        <div className="h-[min(min(70vh,720px),calc(100dvh-14rem))] w-full min-h-0">
+        <div className="min-h-0 w-full flex-1">
           <AssessmentFlowsheetLayout
             key={flowsheetRemountKey}
             className="h-full min-h-0"
@@ -350,9 +362,7 @@ export function AssessmentRunner({
               <Card key={item.id}>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-base">{item.prompt}</CardTitle>
-                  {groupLine && (
-                    <CardDescription>{groupLine}</CardDescription>
-                  )}
+                  {groupLine && <CardDescription>{groupLine}</CardDescription>}
                 </CardHeader>
                 <CardContent>
                   {item.responseType === "boolean" && (
@@ -382,7 +392,10 @@ export function AssessmentRunner({
                           onValueChange={(v) => setResponse(item.id, v)}
                         >
                           {(item.choices ?? []).map((ch) => (
-                            <div key={ch.id} className="flex items-center gap-2">
+                            <div
+                              key={ch.id}
+                              className="flex items-center gap-2"
+                            >
                               <RadioGroupItem
                                 value={ch.id}
                                 id={`${item.id}-${ch.id}`}
@@ -406,7 +419,10 @@ export function AssessmentRunner({
                               : [];
                             const checked = selected.includes(ch.id);
                             return (
-                              <div key={ch.id} className="flex items-center gap-2">
+                              <div
+                                key={ch.id}
+                                className="flex items-center gap-2"
+                              >
                                 <Checkbox
                                   id={`${item.id}-${ch.id}`}
                                   checked={checked}
@@ -437,9 +453,7 @@ export function AssessmentRunner({
                     <Textarea
                       rows={4}
                       value={String(document.responses[item.id]?.value ?? "")}
-                      onChange={(e) =>
-                        setResponse(item.id, e.target.value)
-                      }
+                      onChange={(e) => setResponse(item.id, e.target.value)}
                     />
                   )}
                 </CardContent>
