@@ -11,7 +11,7 @@ import {
 import { isBuiltinTemplateId } from "@/lib/assessments/builtin";
 import {
   emptyAssessmentTemplate,
-  normalizeAssessmentTemplate,
+  tryNormalizeAssessmentTemplate,
   type AssessmentTemplate,
 } from "../types/assessment-template";
 import { nowIso } from "../ids";
@@ -61,8 +61,11 @@ export function useLocalAssessmentTemplate(templateId: string | undefined) {
     queueMicrotask(() => {
       const existing = readWrapped<AssessmentTemplate>(NS, templateId);
       if (existing) {
+        const parsed =
+          tryNormalizeAssessmentTemplate(existing.document) ??
+          emptyAssessmentTemplate(templateId);
         setWrapped({
-          document: normalizeAssessmentTemplate(existing.document),
+          document: parsed,
           meta: existing.meta,
         });
       } else {

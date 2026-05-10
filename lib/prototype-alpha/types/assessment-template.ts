@@ -1,21 +1,10 @@
-export const ASSESSMENT_TEMPLATE_SCHEMA_VERSION = "assessmentTemplate@0.2" as const;
-
-/** Legacy schema; migrated on read via {@link normalizeAssessmentTemplate}. */
-export const ASSESSMENT_TEMPLATE_SCHEMA_VERSION_LEGACY = "assessmentTemplate@0.1" as const;
+export const ASSESSMENT_TEMPLATE_SCHEMA_VERSION = "assessmentTemplate@0.1" as const;
 
 export type AssessmentTemplateStatus = "draft" | "published";
-
-export type DefinedLimits =
-  | { type: "numericRange"; unit?: string; min?: number; max?: number; [key: string]: unknown }
-  | { type: "scenarioDefined"; description?: string; [key: string]: unknown }
-  | { type: "informational"; description?: string; [key: string]: unknown }
-  | { type: "none"; [key: string]: unknown }
-  | Record<string, unknown>;
 
 export type AssessmentChoice = {
   id: string;
   label: string;
-  [key: string]: unknown;
 };
 
 export type AssessmentResponseType =
@@ -30,14 +19,6 @@ export type AssessmentGroup = {
   id: string;
   label: string;
   parentGroupId: string | null;
-  [key: string]: unknown;
-};
-
-/** @deprecated Use {@link AssessmentGroup}. Retained for migration from 0.1. */
-export type AssessmentDomain = {
-  id: string;
-  label: string;
-  [key: string]: unknown;
 };
 
 export type AssessmentPresentationLayout = "cards" | "worksheet" | "flowsheet";
@@ -45,19 +26,15 @@ export type AssessmentPresentationLayout = "cards" | "worksheet" | "flowsheet";
 export type AssessmentItem = {
   id: string;
   groupId?: string;
-  /** @deprecated Migrated to groupId */
-  domainId?: string;
   prompt: string;
   responseType: AssessmentResponseType;
-  definedLimits?: DefinedLimits;
   choices?: AssessmentChoice[];
   /** Flowsheet: one subsection rollup row; WDL vs X, expands to exception `multiChoice` rows. */
-  x_flowsheetSectionRollup?: boolean;
+  flowsheetSectionRollup?: boolean;
   /** Flowsheet: full subsection WDL narrative from workbook `Sub WDL` aggregate row (side panel when set). */
-  x_flowsheetSectionAggregateWdlDefinition?: string;
+  flowsheetSectionAggregateWdlDefinition?: string;
   /** Flowsheet: WDL narrative for multiselect exception rows (not stored as a `WDL=` choice). */
-  x_wdlListDefinition?: string;
-  [key: string]: unknown;
+  wdlListDefinition?: string;
 };
 
 export type AssessmentTemplate = {
@@ -65,24 +42,98 @@ export type AssessmentTemplate = {
   id: string;
   title: string;
   description?: string;
-  /** Optional link to a case study for authoring/navigation */
-  caseStudyId?: string;
   createdAt: string;
   updatedAt: string;
   status: AssessmentTemplateStatus;
   groups: AssessmentGroup[];
   items: AssessmentItem[];
   /** How to render the taker UI (default: cards). */
-  x_presentation?: { layout?: AssessmentPresentationLayout };
+  presentation?: { layout?: AssessmentPresentationLayout };
   /** Optional license / attribution (e.g. bundled H2T workbook). */
-  x_licenseNotice?: string;
-  provenance?: {
-    authoredBy?: { actorType: string; actorId?: string; [key: string]: unknown };
-    [key: string]: unknown;
-  };
-  x_extensions?: Record<string, unknown>;
-  [key: string]: unknown;
+  licenseNotice?: string;
 };
+
+function isRecord(v: unknown): v is Record<string, unknown> {
+  return typeof v === "object" && v !== null && !Array.isArray(v);
+}
+
+function isAssessmentGroup(v: unknown): v is AssessmentGroup {
+  if (!isRecord(v)) {
+    return false;
+  }
+  return (
+    typeof v.id === "string" &&
+    typeof v.label === "string" &&
+    (v.parentGroupId === null || typeof v.parentGroupId === "string")
+  );
+}
+
+function isAssessmentItem(v: unknown): v is AssessmentItem {
+  if (!isRecord(v)) {
+    return false;
+  }
+  return (
+    typeof v.id === "string" &&
+    typeof v.prompt === "string" &&
+    typeof v.responseType === "string"
+  );
+}
+
+/**
+ * Returns a valid template or null (e.g. corrupt or wrong schema). No migration of legacy shapes.
+ */
+export function tryNormalizeAssessmentTemplate(raw: unknown): AssessmentTemplate | null {
+  if (!isRecord(raw)) {
+    return null;
+  }
+  if (raw.schemaVersion !== ASSESSMENT_TEMPLATE_SCHEMA_VERSION) {
+    return null;
+  }
+  if (
+    typeof raw.id !== "string" ||
+    typeof raw.title !== "string" ||
+    typeof raw.createdAt !== "string" ||
+    typeof raw.updatedAt !== "string" ||
+    (raw.status !== "draft" && raw.status !== "published")
+  ) {
+    return null;
+  }
+  if (!Array.isArray(raw.groups) || !raw.groups.every(isAssessmentGroup)) {
+    return null;
+  }
+  if (!Array.isArray(raw.items) || !raw.items.every(isAssessmentItem)) {
+    return null;
+  }
+
+  const template: AssessmentTemplate = {
+    schemaVersion: ASSESSMENT_TEMPLATE_SCHEMA_VERSION,
+    id: raw.id,
+    title: raw.title,
+    createdAt: raw.createdAt,
+    updatedAt: raw.updatedAt,
+    status: raw.status,
+    groups: raw.groups,
+    items: raw.items,
+  };
+  if (typeof raw.description === "string") {
+    template.description = raw.description;
+  }
+  if (isRecord(raw.presentation)) {
+    const layout = raw.presentation.layout;
+    if (
+      layout === undefined ||
+      layout === "cards" ||
+      layout === "worksheet" ||
+      layout === "flowsheet"
+    ) {
+      template.presentation = { layout };
+    }
+  }
+  if (typeof raw.licenseNotice === "string") {
+    template.licenseNotice = raw.licenseNotice;
+  }
+  return template;
+}
 
 export function emptyAssessmentTemplate(id: string): AssessmentTemplate {
   const t = new Date().toISOString();
@@ -100,65 +151,14 @@ export function emptyAssessmentTemplate(id: string): AssessmentTemplate {
     status: "draft",
     groups: [defaultGroup],
     items: [],
-    x_extensions: {},
   };
 }
 
-/**
- * Migrates legacy 0.1 documents (domains / domainId) to 0.2 (groups / groupId).
- */
+/** Strict parse; throws if the document is not a valid current-schema template. */
 export function normalizeAssessmentTemplate(raw: unknown): AssessmentTemplate {
-  const d = raw as Record<string, unknown>;
-  const schemaVersion = d.schemaVersion as string | undefined;
-
-  if (
-    schemaVersion === ASSESSMENT_TEMPLATE_SCHEMA_VERSION &&
-    Array.isArray(d.groups)
-  ) {
-    return raw as AssessmentTemplate;
+  const parsed = tryNormalizeAssessmentTemplate(raw);
+  if (!parsed) {
+    throw new Error("Invalid assessment template document");
   }
-
-  if (
-    schemaVersion === ASSESSMENT_TEMPLATE_SCHEMA_VERSION_LEGACY &&
-    Array.isArray(d.domains)
-  ) {
-    const domains = d.domains as AssessmentDomain[];
-    const groups: AssessmentGroup[] = domains.map((dom) => ({
-      id: dom.id,
-      label: dom.label,
-      parentGroupId: null,
-    }));
-    const defaultGid = groups[0]?.id ?? "grp_default";
-    const items = (Array.isArray(d.items) ? d.items : []).map((it) => {
-      const row = it as AssessmentItem & { domainId?: string };
-      const { domainId: _legacy, ...rest } = row;
-      const gid = row.groupId ?? row.domainId ?? defaultGid;
-      return { ...rest, groupId: gid } as AssessmentItem;
-    });
-    const { domains: _drop, ...rest } = d;
-    return {
-      ...rest,
-      schemaVersion: ASSESSMENT_TEMPLATE_SCHEMA_VERSION,
-      groups,
-      items,
-    } as AssessmentTemplate;
-  }
-
-  const groups: AssessmentGroup[] = Array.isArray(d.groups)
-    ? (d.groups as AssessmentGroup[])
-    : [{ id: "grp_default", label: "General", parentGroupId: null }];
-  const defaultGid = groups[0]?.id ?? "grp_default";
-  const items = (Array.isArray(d.items) ? d.items : []).map((it) => {
-    const row = it as AssessmentItem;
-    return {
-      ...row,
-      groupId: row.groupId ?? row.domainId ?? defaultGid,
-    } as AssessmentItem;
-  });
-  return {
-    ...(d as object),
-    schemaVersion: ASSESSMENT_TEMPLATE_SCHEMA_VERSION,
-    groups,
-    items,
-  } as AssessmentTemplate;
+  return parsed;
 }

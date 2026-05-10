@@ -2,7 +2,6 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { getAssessmentTemplateById } from "@/lib/actions/assessment-template";
 import { AssessmentRunner } from "@/components/student/assessment-runner";
-import { STANDALONE_PRACTICE_CASE_STUDY_ID } from "@/lib/assessments/constants";
 import { Button } from "@/components/ui/button";
 
 type Props = {
@@ -29,7 +28,6 @@ export default async function StudentStandaloneAssessmentPage({ params }: Props)
 
   return (
     <AssessmentRunner
-      caseStudyId={STANDALONE_PRACTICE_CASE_STUDY_ID}
       templateId={templateId}
       template={template}
       backHref="/student/assessments"

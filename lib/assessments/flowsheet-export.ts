@@ -4,10 +4,8 @@ import {
   FLOWSHEET_EXCEPTION_CHOICE_ID,
   findSectionRollupGate,
   isFlowsheetExceptionSelected,
-  isFlowsheetWdlDetailChoiceItem,
   isFlowsheetWdlXComboboxItem,
   segmentFlowsheetRowItems,
-  stripFlowsheetMultiselectWdlSlotIds,
 } from "@/lib/assessments/flowsheet";
 import type {
   AssessmentItem,
@@ -33,10 +31,7 @@ function flowsheetChoiceIdExportLabel(
   if (!ch) {
     return id;
   }
-  if (
-    isFlowsheetWdlDetailChoiceItem(item) &&
-    WDL_EQUALS_EXPORT.test(ch.label)
-  ) {
+  if (WDL_EQUALS_EXPORT.test(ch.label)) {
     return "WDL";
   }
   return ch.label;
@@ -57,10 +52,7 @@ function choiceDisplay(
     }
     return "WDL";
   }
-  const ids = stripFlowsheetMultiselectWdlSlotIds(
-    item,
-    coerceFlowsheetMultiselectValue(raw),
-  );
+  const ids = coerceFlowsheetMultiselectValue(raw);
   if (ids.length === 0) {
     return "—";
   }
@@ -73,10 +65,7 @@ function multiChoiceDisplay(
   responses: Record<string, AssessmentItemResponse>,
 ): string {
   const raw = responses[item.id]?.value;
-  const ids = stripFlowsheetMultiselectWdlSlotIds(
-    item,
-    coerceFlowsheetMultiselectValue(raw),
-  );
+  const ids = coerceFlowsheetMultiselectValue(raw);
   if (ids.length === 0) {
     return "—";
   }
@@ -129,7 +118,7 @@ function exportValueDisplayWithComment(
   responses: Record<string, AssessmentItemResponse>,
 ): string {
   const main = formatItemValue(item, responses);
-  const raw = responses[item.id]?.x_comment;
+  const raw = responses[item.id]?.comment;
   const c = typeof raw === "string" ? raw.trim() : "";
   if (!c) {
     return main;

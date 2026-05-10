@@ -1,5 +1,5 @@
 import type { AssessmentTemplate } from "@/lib/prototype-alpha/types/assessment-template";
-import { normalizeAssessmentTemplate } from "@/lib/prototype-alpha/types/assessment-template";
+import { tryNormalizeAssessmentTemplate } from "@/lib/prototype-alpha/types/assessment-template";
 import h2tHeadToToe from "./h2t-head-to-toe.generated.json";
 
 const rawBuiltins: Record<string, unknown> = {
@@ -17,5 +17,5 @@ export function getBuiltinAssessmentTemplate(id: string): AssessmentTemplate | n
   if (!raw) {
     return null;
   }
-  return normalizeAssessmentTemplate(raw);
+  return tryNormalizeAssessmentTemplate(raw);
 }

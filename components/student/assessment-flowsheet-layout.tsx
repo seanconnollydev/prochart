@@ -21,7 +21,6 @@ import {
   isFlowsheetWdlXComboboxItem,
   prepareFlowsheetTemplate,
   segmentFlowsheetRowItems,
-  stripFlowsheetMultiselectWdlSlotIds,
 } from "@/lib/assessments/flowsheet";
 import { AssessmentChoiceCombobox } from "@/components/student/assessment-choice-combobox";
 import { AssessmentFlowsheetInfoPanel } from "@/components/student/assessment-flowsheet-info-panel";
@@ -132,16 +131,8 @@ function FlowsheetItemTableRow({
               id={selId}
               label={item.prompt}
               choices={flowsheetMultiselectChoicesForItem(item)}
-              value={stripFlowsheetMultiselectWdlSlotIds(
-                item,
-                coerceFlowsheetMultiselectValue(responses[item.id]?.value),
-              )}
-              onChange={(ids) =>
-                setResponse(
-                  item.id,
-                  stripFlowsheetMultiselectWdlSlotIds(item, ids),
-                )
-              }
+              value={coerceFlowsheetMultiselectValue(responses[item.id]?.value)}
+              onChange={(ids) => setResponse(item.id, ids)}
               className="w-full min-w-0"
             />
           ) : null}

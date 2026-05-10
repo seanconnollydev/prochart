@@ -26,34 +26,6 @@ export function isFlowsheetWdlXComboboxItem(item: AssessmentItem): boolean {
   return isFlowsheetWdlGateItem(item);
 }
 
-/**
- * Epic-style detail row: leaf `choice` with WDL narrative on `x_wdlListDefinition` (not in choices),
- * or legacy template with exactly one `WDL=`… choice plus exceptions.
- */
-export function isFlowsheetWdlDetailChoiceItem(item: AssessmentItem): boolean {
-  if (item.responseType !== "choice") {
-    return false;
-  }
-  if (isFlowsheetWdlGateItem(item)) {
-    return false;
-  }
-  const def =
-    typeof item.x_wdlListDefinition === "string"
-      ? item.x_wdlListDefinition.trim()
-      : "";
-  if (def !== "") {
-    return (item.choices ?? []).length >= 1;
-  }
-  const cs = item.choices ?? [];
-  let wdlSlotCount = 0;
-  for (const c of cs) {
-    if (WDL_EQUALS_PREFIX.test(c.label)) {
-      wdlSlotCount += 1;
-    }
-  }
-  return wdlSlotCount === 1 && cs.length >= 2;
-}
-
 /** Flowsheet grid + panel: multiselect UI for `multiChoice` and leaf (non-gate) `choice` rows. */
 export function isFlowsheetMultiselectPresentationItem(item: AssessmentItem): boolean {
   return (
@@ -73,41 +45,15 @@ export function coerceFlowsheetMultiselectValue(raw: unknown): string[] {
   return [];
 }
 
-/** @deprecated Legacy: choice ids whose labels used a `WDL=` row; modern templates use {@link AssessmentItem.x_wdlListDefinition} instead. */
-export function flowsheetWdlSlotChoiceIds(item: AssessmentItem): Set<string> {
-  const out = new Set<string>();
-  for (const c of item.choices ?? []) {
-    if (WDL_EQUALS_PREFIX.test(c.label)) {
-      out.add(c.id);
-    }
-  }
-  return out;
-}
-
-/** Remove WDL-slot choice ids from stored multiselect values (those options are not in the UI). */
-export function stripFlowsheetMultiselectWdlSlotIds(
-  item: AssessmentItem,
-  ids: string[],
-): string[] {
-  const drop = flowsheetWdlSlotChoiceIds(item);
-  return ids.filter((id) => !drop.has(id));
-}
-
-/**
- * Multiselect options: exception labels only. Drops any legacy `WDL=`… choice rows (prefer
- * `x_wdlListDefinition` on the item instead).
- */
+/** Multiselect options for flowsheet UI. */
 export function flowsheetMultiselectChoicesForItem(item: AssessmentItem): AssessmentChoice[] {
-  const withoutWdlSlot = (cs: AssessmentChoice[]) =>
-    cs.filter((ch) => !WDL_EQUALS_PREFIX.test(ch.label));
-
   if (item.responseType === "multiChoice") {
-    return withoutWdlSlot(item.choices ?? []);
+    return item.choices ?? [];
   }
   if (item.responseType !== "choice" || isFlowsheetWdlGateItem(item)) {
     return [];
   }
-  return withoutWdlSlot(item.choices ?? []);
+  return item.choices ?? [];
 }
 
 export function gateHasExceptionChoice(item: AssessmentItem): boolean {
@@ -162,7 +108,7 @@ export function findGateItemForGroup(
 }
 
 export function isSectionRollupGateItem(item: AssessmentItem): boolean {
-  return item.x_flowsheetSectionRollup === true;
+  return item.flowsheetSectionRollup === true;
 }
 
 export function findSectionRollupGate(
@@ -322,7 +268,7 @@ export function flowsheetOrderedItemsForGroup(
 
 /**
  * Text after `WDL =` in a choice label, or the full label if absent.
- * Used by {@link getWdlDefinitionForItem} for gate rows and legacy slots.
+ * Used by {@link getWdlDefinitionForItem} for gate rows.
  */
 function narrativeAfterWdlEquals(label: string): string {
   const t = label.trim();
@@ -334,7 +280,7 @@ function narrativeAfterWdlEquals(label: string): string {
 }
 
 /**
- * WDL narrative stored on the template (`x_wdlListDefinition`, section aggregate).
+ * WDL narrative stored on the template (`wdlListDefinition`, section aggregate).
  * Flowsheet sidebar uses this—not gate choice labels—for “Within Defined Limits” copy.
  */
 export function getTemplateStoredWdlDefinition(
@@ -342,24 +288,23 @@ export function getTemplateStoredWdlDefinition(
 ): string | null {
   if (
     (item.responseType === "multiChoice" || item.responseType === "choice") &&
-    typeof item.x_wdlListDefinition === "string" &&
-    item.x_wdlListDefinition.trim() !== ""
+    typeof item.wdlListDefinition === "string" &&
+    item.wdlListDefinition.trim() !== ""
   ) {
-    return item.x_wdlListDefinition;
+    return item.wdlListDefinition;
   }
   if (
-    item.x_flowsheetSectionRollup === true &&
-    typeof item.x_flowsheetSectionAggregateWdlDefinition === "string" &&
-    item.x_flowsheetSectionAggregateWdlDefinition.trim() !== ""
+    item.flowsheetSectionRollup === true &&
+    typeof item.flowsheetSectionAggregateWdlDefinition === "string" &&
+    item.flowsheetSectionAggregateWdlDefinition.trim() !== ""
   ) {
-    return item.x_flowsheetSectionAggregateWdlDefinition.trim();
+    return item.flowsheetSectionAggregateWdlDefinition.trim();
   }
   return null;
 }
 
 /**
- * Full WDL narrative for an item: template fields first, then gate choice labels,
- * then legacy `WDL =` choice rows.
+ * Full WDL narrative for an item: template fields first, then gate choice labels.
  */
 export function getWdlDefinitionForItem(item: AssessmentItem): string | null {
   const fromTemplate = getTemplateStoredWdlDefinition(item);
@@ -375,14 +320,6 @@ export function getWdlDefinitionForItem(item: AssessmentItem): string | null {
       return null;
     }
     return parts.join("\n\n");
-  }
-  if (item.responseType === "choice" || item.responseType === "multiChoice") {
-    for (const c of item.choices ?? []) {
-      const label = c.label;
-      if (WDL_EQUALS_PREFIX.test(label)) {
-        return narrativeAfterWdlEquals(label);
-      }
-    }
   }
   return null;
 }

@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { STANDALONE_PRACTICE_CASE_STUDY_ID } from "@/lib/assessments/constants";
 import { prepareFlowsheetTemplate } from "@/lib/assessments/flowsheet";
 import { buildFlowsheetExportRows } from "@/lib/assessments/flowsheet-export";
 import { exportFlowsheetAssessmentPdf } from "@/lib/assessments/flowsheet-pdf";
@@ -48,7 +47,7 @@ function hasMeaningfulResponses(
   responses: Record<string, AssessmentItemResponse>,
 ): boolean {
   for (const r of Object.values(responses)) {
-    const c = r?.x_comment;
+    const c = r?.comment;
     if (typeof c === "string" && c.trim() !== "") {
       return true;
     }
@@ -110,7 +109,6 @@ function FlowsheetPdfExportButton({
 }
 
 type Props = {
-  caseStudyId: string;
   templateId: string;
   template: AssessmentTemplate;
   /** Shown above the title (e.g. author preview). */
@@ -118,15 +116,17 @@ type Props = {
   backHref?: string;
   /** Accessible name for the header back control (icon-only). */
   backLabel?: string;
+  /** When true, show submission status badges in the header. */
+  showSubmissionStatus?: boolean;
 };
 
 export function AssessmentRunner({
-  caseStudyId,
   templateId,
   template: templateRaw,
   previewBanner,
   backHref = "/student/assessments",
   backLabel = "Back to practice assessments",
+  showSubmissionStatus = false,
 }: Props) {
   const template = useMemo(
     () => normalizeAssessmentTemplate(templateRaw),
@@ -134,12 +134,12 @@ export function AssessmentRunner({
   );
 
   const { document, meta, setDocument, setSyncError, hydrated } =
-    useLocalAssessmentSubmission(caseStudyId, templateId);
+    useLocalAssessmentSubmission(templateId);
 
   const [resetDialogOpen, setResetDialogOpen] = useState(false);
   const [flowsheetRemountKey, setFlowsheetRemountKey] = useState(0);
 
-  const layout = template.x_presentation?.layout ?? "cards";
+  const layout = template.presentation?.layout ?? "cards";
 
   function setResponse(
     itemId: string,
@@ -166,9 +166,9 @@ export function AssessmentRunner({
       const prev = { ...(d.responses[itemId] ?? {}) };
       const trimmed = comment?.trim();
       if (trimmed) {
-        prev.x_comment = trimmed;
+        prev.comment = trimmed;
       } else {
-        delete prev.x_comment;
+        delete prev.comment;
       }
       const nextResponses = { ...d.responses };
       if (Object.keys(prev).length === 0) {
@@ -224,7 +224,7 @@ export function AssessmentRunner({
                 {template.description}
               </p>
             )}
-            {caseStudyId !== STANDALONE_PRACTICE_CASE_STUDY_ID && (
+            {showSubmissionStatus && (
               <div className="mt-2 flex gap-2">
                 <Badge variant="secondary">{document.status}</Badge>
               </div>
@@ -307,7 +307,7 @@ export function AssessmentRunner({
       ) : (
         <div className="space-y-6">
           {template.items.map((item) => {
-            const path = groupPathLabels(groups, item.groupId ?? item.domainId);
+            const path = groupPathLabels(groups, item.groupId);
             const groupLine = path.length > 0 ? path.join(" → ") : null;
             return (
               <Card key={item.id}>
@@ -412,9 +412,9 @@ export function AssessmentRunner({
         </div>
       )}
 
-      {template.x_licenseNotice && (
+      {template.licenseNotice && (
         <p className="text-muted-foreground border-t pt-4 text-xs leading-relaxed">
-          {template.x_licenseNotice}
+          {template.licenseNotice}
         </p>
       )}
     </div>

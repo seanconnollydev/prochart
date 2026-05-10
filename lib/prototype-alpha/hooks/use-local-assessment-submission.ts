@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { isLocalOnlyAssessmentCaseStudy } from "@/lib/assessments/constants";
 import {
   debounce,
   defaultMeta,
@@ -28,10 +27,7 @@ function getStudentActorId(): string {
   return id;
 }
 
-export function useLocalAssessmentSubmission(
-  caseStudyId: string | undefined,
-  templateId: string | undefined,
-) {
+export function useLocalAssessmentSubmission(templateId: string | undefined) {
   const [wrapped, setWrapped] = useState<{
     document: AssessmentSubmission;
     meta: import("../types/local-meta").LocalDocumentMeta;
@@ -45,19 +41,19 @@ export function useLocalAssessmentSubmission(
           doc: AssessmentSubmission,
           meta: import("../types/local-meta").LocalDocumentMeta,
         ) => {
-          if (!caseStudyId || !templateId) {
+          if (!templateId) {
             return;
           }
-          writeSubmission(caseStudyId, templateId, { document: doc, meta });
+          writeSubmission(templateId, { document: doc, meta });
         },
         400,
       ),
-    [caseStudyId, templateId],
+    [templateId],
   );
 
   useEffect(() => {
     saveDebounced.cancel();
-    if (!caseStudyId || !templateId) {
+    if (!templateId) {
       queueMicrotask(() => {
         setWrapped(null);
         setHydrated(true);
@@ -65,17 +61,11 @@ export function useLocalAssessmentSubmission(
       return;
     }
     queueMicrotask(() => {
-      const existing = readSubmission<AssessmentSubmission>(
-        caseStudyId,
-        templateId,
-      );
+      const existing = readSubmission<AssessmentSubmission>(templateId);
       if (existing) {
         let doc = existing.document;
         let meta = existing.meta;
-        if (
-          isLocalOnlyAssessmentCaseStudy(caseStudyId) &&
-          doc.status === "submitted"
-        ) {
+        if (doc.status === "submitted") {
           const updatedAt = nowIso();
           doc = {
             ...doc,
@@ -90,32 +80,31 @@ export function useLocalAssessmentSubmission(
             syncedBasisAt: null,
             syncError: null,
           };
-          writeSubmission(caseStudyId, templateId, { document: doc, meta });
+          writeSubmission(templateId, { document: doc, meta });
         }
         setWrapped({ document: doc, meta });
       } else {
         const actorId = getStudentActorId();
         const doc = emptyAssessmentSubmission(
           `assessment_sub_${newId()}`,
-          caseStudyId,
           templateId,
           actorId,
         );
         const meta = defaultMeta(doc.updatedAt);
         setWrapped({ document: doc, meta });
-        writeSubmission(caseStudyId, templateId, { document: doc, meta });
+        writeSubmission(templateId, { document: doc, meta });
       }
       setHydrated(true);
     });
     return () => {
       saveDebounced.flush();
     };
-  }, [caseStudyId, templateId, saveDebounced]);
+  }, [templateId, saveDebounced]);
 
   const setDocument = useCallback(
     (updater: (prev: AssessmentSubmission) => AssessmentSubmission) => {
       setWrapped((w) => {
-        if (!w || !caseStudyId || !templateId) {
+        if (!w || !templateId) {
           return w;
         }
         const nextDoc = updater(w.document);
@@ -126,13 +115,13 @@ export function useLocalAssessmentSubmission(
         return next;
       });
     },
-    [caseStudyId, templateId, saveDebounced],
+    [templateId, saveDebounced],
   );
 
   const markSynced = useCallback(
     (lastSyncedAt: string, syncedBasisAt: string) => {
       setWrapped((w) => {
-        if (!w || !caseStudyId || !templateId) {
+        if (!w || !templateId) {
           return w;
         }
         const meta = {
@@ -142,11 +131,11 @@ export function useLocalAssessmentSubmission(
           syncedBasisAt,
           syncError: null,
         };
-        writeSubmission(caseStudyId, templateId, { document: w.document, meta });
+        writeSubmission(templateId, { document: w.document, meta });
         return { document: w.document, meta };
       });
     },
-    [caseStudyId, templateId],
+    [templateId],
   );
 
   const setSyncError = useCallback((message: string | null) => {

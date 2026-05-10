@@ -102,7 +102,7 @@ function scenarioResponsesFromTemplate(
 
   const rollup = prepared.items.find(
     (it) =>
-      it.prompt === scenario.commentGatePrompt && it.x_flowsheetSectionRollup,
+      it.prompt === scenario.commentGatePrompt && it.flowsheetSectionRollup,
   );
   if (!rollup?.id) {
     throw new Error(
@@ -111,7 +111,7 @@ function scenarioResponsesFromTemplate(
   }
   responses[rollup.id] = {
     ...responses[rollup.id],
-    x_comment: scenario.commentText,
+    comment: scenario.commentText,
   };
 
   return responses;

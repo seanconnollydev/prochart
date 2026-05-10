@@ -11,8 +11,8 @@ function key(ns: StorageNamespace, id: string): string {
   return `${PREFIX}${ns}:${id}`;
 }
 
-function submissionKey(caseStudyId: string, templateId: string): string {
-  return `${PREFIX}assessment-submission:${caseStudyId}:${templateId}`;
+function submissionKey(templateId: string): string {
+  return `${PREFIX}assessment-submission:${templateId}`;
 }
 
 function normalizeMeta(
@@ -49,14 +49,11 @@ export function readWrapped<T>(
   }
 }
 
-export function readSubmission<T>(
-  caseStudyId: string,
-  templateId: string,
-): LocalWrapped<T> | null {
+export function readSubmission<T>(templateId: string): LocalWrapped<T> | null {
   if (typeof window === "undefined") {
     return null;
   }
-  const raw = localStorage.getItem(submissionKey(caseStudyId, templateId));
+  const raw = localStorage.getItem(submissionKey(templateId));
   if (!raw) {
     return null;
   }
@@ -83,14 +80,13 @@ export function writeWrapped<T>(
 }
 
 export function writeSubmission<T>(
-  caseStudyId: string,
   templateId: string,
   wrapped: LocalWrapped<T>,
 ): void {
   if (typeof window === "undefined") {
     return;
   }
-  localStorage.setItem(submissionKey(caseStudyId, templateId), JSON.stringify(wrapped));
+  localStorage.setItem(submissionKey(templateId), JSON.stringify(wrapped));
 }
 
 export function removeWrapped(ns: StorageNamespace, id: string): void {
@@ -115,24 +111,19 @@ export function listIds(ns: StorageNamespace): string[] {
   return ids;
 }
 
-export function listSubmissionKeys(): Array<{ caseStudyId: string; templateId: string }> {
+export function listSubmissionKeys(): Array<{ templateId: string }> {
   if (typeof window === "undefined") {
     return [];
   }
   const p = `${PREFIX}assessment-submission:`;
-  const out: Array<{ caseStudyId: string; templateId: string }> = [];
+  const out: Array<{ templateId: string }> = [];
   for (let i = 0; i < localStorage.length; i++) {
     const k = localStorage.key(i);
     if (k?.startsWith(p)) {
-      const rest = k.slice(p.length);
-      const idx = rest.indexOf(":");
-      if (idx === -1) {
-        continue;
+      const templateId = k.slice(p.length);
+      if (templateId.length > 0) {
+        out.push({ templateId });
       }
-      out.push({
-        caseStudyId: rest.slice(0, idx),
-        templateId: rest.slice(idx + 1),
-      });
     }
   }
   return out;

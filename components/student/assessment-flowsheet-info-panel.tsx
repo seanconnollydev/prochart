@@ -9,7 +9,6 @@ import {
   isFlowsheetMultiselectPresentationItem,
   isFlowsheetWdlGateItem,
   segmentWdlDefinitionText,
-  stripFlowsheetMultiselectWdlSlotIds,
 } from "@/lib/assessments/flowsheet";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -34,7 +33,7 @@ function InfoPanelCommentSection({
   const [commentEditing, setCommentEditing] = useState(false);
   const [commentDraft, setCommentDraft] = useState("");
 
-  const storedCommentRaw = responses[item.id]?.x_comment;
+  const storedCommentRaw = responses[item.id]?.comment;
   const storedComment =
     typeof storedCommentRaw === "string" ? storedCommentRaw.trim() : "";
   const hasStoredComment = storedComment.length > 0;
@@ -213,11 +212,8 @@ export function AssessmentFlowsheetInfoPanel({
                     if (panelChoices.length === 0) {
                       return null;
                     }
-                    const selectedIds = stripFlowsheetMultiselectWdlSlotIds(
-                      item,
-                      coerceFlowsheetMultiselectValue(
-                        responses[item.id]?.value,
-                      ),
+                    const selectedIds = coerceFlowsheetMultiselectValue(
+                      responses[item.id]?.value,
                     );
                     return (
                       <>
@@ -246,13 +242,7 @@ export function AssessmentFlowsheetInfoPanel({
                                     } else {
                                       next.delete(ch.id);
                                     }
-                                    setResponse(
-                                      item.id,
-                                      stripFlowsheetMultiselectWdlSlotIds(
-                                        item,
-                                        [...next],
-                                      ),
-                                    );
+                                    setResponse(item.id, [...next]);
                                   }}
                                   className="mt-0.5"
                                 />

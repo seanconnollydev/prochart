@@ -18,7 +18,7 @@ const outDir = join(repoRoot, "lib/assessments");
 const outPath = join(outDir, "h2t-head-to-toe.generated.json");
 
 const TEMPLATE_ID = "h2t_head_to_toe_v1";
-const SCHEMA_VERSION = "assessmentTemplate@0.2";
+const SCHEMA_VERSION = "assessmentTemplate@0.1";
 
 /** Body system flattened to a single root group + hierarchical gates (see NV/MSK plan). */
 const NV_MSK_SYSTEM = "NeuroVascular/Musculoskeletal";
@@ -355,8 +355,7 @@ function pushWdlCluster(bodySystem, bodySub, primaryConceptRow, wdlLKeys) {
     groupId: gid,
     prompt: cr.endsWith(" WDL") ? cr : `${cr} WDL`,
     responseType: "choice",
-    x_flowsheetSectionRollup: true,
-    definedLimits: { type: "none" },
+    flowsheetSectionRollup: true,
     choices: [
       {
         id: choiceId(gateId, gateChoiceLabel, 0),
@@ -365,9 +364,9 @@ function pushWdlCluster(bodySystem, bodySub, primaryConceptRow, wdlLKeys) {
     ],
   };
   if (aggregateNarrative) {
-    gate.x_flowsheetSectionAggregateWdlDefinition = aggregateNarrative;
+    gate.flowsheetSectionAggregateWdlDefinition = aggregateNarrative;
   } else if (primaryWdlAggregateFallback) {
-    gate.x_flowsheetSectionAggregateWdlDefinition = primaryWdlAggregateFallback;
+    gate.flowsheetSectionAggregateWdlDefinition = primaryWdlAggregateFallback;
   }
   items.push(gate);
 
@@ -405,9 +404,8 @@ function pushWdlCluster(bodySystem, bodySub, primaryConceptRow, wdlLKeys) {
       groupId: gid,
       prompt,
       responseType: "multiChoice",
-      definedLimits: { type: "none" },
       choices: choiceObjs,
-      x_wdlListDefinition: wdlNarrative,
+      wdlListDefinition: wdlNarrative,
     });
     keyEmitted.add(k);
   }
@@ -504,14 +502,13 @@ function pushNvMskBlock() {
       groupId: gid,
       prompt: gateCr.endsWith(" WDL") ? gateCr : `${gateCr} WDL`,
       responseType: "choice",
-      x_flowsheetSectionRollup: true,
-      definedLimits: { type: "none" },
+      flowsheetSectionRollup: true,
       choices: [{ id: choiceId(gateId, gateChoiceLabel, 0), label: gateChoiceLabel }],
     };
     if (narrative) {
-      gate.x_flowsheetSectionAggregateWdlDefinition = narrative;
+      gate.flowsheetSectionAggregateWdlDefinition = narrative;
     } else if (primaryWdlFromPartition.exc.length >= 1) {
-      gate.x_flowsheetSectionAggregateWdlDefinition =
+      gate.flowsheetSectionAggregateWdlDefinition =
         normalizeAggregateWdlNarrative(rawChoicesRollup.join("\n\n"));
     }
     items.push(gate);
@@ -530,7 +527,6 @@ function pushNvMskBlock() {
       groupId: gid,
       prompt: extGatePrompt,
       responseType: "choice",
-      definedLimits: { type: "none" },
       choices: [
         {
           id: choiceId(extGateId, extGateChoiceLabel, 0),
@@ -539,7 +535,7 @@ function pushNvMskBlock() {
       ],
     };
     if (extAgg) {
-      extGate.x_wdlListDefinition = extAgg;
+      extGate.wdlListDefinition = extAgg;
     }
     items.push(extGate);
 
@@ -590,9 +586,8 @@ function pushNvMskBlock() {
           groupId: gid,
           prompt: conceptTrim.replace(/ WDL$/, ""),
           responseType: "choice",
-          definedLimits: { type: "none" },
           choices: choiceObjs,
-          x_wdlListDefinition: narrativeAfterWdlEquals(wdl[0]),
+          wdlListDefinition: narrativeAfterWdlEquals(wdl[0]),
         });
         keyEmitted.add(kk);
         continue;
@@ -619,9 +614,8 @@ function pushNvMskBlock() {
           groupId: gid,
           prompt: conceptTrim.replace(/ WDL$/, ""),
           responseType: "choice",
-          definedLimits: { type: "none" },
           choices: choiceObjs,
-          x_wdlListDefinition: wdlListDef,
+          wdlListDefinition: wdlListDef,
         });
         keyEmitted.add(kk);
         continue;
@@ -642,7 +636,6 @@ function pushNvMskBlock() {
         groupId: gid,
         prompt: conceptTrim,
         responseType: "choice",
-        definedLimits: { type: "none" },
         choices: choiceObjs,
       });
       keyEmitted.add(kk);
@@ -711,7 +704,6 @@ for (const key of sortedKeys) {
     groupId: grpChild(bodySystem, bodySub),
     prompt: conceptRow,
     responseType: "choice",
-    definedLimits: { type: "none" },
     choices: choiceObjs,
   });
   keyEmitted.add(key);
@@ -730,12 +722,8 @@ const doc = {
   status: "published",
   groups,
   items,
-  x_presentation: { layout: "flowsheet" },
-  x_licenseNotice: LICENSE_NOTICE,
-  provenance: {
-    authoredBy: { actorType: "repository", actorId: "h2t_workbook" },
-  },
-  x_extensions: {},
+  presentation: { layout: "flowsheet" },
+  licenseNotice: LICENSE_NOTICE,
 };
 
 mkdirSync(outDir, { recursive: true });

@@ -13,33 +13,27 @@ export type AssessmentResponseValue =
 export type AssessmentItemResponse = {
   value?: AssessmentResponseValue;
   /** Optional student note on this item (flowsheet info panel); one per item. */
-  x_comment?: string;
-  [key: string]: unknown;
+  comment?: string;
 };
 
 export type AssessmentSubmission = {
   schemaVersion: typeof ASSESSMENT_SUBMISSION_SCHEMA_VERSION;
   id: string;
-  caseStudyId: string;
   templateId: string;
   student?: {
     actorType: string;
     actorId?: string;
     displayName?: string;
-    [key: string]: unknown;
   };
   startedAt: string;
   updatedAt: string;
   submittedAt: string | null;
   status: AssessmentSubmissionStatus;
   responses: Record<string, AssessmentItemResponse>;
-  x_extensions?: Record<string, unknown>;
-  [key: string]: unknown;
 };
 
 export function emptyAssessmentSubmission(
   id: string,
-  caseStudyId: string,
   templateId: string,
   studentActorId: string,
 ): AssessmentSubmission {
@@ -47,7 +41,6 @@ export function emptyAssessmentSubmission(
   return {
     schemaVersion: ASSESSMENT_SUBMISSION_SCHEMA_VERSION,
     id,
-    caseStudyId,
     templateId,
     student: {
       actorType: "student",
@@ -59,6 +52,5 @@ export function emptyAssessmentSubmission(
     submittedAt: null,
     status: "in_progress",
     responses: {},
-    x_extensions: {},
   };
 }
