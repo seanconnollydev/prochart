@@ -66,6 +66,38 @@ async function openH2TPractice(page: Page): Promise<void> {
   ).toBeVisible();
 }
 
+async function setFlowsheetWdlGate(
+  page: Page,
+  prompt: string,
+  choice: "WDL" | "X",
+): Promise<void> {
+  const trigger = page.getByLabel(prompt, { exact: true });
+  await trigger.scrollIntoViewIfNeeded();
+  await trigger.click();
+  await page.getByRole("option", { name: choice, exact: true }).click();
+  await expect(trigger).toContainText(choice);
+}
+
+function abdomenPanelOptions(page: Page) {
+  return page.getByRole("group", {
+    name: `Options for ${H2T_GI_PANEL_MULTI_ROW}`,
+  });
+}
+
+async function openAbdomenInfoPanel(page: Page): Promise<void> {
+  const flowsheetScroll = flowsheetScrollLocator(page);
+  await flowsheetScroll
+    .getByRole("button", {
+      name: `View row information for ${H2T_GI_PANEL_MULTI_ROW}`,
+    })
+    .scrollIntoViewIfNeeded();
+  await flowsheetScroll
+    .getByRole("button", {
+      name: `View row information for ${H2T_GI_PANEL_MULTI_ROW}`,
+    })
+    .click();
+}
+
 test.describe("H2T assessment", () => {
   test("sections, rollup rows, and WDL info panels (read-only)", async ({
     page,
@@ -118,6 +150,66 @@ test.describe("H2T assessment", () => {
         page.getByRole("button", { name: "Close info panel" }),
       ).toBeHidden();
     }
+  });
+
+  test("clears Abdomen multiselect when GI gate returns to WDL (side panel)", async ({
+    page,
+  }) => {
+    await openH2TPractice(page);
+
+    await setFlowsheetWdlGate(page, H2T_COMMENT_GATE_PROMPT, "X");
+    await openAbdomenInfoPanel(page);
+
+    const distended = abdomenPanelOptions(page).getByRole("checkbox", {
+      name: H2T_GI_PANEL_MULTI_CHOICE,
+      exact: true,
+    });
+    await distended.check();
+    await expect(distended).toBeChecked();
+
+    await setFlowsheetWdlGate(page, H2T_COMMENT_GATE_PROMPT, "WDL");
+
+    await expect(
+      abdomenPanelOptions(page).getByRole("checkbox", {
+        name: H2T_GI_PANEL_MULTI_CHOICE,
+        exact: true,
+      }),
+    ).not.toBeChecked();
+  });
+
+  test("clears Abdomen multiselect when GI gate returns to WDL (row combobox)", async ({
+    page,
+  }) => {
+    await openH2TPractice(page);
+
+    await setFlowsheetWdlGate(page, H2T_COMMENT_GATE_PROMPT, "X");
+
+    /** Empty multiselect uses aria-label `Abdomen`; with one chip it becomes `Abdomen: Distended`. */
+    const abdomenCombo = page.getByLabel(
+      new RegExp(`^${H2T_GI_PANEL_MULTI_ROW}`),
+    );
+    await abdomenCombo.scrollIntoViewIfNeeded();
+    await abdomenCombo.click();
+    await page
+      .getByRole("option", {
+        name: H2T_GI_PANEL_MULTI_CHOICE,
+        exact: true,
+      })
+      .click();
+    await expect(abdomenCombo).toHaveAccessibleName(
+      new RegExp(H2T_GI_PANEL_MULTI_CHOICE),
+    );
+
+    await setFlowsheetWdlGate(page, H2T_COMMENT_GATE_PROMPT, "WDL");
+    await setFlowsheetWdlGate(page, H2T_COMMENT_GATE_PROMPT, "X");
+
+    await openAbdomenInfoPanel(page);
+    await expect(
+      abdomenPanelOptions(page).getByRole("checkbox", {
+        name: H2T_GI_PANEL_MULTI_CHOICE,
+        exact: true,
+      }),
+    ).not.toBeChecked();
   });
 
   test.describe("selections, persistence, and export", () => {
