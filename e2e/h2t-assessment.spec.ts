@@ -282,5 +282,42 @@ test.describe("H2T assessment", () => {
 
       expectPdfContainsOrderedComparableFragments(text, fragments);
     });
+
+    test("Reset clears all selections", async () => {
+      await page.getByRole("button", { name: "Reset" }).click();
+      await expect(page.getByRole("alertdialog")).toBeVisible();
+      await page
+        .getByRole("alertdialog")
+        .getByRole("button", { name: "Reset" })
+        .click();
+
+      const gatePlaceholder = "Select…";
+      for (const { prompt } of H2T_GATE_SELECTION_PLAN) {
+        const trigger = page.getByLabel(prompt, { exact: true });
+        await trigger.scrollIntoViewIfNeeded();
+        await expect(trigger).toHaveText(gatePlaceholder);
+      }
+
+      await expect(page.getByRole("button", { name: "Export to PDF" })).toBeDisabled();
+      await expect(page.getByRole("button", { name: "Reset" })).toBeDisabled();
+
+      await flowsheetScrollLocator(page)
+        .getByRole("button", {
+          name: `View row information for ${H2T_COMMENT_GATE_PROMPT}`,
+        })
+        .scrollIntoViewIfNeeded();
+      await flowsheetScrollLocator(page)
+        .getByRole("button", {
+          name: `View row information for ${H2T_COMMENT_GATE_PROMPT}`,
+        })
+        .click();
+
+      const giCommentPanel = page.locator("aside").filter({
+        has: page.getByText(H2T_COMMENT_GATE_PROMPT, { exact: true }),
+      });
+      await expect(
+        giCommentPanel.getByText(H2T_COMMENT_TEXT, { exact: true }),
+      ).not.toBeVisible();
+    });
   });
 });
