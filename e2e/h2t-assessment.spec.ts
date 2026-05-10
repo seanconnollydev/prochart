@@ -1,5 +1,14 @@
+import { readFileSync } from "node:fs";
+
+import { PDFParse } from "pdf-parse";
+
 import type { BrowserContext, Page } from "@playwright/test";
 import { expect, test } from "@playwright/test";
+
+import {
+  buildH2TScenarioOrderedPdfFragments,
+  expectPdfContainsOrderedComparableFragments,
+} from "./helpers/h2t-export-expectations";
 
 /**
  * Hard-coded regression snapshots for the current H2T flowsheet (empty responses).
@@ -37,9 +46,7 @@ const H2T_COMMENT_GATE_PROMPT = "GI WDL";
 const H2T_COMMENT_TEXT = "Head-to-toe practice - e2e verification comment.";
 
 function flowsheetScrollLocator(page: Page) {
-  return page
-    .locator("div.bg-background.min-w-0.flex-1.overflow-auto")
-    .first();
+  return page.locator("div.bg-background.min-w-0.flex-1.overflow-auto").first();
 }
 
 async function openH2TPractice(page: Page): Promise<void> {
@@ -170,13 +177,13 @@ test.describe("H2T assessment", () => {
         })
         .click();
 
-      const giWdlPanel = page
-        .locator("aside")
-        .filter({ has: page.getByText(H2T_COMMENT_GATE_PROMPT, { exact: true }) });
+      const giWdlPanel = page.locator("aside").filter({
+        has: page.getByText(H2T_COMMENT_GATE_PROMPT, { exact: true }),
+      });
       await giWdlPanel.getByRole("button", { name: "Add comment" }).click();
-      await giWdlPanel.getByLabel(`Comment for ${H2T_COMMENT_GATE_PROMPT}`).fill(
-        H2T_COMMENT_TEXT,
-      );
+      await giWdlPanel
+        .getByLabel(`Comment for ${H2T_COMMENT_GATE_PROMPT}`)
+        .fill(H2T_COMMENT_TEXT);
       await giWdlPanel.getByRole("button", { name: "Save" }).click();
       await expect(giWdlPanel.getByText(H2T_COMMENT_TEXT)).toBeVisible();
 
@@ -213,12 +220,14 @@ test.describe("H2T assessment", () => {
         })
         .click();
       await expect(
-        page.getByRole("group", {
-          name: `Options for ${H2T_GI_PANEL_MULTI_ROW}`,
-        }).getByRole("checkbox", {
-          name: H2T_GI_PANEL_MULTI_CHOICE,
-          exact: true,
-        }),
+        page
+          .getByRole("group", {
+            name: `Options for ${H2T_GI_PANEL_MULTI_ROW}`,
+          })
+          .getByRole("checkbox", {
+            name: H2T_GI_PANEL_MULTI_CHOICE,
+            exact: true,
+          }),
       ).toBeChecked();
 
       await page.getByRole("button", { name: "Close info panel" }).click();
@@ -243,10 +252,35 @@ test.describe("H2T assessment", () => {
       ).toBeVisible();
     });
 
-    test("Export to PDF is enabled after selections", async () => {
-      await expect(
-        page.getByRole("button", { name: "Export to PDF" }),
-      ).toBeEnabled();
+    test("exported PDF reflects gate selections, panel choices, and comments", async ({}, testInfo) => {
+      const exportBtn = page.getByRole("button", { name: "Export to PDF" });
+      await expect(exportBtn).toBeEnabled();
+
+      const [download] = await Promise.all([
+        page.waitForEvent("download"),
+        exportBtn.click(),
+      ]);
+
+      const pdfPath = testInfo.outputPath("h2t-export.pdf");
+      await download.saveAs(pdfPath);
+
+      const parser = new PDFParse({ data: readFileSync(pdfPath) });
+      let text = "";
+      try {
+        ({ text } = await parser.getText());
+      } finally {
+        await parser.destroy();
+      }
+
+      const fragments = buildH2TScenarioOrderedPdfFragments({
+        gateSelectionPlan: H2T_GATE_SELECTION_PLAN,
+        commentGatePrompt: H2T_COMMENT_GATE_PROMPT,
+        commentText: H2T_COMMENT_TEXT,
+        multiRowPrompt: H2T_GI_PANEL_MULTI_ROW,
+        multiChoiceLabel: H2T_GI_PANEL_MULTI_CHOICE,
+      });
+
+      expectPdfContainsOrderedComparableFragments(text, fragments);
     });
   });
 });

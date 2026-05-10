@@ -23,7 +23,7 @@ function slugifyForFilename(title: string): string {
  * jsPDF’s standard fonts use PDF WinAnsi encoding. Unicode (e.g. →, —, smart quotes)
  * is not represented and can render as wrong glyphs (e.g. "!' " instead of an arrow).
  */
-function sanitizeTextForStandardPdfFont(text: string): string {
+export function sanitizeTextForStandardPdfFont(text: string): string {
   return (
     text
       .replace(/\u2192/g, " -> ") // → (matches web `join(" → ")` paths)
