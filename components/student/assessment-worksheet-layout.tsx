@@ -1,7 +1,7 @@
 "use client";
 
-import type { AssessmentTemplate } from "@/lib/prototype-alpha/types/assessment-template";
-import type { AssessmentItemResponse } from "@/lib/prototype-alpha/types/assessment-submission";
+import type { AssessmentTemplate } from "@/lib/types/assessment-template";
+import type { AssessmentItemResponse } from "@/lib/types/assessment-submission";
 import { groupPathLabels } from "@/lib/assessments/group-path";
 import { Label } from "@/components/ui/label";
 import {
@@ -65,7 +65,10 @@ export function AssessmentWorksheetLayout({
                   return (
                     <TableRow key={item.id}>
                       <TableCell className="align-top text-sm whitespace-normal">
-                        <Label htmlFor={selId} className="font-normal leading-snug">
+                        <Label
+                          htmlFor={selId}
+                          className="font-normal leading-snug"
+                        >
                           {item.prompt}
                         </Label>
                       </TableCell>
@@ -93,7 +96,9 @@ export function AssessmentWorksheetLayout({
                           <label className="flex items-center gap-2 text-sm">
                             <input
                               type="checkbox"
-                              checked={Boolean(responses[item.id]?.value === true)}
+                              checked={Boolean(
+                                responses[item.id]?.value === true,
+                              )}
                               onChange={(e) =>
                                 setResponse(item.id, e.target.checked)
                               }

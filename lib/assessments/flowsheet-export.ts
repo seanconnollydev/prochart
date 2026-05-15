@@ -10,8 +10,8 @@ import {
 import type {
   AssessmentItem,
   AssessmentTemplate,
-} from "@/lib/prototype-alpha/types/assessment-template";
-import type { AssessmentItemResponse } from "@/lib/prototype-alpha/types/assessment-submission";
+} from "@/lib/types/assessment-template";
+import type { AssessmentItemResponse } from "@/lib/types/assessment-submission";
 
 export type FlowsheetExportRow =
   | { kind: "section"; pathLine: string }

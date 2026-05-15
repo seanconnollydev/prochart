@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import type { AssessmentItem } from "@/lib/prototype-alpha/types/assessment-template";
-import type { AssessmentItemResponse } from "@/lib/prototype-alpha/types/assessment-submission";
+import type { AssessmentItem } from "@/lib/types/assessment-template";
+import type { AssessmentItemResponse } from "@/lib/types/assessment-submission";
 import {
   coerceFlowsheetMultiselectValue,
   flowsheetMultiselectChoicesForItem,

@@ -9,8 +9,8 @@ export function isChromePromptLikelyAvailable(): boolean {
   const ai = (window as unknown as { ai?: Record<string, unknown> }).ai;
   return Boolean(
     ai &&
-      (typeof ai.languageModel === "object" ||
-        typeof ai.createTextSession === "function"),
+    (typeof ai.languageModel === "object" ||
+      typeof ai.createTextSession === "function"),
   );
 }
 
@@ -25,8 +25,12 @@ export async function runPromptForPatches(
   const full = `${systemHint}\n\n${userMessage}`;
   const w = window as unknown as {
     ai?: {
-      languageModel?: { create?: () => Promise<{ prompt: (s: string) => Promise<string> }> };
-      createTextSession?: () => Promise<{ prompt: (s: string) => Promise<string> }>;
+      languageModel?: {
+        create?: () => Promise<{ prompt: (s: string) => Promise<string> }>;
+      };
+      createTextSession?: () => Promise<{
+        prompt: (s: string) => Promise<string>;
+      }>;
     };
   };
   if (w.ai?.languageModel?.create) {

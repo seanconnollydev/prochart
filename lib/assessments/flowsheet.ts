@@ -4,8 +4,8 @@ import type {
   AssessmentGroup,
   AssessmentItem,
   AssessmentTemplate,
-} from "@/lib/prototype-alpha/types/assessment-template";
-import type { AssessmentItemResponse } from "@/lib/prototype-alpha/types/assessment-submission";
+} from "@/lib/types/assessment-template";
+import type { AssessmentItemResponse } from "@/lib/types/assessment-submission";
 
 /** Synthetic choice id appended to WDL gate rows for Epic-style “X” (exception) documentation. */
 export const FLOWSHEET_EXCEPTION_CHOICE_ID = "ch_flowsheet_exception";
@@ -27,7 +27,9 @@ export function isFlowsheetWdlXComboboxItem(item: AssessmentItem): boolean {
 }
 
 /** Flowsheet grid + panel: multiselect UI for `multiChoice` and leaf (non-gate) `choice` rows. */
-export function isFlowsheetMultiselectPresentationItem(item: AssessmentItem): boolean {
+export function isFlowsheetMultiselectPresentationItem(
+  item: AssessmentItem,
+): boolean {
   return (
     item.responseType === "multiChoice" ||
     (item.responseType === "choice" && !isFlowsheetWdlGateItem(item))
@@ -46,7 +48,9 @@ export function coerceFlowsheetMultiselectValue(raw: unknown): string[] {
 }
 
 /** Multiselect options for flowsheet UI. */
-export function flowsheetMultiselectChoicesForItem(item: AssessmentItem): AssessmentChoice[] {
+export function flowsheetMultiselectChoicesForItem(
+  item: AssessmentItem,
+): AssessmentChoice[] {
   if (item.responseType === "multiChoice") {
     return item.choices ?? [];
   }
@@ -57,11 +61,15 @@ export function flowsheetMultiselectChoicesForItem(item: AssessmentItem): Assess
 }
 
 export function gateHasExceptionChoice(item: AssessmentItem): boolean {
-  return (item.choices ?? []).some((c) => c.id === FLOWSHEET_EXCEPTION_CHOICE_ID);
+  return (item.choices ?? []).some(
+    (c) => c.id === FLOWSHEET_EXCEPTION_CHOICE_ID,
+  );
 }
 
 /** Ensures the synthetic exception choice exists on gate items; idempotent. */
-export function ensureFlowsheetGateChoices(item: AssessmentItem): AssessmentItem {
+export function ensureFlowsheetGateChoices(
+  item: AssessmentItem,
+): AssessmentItem {
   if (!isFlowsheetWdlXComboboxItem(item)) {
     return item;
   }
@@ -77,7 +85,9 @@ export function ensureFlowsheetGateChoices(item: AssessmentItem): AssessmentItem
 }
 
 /** Clone template and augment WDL gate rows for flowsheet UX. */
-export function prepareFlowsheetTemplate(template: AssessmentTemplate): AssessmentTemplate {
+export function prepareFlowsheetTemplate(
+  template: AssessmentTemplate,
+): AssessmentTemplate {
   return {
     ...template,
     items: template.items.map((it) => ensureFlowsheetGateChoices(it)),
@@ -104,7 +114,9 @@ export function findGateItemForGroup(
   groupId: string,
   items: AssessmentItem[],
 ): AssessmentItem | undefined {
-  return items.find((it) => it.groupId === groupId && isFlowsheetWdlGateItem(it));
+  return items.find(
+    (it) => it.groupId === groupId && isFlowsheetWdlGateItem(it),
+  );
 }
 
 export function isSectionRollupGateItem(item: AssessmentItem): boolean {
@@ -327,7 +339,10 @@ export function getWdlDefinitionForItem(item: AssessmentItem): string | null {
 /** Split definition copy into bullet segments (paragraph breaks, then ". " sentence boundaries). */
 export function segmentWdlDefinitionText(text: string): string[] {
   const t = text.trim();
-  const paragraphs = t.split(/\n\s*\n/).map((s) => s.trim()).filter(Boolean);
+  const paragraphs = t
+    .split(/\n\s*\n/)
+    .map((s) => s.trim())
+    .filter(Boolean);
   const chunks = paragraphs.length > 1 ? paragraphs : [t];
   const out: string[] = [];
   for (const chunk of chunks) {

@@ -7,13 +7,13 @@ import { prepareFlowsheetTemplate } from "@/lib/assessments/flowsheet";
 import { buildFlowsheetExportRows } from "@/lib/assessments/flowsheet-export";
 import { exportFlowsheetAssessmentPdf } from "@/lib/assessments/flowsheet-pdf";
 import { groupPathLabels } from "@/lib/assessments/group-path";
-import { useLocalAssessmentSubmission } from "@/lib/prototype-alpha/hooks/use-local-assessment-submission";
-import { nowIso } from "@/lib/prototype-alpha/ids";
+import { useLocalAssessmentSubmission } from "@/lib/hooks/use-local-assessment-submission";
+import { nowIso } from "@/lib/ids";
 import {
   normalizeAssessmentTemplate,
   type AssessmentTemplate,
-} from "@/lib/prototype-alpha/types/assessment-template";
-import type { AssessmentItemResponse } from "@/lib/prototype-alpha/types/assessment-submission";
+} from "@/lib/types/assessment-template";
+import type { AssessmentItemResponse } from "@/lib/types/assessment-submission";
 import { AssessmentFlowsheetLayout } from "@/components/student/assessment-flowsheet-layout";
 import { AssessmentWorksheetLayout } from "@/components/student/assessment-worksheet-layout";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -236,8 +236,7 @@ export function AssessmentRunner({
     <div
       className={cn(
         layout !== "flowsheet" && "space-y-6",
-        layout === "flowsheet" &&
-          "flex min-h-0 flex-1 flex-col gap-6",
+        layout === "flowsheet" && "flex min-h-0 flex-1 flex-col gap-6",
       )}
     >
       {previewBanner && (

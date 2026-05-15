@@ -12,12 +12,15 @@ import { sanitizeTextForStandardPdfFont } from "@/lib/assessments/flowsheet-pdf"
 import {
   normalizeAssessmentTemplate,
   type AssessmentTemplate,
-} from "@/lib/prototype-alpha/types/assessment-template";
-import type { AssessmentItemResponse } from "@/lib/prototype-alpha/types/assessment-submission";
+} from "@/lib/types/assessment-template";
+import type { AssessmentItemResponse } from "@/lib/types/assessment-submission";
 import { expect } from "@playwright/test";
 
 export type H2TExportScenario = {
-  gateSelectionPlan: readonly Readonly<{ prompt: string; choice: "WDL" | "X" }>[];
+  gateSelectionPlan: readonly Readonly<{
+    prompt: string;
+    choice: "WDL" | "X";
+  }>[];
   commentGatePrompt: string;
   commentText: string;
   multiRowPrompt: string;
@@ -68,9 +71,7 @@ function scenarioResponsesFromTemplate(
       gates.find((c) => c.id !== FLOWSHEET_EXCEPTION_CHOICE_ID) ?? gates[0];
     responses[item.id] = {
       value:
-        choice === "X"
-          ? FLOWSHEET_EXCEPTION_CHOICE_ID
-          : (wdlChoice?.id ?? ""),
+        choice === "X" ? FLOWSHEET_EXCEPTION_CHOICE_ID : (wdlChoice?.id ?? ""),
     };
     if (
       responses[item.id].value !== FLOWSHEET_EXCEPTION_CHOICE_ID &&
@@ -82,8 +83,7 @@ function scenarioResponsesFromTemplate(
 
   const abdomen = prepared.items.find(
     (i) =>
-      i.prompt === scenario.multiRowPrompt &&
-      i.responseType === "multiChoice",
+      i.prompt === scenario.multiRowPrompt && i.responseType === "multiChoice",
   );
   if (!abdomen?.id) {
     throw new Error(
@@ -140,9 +140,10 @@ export function expectPdfContainsOrderedComparableFragments(
       continue;
     }
     const at = haystack.indexOf(needle, from);
-    expect(at >= 0, `missing ordered PDF fragment "${needle.slice(0, 120)}"`).toBe(
-      true,
-    );
+    expect(
+      at >= 0,
+      `missing ordered PDF fragment "${needle.slice(0, 120)}"`,
+    ).toBe(true);
     from = at + needle.length;
   }
 }

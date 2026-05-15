@@ -1,4 +1,4 @@
-import type { AssessmentGroup } from "@/lib/prototype-alpha/types/assessment-template";
+import type { AssessmentGroup } from "@/lib/types/assessment-template";
 
 /**
  * Labels from root → leaf for a group's ancestry.

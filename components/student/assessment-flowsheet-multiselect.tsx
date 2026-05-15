@@ -1,7 +1,7 @@
 "use client";
 
 import { useLayoutEffect, useMemo, useState } from "react";
-import type { AssessmentChoice } from "@/lib/prototype-alpha/types/assessment-template";
+import type { AssessmentChoice } from "@/lib/types/assessment-template";
 import {
   Combobox,
   ComboboxChip,
