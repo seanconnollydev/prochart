@@ -1,6 +1,6 @@
 import type { LocalDocumentMeta, LocalWrapped } from "./types/local-meta";
 
-const PREFIX = "prochart:prototype-alpha:";
+const PREFIX = "prochart:";
 
 export type StorageNamespace =
   | "case-study-draft"

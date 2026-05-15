@@ -18,9 +18,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sim EHR · Prototype Alpha",
+  title: "ProChart RN",
   description:
-    "Nursing education EHR simulation — case studies and assessments (prototype).",
+    "Nursing education EHR simulation — case studies and assessments.",
 };
 
 export default function RootLayout({
