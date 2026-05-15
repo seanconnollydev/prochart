@@ -12,6 +12,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## License
 
-Copyright (c) 2026 contributors to sim-ehr.
+Copyright (c) 2026 contributors to ProChart.
 
 This program is free software: you can redistribute it and/or modify it under the terms of the [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html) as published by the Free Software Foundation, version 3 of the License. See the [full license text](LICENSE).

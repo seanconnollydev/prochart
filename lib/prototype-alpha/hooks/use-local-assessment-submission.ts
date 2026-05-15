@@ -13,7 +13,7 @@ import {
 } from "../types/assessment-submission";
 import { newId, nowIso } from "../ids";
 
-const STUDENT_KEY = "sim-ehr:student-actor-id";
+const STUDENT_KEY = "prochart:student-actor-id";
 
 function getStudentActorId(): string {
   if (typeof window === "undefined") {

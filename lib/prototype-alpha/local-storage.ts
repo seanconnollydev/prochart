@@ -1,6 +1,6 @@
 import type { LocalDocumentMeta, LocalWrapped } from "./types/local-meta";
 
-const PREFIX = "sim-ehr:prototype-alpha:";
+const PREFIX = "prochart:prototype-alpha:";
 
 export type StorageNamespace =
   | "case-study-draft"
