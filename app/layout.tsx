@@ -4,6 +4,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { ToasterProvider } from "@/components/toaster-provider";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { Analytics } from "@vercel/analytics/next";
 
 const publicSans = Public_Sans({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -46,6 +47,7 @@ export default function RootLayout({
         </main>
         <SiteFooter />
         <ToasterProvider />
+        <Analytics />
       </body>
     </html>
   );
