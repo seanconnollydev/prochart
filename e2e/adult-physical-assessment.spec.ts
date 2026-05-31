@@ -6,15 +6,15 @@ import type { BrowserContext, Page } from "@playwright/test";
 import { expect, test } from "@playwright/test";
 
 import {
-  buildH2TScenarioOrderedPdfFragments,
+  buildAdultPhysicalAssessmentScenarioOrderedPdfFragments,
   expectPdfContainsOrderedComparableFragments,
-} from "./helpers/h2t-export-expectations";
+} from "./helpers/adult-physical-assessment-export-expectations";
 
 /**
- * Hard-coded regression snapshots for the current H2T flowsheet (empty responses).
+ * Hard-coded regression snapshots for the current adult physical assessment flowsheet (empty responses).
  * Update deliberately when the workbook or grouping changes.
  */
-const H2T_SECTION_BLOCKS: ReadonlyArray<{
+const ADULT_PHYSICAL_ASSESSMENT_SECTION_BLOCKS: ReadonlyArray<{
   heading: string;
   initialPrompt: string;
 }> = [
@@ -32,35 +32,37 @@ const H2T_SECTION_BLOCKS: ReadonlyArray<{
   { heading: "Urinary Symptoms", initialPrompt: "Urinary Symptoms WDL" },
 ] as const;
 
-/** Fixed WDL vs X choices per section gate (matches `H2T_SECTION_BLOCKS` order). */
-const H2T_GATE_SELECTION_PLAN = H2T_SECTION_BLOCKS.map((b, i) => ({
-  prompt: b.initialPrompt,
-  choice: i === 2 ? ("X" as const) : ("WDL" as const),
-}));
+/** Fixed WDL vs X choices per section gate (matches `ADULT_PHYSICAL_ASSESSMENT_SECTION_BLOCKS` order). */
+const ADULT_PHYSICAL_ASSESSMENT_GATE_SELECTION_PLAN =
+  ADULT_PHYSICAL_ASSESSMENT_SECTION_BLOCKS.map((b, i) => ({
+    prompt: b.initialPrompt,
+    choice: i === 2 ? ("X" as const) : ("WDL" as const),
+  }));
 
-/** GI is X in `H2T_GATE_SELECTION_PLAN`, so these detail rows are visible in the flowsheet. */
-const H2T_GI_PANEL_MULTI_ROW = "Abdomen";
-const H2T_GI_PANEL_MULTI_CHOICE = "Distended";
+/** GI is X in `ADULT_PHYSICAL_ASSESSMENT_GATE_SELECTION_PLAN`, so these detail rows are visible in the flowsheet. */
+const ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_ROW = "Abdomen";
+const ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_CHOICE = "Distended";
 
-const H2T_COMMENT_GATE_PROMPT = "GI WDL";
-const H2T_COMMENT_TEXT = "Head-to-toe practice - e2e verification comment.";
+const ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT = "GI WDL";
+const ADULT_PHYSICAL_ASSESSMENT_COMMENT_TEXT =
+  "Adult physical assessment practice - e2e verification comment.";
 
 function flowsheetScrollLocator(page: Page) {
   return page.locator("div.bg-background.min-w-0.flex-1.overflow-auto").first();
 }
 
-async function openH2TPractice(page: Page): Promise<void> {
+async function openAdultPhysicalAssessmentPractice(page: Page): Promise<void> {
   await page.goto("/student/assessments");
 
   await page
     .locator('[data-slot="card"]')
-    .filter({ has: page.getByText("Head-to-Toe Assessment (H2T)") })
+    .filter({ has: page.getByText("Adult Physical Assessment") })
     .getByRole("button", { name: "Open practice" })
     .click();
 
   await expect(
     page.getByRole("heading", {
-      name: "Head-to-Toe Assessment (H2T)",
+      name: "Adult Physical Assessment",
       level: 1,
     }),
   ).toBeVisible();
@@ -80,7 +82,7 @@ async function setFlowsheetWdlGate(
 
 function abdomenPanelOptions(page: Page) {
   return page.getByRole("group", {
-    name: `Options for ${H2T_GI_PANEL_MULTI_ROW}`,
+    name: `Options for ${ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_ROW}`,
   });
 }
 
@@ -88,21 +90,21 @@ async function openAbdomenInfoPanel(page: Page): Promise<void> {
   const flowsheetScroll = flowsheetScrollLocator(page);
   await flowsheetScroll
     .getByRole("button", {
-      name: `View row information for ${H2T_GI_PANEL_MULTI_ROW}`,
+      name: `View row information for ${ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_ROW}`,
     })
     .scrollIntoViewIfNeeded();
   await flowsheetScroll
     .getByRole("button", {
-      name: `View row information for ${H2T_GI_PANEL_MULTI_ROW}`,
+      name: `View row information for ${ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_ROW}`,
     })
     .click();
 }
 
-test.describe("H2T assessment", () => {
+test.describe("Adult Physical Assessment", () => {
   test("sections, rollup rows, and WDL info panels (read-only)", async ({
     page,
   }) => {
-    await openH2TPractice(page);
+    await openAdultPhysicalAssessmentPractice(page);
 
     const flowsheetScroll = flowsheetScrollLocator(page);
     await expect(flowsheetScroll).toBeVisible();
@@ -110,11 +112,14 @@ test.describe("H2T assessment", () => {
     const sectionBodies = flowsheetScroll.locator(
       'tbody[id^="flowsheet-section-"]',
     );
-    await expect(sectionBodies).toHaveCount(H2T_SECTION_BLOCKS.length);
+    await expect(sectionBodies).toHaveCount(
+      ADULT_PHYSICAL_ASSESSMENT_SECTION_BLOCKS.length,
+    );
 
-    for (let i = 0; i < H2T_SECTION_BLOCKS.length; i++) {
+    for (let i = 0; i < ADULT_PHYSICAL_ASSESSMENT_SECTION_BLOCKS.length; i++) {
       const section = sectionBodies.nth(i);
-      const { heading, initialPrompt } = H2T_SECTION_BLOCKS[i]!;
+      const { heading, initialPrompt } =
+        ADULT_PHYSICAL_ASSESSMENT_SECTION_BLOCKS[i]!;
       await section.scrollIntoViewIfNeeded();
       await expect(
         section.getByRole("cell", { name: heading, exact: true }),
@@ -127,7 +132,9 @@ test.describe("H2T assessment", () => {
     const infoButtons = flowsheetScroll.getByRole("button", {
       name: /^View row information for /,
     });
-    await expect(infoButtons).toHaveCount(H2T_SECTION_BLOCKS.length);
+    await expect(infoButtons).toHaveCount(
+      ADULT_PHYSICAL_ASSESSMENT_SECTION_BLOCKS.length,
+    );
 
     const n = await infoButtons.count();
     for (let i = 0; i < n; i++) {
@@ -155,23 +162,31 @@ test.describe("H2T assessment", () => {
   test("clears Abdomen multiselect when GI gate returns to WDL (side panel)", async ({
     page,
   }) => {
-    await openH2TPractice(page);
+    await openAdultPhysicalAssessmentPractice(page);
 
-    await setFlowsheetWdlGate(page, H2T_COMMENT_GATE_PROMPT, "X");
+    await setFlowsheetWdlGate(
+      page,
+      ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT,
+      "X",
+    );
     await openAbdomenInfoPanel(page);
 
     const distended = abdomenPanelOptions(page).getByRole("checkbox", {
-      name: H2T_GI_PANEL_MULTI_CHOICE,
+      name: ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_CHOICE,
       exact: true,
     });
     await distended.check();
     await expect(distended).toBeChecked();
 
-    await setFlowsheetWdlGate(page, H2T_COMMENT_GATE_PROMPT, "WDL");
+    await setFlowsheetWdlGate(
+      page,
+      ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT,
+      "WDL",
+    );
 
     await expect(
       abdomenPanelOptions(page).getByRole("checkbox", {
-        name: H2T_GI_PANEL_MULTI_CHOICE,
+        name: ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_CHOICE,
         exact: true,
       }),
     ).not.toBeChecked();
@@ -180,33 +195,45 @@ test.describe("H2T assessment", () => {
   test("clears Abdomen multiselect when GI gate returns to WDL (row combobox)", async ({
     page,
   }) => {
-    await openH2TPractice(page);
+    await openAdultPhysicalAssessmentPractice(page);
 
-    await setFlowsheetWdlGate(page, H2T_COMMENT_GATE_PROMPT, "X");
+    await setFlowsheetWdlGate(
+      page,
+      ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT,
+      "X",
+    );
 
     /** Empty multiselect uses aria-label `Abdomen`; with one chip it becomes `Abdomen: Distended`. */
     const abdomenCombo = page.getByLabel(
-      new RegExp(`^${H2T_GI_PANEL_MULTI_ROW}`),
+      new RegExp(`^${ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_ROW}`),
     );
     await abdomenCombo.scrollIntoViewIfNeeded();
     await abdomenCombo.click();
     await page
       .getByRole("option", {
-        name: H2T_GI_PANEL_MULTI_CHOICE,
+        name: ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_CHOICE,
         exact: true,
       })
       .click();
     await expect(abdomenCombo).toHaveAccessibleName(
-      new RegExp(H2T_GI_PANEL_MULTI_CHOICE),
+      new RegExp(ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_CHOICE),
     );
 
-    await setFlowsheetWdlGate(page, H2T_COMMENT_GATE_PROMPT, "WDL");
-    await setFlowsheetWdlGate(page, H2T_COMMENT_GATE_PROMPT, "X");
+    await setFlowsheetWdlGate(
+      page,
+      ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT,
+      "WDL",
+    );
+    await setFlowsheetWdlGate(
+      page,
+      ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT,
+      "X",
+    );
 
     await openAbdomenInfoPanel(page);
     await expect(
       abdomenPanelOptions(page).getByRole("checkbox", {
-        name: H2T_GI_PANEL_MULTI_CHOICE,
+        name: ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_CHOICE,
         exact: true,
       }),
     ).not.toBeChecked();
@@ -221,12 +248,12 @@ test.describe("H2T assessment", () => {
     test.beforeAll(async ({ browser, baseURL }) => {
       context = await browser.newContext({ baseURL });
       page = await context.newPage();
-      await openH2TPractice(page);
+      await openAdultPhysicalAssessmentPractice(page);
 
       const exportPdf = page.getByRole("button", { name: "Export to PDF" });
       await expect(exportPdf).toBeDisabled();
 
-      for (const { prompt, choice } of H2T_GATE_SELECTION_PLAN) {
+      for (const { prompt, choice } of ADULT_PHYSICAL_ASSESSMENT_GATE_SELECTION_PLAN) {
         const trigger = page.getByLabel(prompt, { exact: true });
         await trigger.scrollIntoViewIfNeeded();
         await trigger.click();
@@ -238,21 +265,21 @@ test.describe("H2T assessment", () => {
 
       await flowsheetScrollLocator(page)
         .getByRole("button", {
-          name: `View row information for ${H2T_GI_PANEL_MULTI_ROW}`,
+          name: `View row information for ${ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_ROW}`,
         })
         .scrollIntoViewIfNeeded();
       await flowsheetScrollLocator(page)
         .getByRole("button", {
-          name: `View row information for ${H2T_GI_PANEL_MULTI_ROW}`,
+          name: `View row information for ${ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_ROW}`,
         })
         .click();
 
       const abdomenOptions = page.getByRole("group", {
-        name: `Options for ${H2T_GI_PANEL_MULTI_ROW}`,
+        name: `Options for ${ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_ROW}`,
       });
       await expect(abdomenOptions).toBeVisible();
       const distended = abdomenOptions.getByRole("checkbox", {
-        name: H2T_GI_PANEL_MULTI_CHOICE,
+        name: ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_CHOICE,
         exact: true,
       });
       await distended.check();
@@ -260,24 +287,30 @@ test.describe("H2T assessment", () => {
 
       await flowsheetScrollLocator(page)
         .getByRole("button", {
-          name: `View row information for ${H2T_COMMENT_GATE_PROMPT}`,
+          name: `View row information for ${ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT}`,
         })
         .scrollIntoViewIfNeeded();
       await flowsheetScrollLocator(page)
         .getByRole("button", {
-          name: `View row information for ${H2T_COMMENT_GATE_PROMPT}`,
+          name: `View row information for ${ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT}`,
         })
         .click();
 
       const giWdlPanel = page.locator("aside").filter({
-        has: page.getByText(H2T_COMMENT_GATE_PROMPT, { exact: true }),
+        has: page.getByText(ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT, {
+          exact: true,
+        }),
       });
       await giWdlPanel.getByRole("button", { name: "Add comment" }).click();
       await giWdlPanel
-        .getByLabel(`Comment for ${H2T_COMMENT_GATE_PROMPT}`)
-        .fill(H2T_COMMENT_TEXT);
+        .getByLabel(
+          `Comment for ${ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT}`,
+        )
+        .fill(ADULT_PHYSICAL_ASSESSMENT_COMMENT_TEXT);
       await giWdlPanel.getByRole("button", { name: "Save" }).click();
-      await expect(giWdlPanel.getByText(H2T_COMMENT_TEXT)).toBeVisible();
+      await expect(
+        giWdlPanel.getByText(ADULT_PHYSICAL_ASSESSMENT_COMMENT_TEXT),
+      ).toBeVisible();
 
       await page.waitForTimeout(500);
     });
@@ -290,12 +323,12 @@ test.describe("H2T assessment", () => {
       await page.reload();
       await expect(
         page.getByRole("heading", {
-          name: "Head-to-Toe Assessment (H2T)",
+          name: "Adult Physical Assessment",
           level: 1,
         }),
       ).toBeVisible();
 
-      for (const { prompt, choice } of H2T_GATE_SELECTION_PLAN) {
+      for (const { prompt, choice } of ADULT_PHYSICAL_ASSESSMENT_GATE_SELECTION_PLAN) {
         const trigger = page.getByLabel(prompt, { exact: true });
         await trigger.scrollIntoViewIfNeeded();
         await expect(trigger).toContainText(choice);
@@ -303,21 +336,21 @@ test.describe("H2T assessment", () => {
 
       await flowsheetScrollLocator(page)
         .getByRole("button", {
-          name: `View row information for ${H2T_GI_PANEL_MULTI_ROW}`,
+          name: `View row information for ${ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_ROW}`,
         })
         .scrollIntoViewIfNeeded();
       await flowsheetScrollLocator(page)
         .getByRole("button", {
-          name: `View row information for ${H2T_GI_PANEL_MULTI_ROW}`,
+          name: `View row information for ${ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_ROW}`,
         })
         .click();
       await expect(
         page
           .getByRole("group", {
-            name: `Options for ${H2T_GI_PANEL_MULTI_ROW}`,
+            name: `Options for ${ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_ROW}`,
           })
           .getByRole("checkbox", {
-            name: H2T_GI_PANEL_MULTI_CHOICE,
+            name: ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_CHOICE,
             exact: true,
           }),
       ).toBeChecked();
@@ -326,21 +359,24 @@ test.describe("H2T assessment", () => {
 
       await flowsheetScrollLocator(page)
         .getByRole("button", {
-          name: `View row information for ${H2T_COMMENT_GATE_PROMPT}`,
+          name: `View row information for ${ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT}`,
         })
         .scrollIntoViewIfNeeded();
       await flowsheetScrollLocator(page)
         .getByRole("button", {
-          name: `View row information for ${H2T_COMMENT_GATE_PROMPT}`,
+          name: `View row information for ${ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT}`,
         })
         .click();
       await expect(
         page
           .locator("aside")
           .filter({
-            has: page.getByText(H2T_COMMENT_GATE_PROMPT, { exact: true }),
+            has: page.getByText(
+              ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT,
+              { exact: true },
+            ),
           })
-          .getByText(H2T_COMMENT_TEXT),
+          .getByText(ADULT_PHYSICAL_ASSESSMENT_COMMENT_TEXT),
       ).toBeVisible();
     });
 
@@ -353,7 +389,7 @@ test.describe("H2T assessment", () => {
         exportBtn.click(),
       ]);
 
-      const pdfPath = testInfo.outputPath("h2t-export.pdf");
+      const pdfPath = testInfo.outputPath("adult-physical-assessment-export.pdf");
       await download.saveAs(pdfPath);
 
       const parser = new PDFParse({ data: readFileSync(pdfPath) });
@@ -364,13 +400,15 @@ test.describe("H2T assessment", () => {
         await parser.destroy();
       }
 
-      const fragments = buildH2TScenarioOrderedPdfFragments({
-        gateSelectionPlan: H2T_GATE_SELECTION_PLAN,
-        commentGatePrompt: H2T_COMMENT_GATE_PROMPT,
-        commentText: H2T_COMMENT_TEXT,
-        multiRowPrompt: H2T_GI_PANEL_MULTI_ROW,
-        multiChoiceLabel: H2T_GI_PANEL_MULTI_CHOICE,
-      });
+      const fragments = buildAdultPhysicalAssessmentScenarioOrderedPdfFragments(
+        {
+          gateSelectionPlan: ADULT_PHYSICAL_ASSESSMENT_GATE_SELECTION_PLAN,
+          commentGatePrompt: ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT,
+          commentText: ADULT_PHYSICAL_ASSESSMENT_COMMENT_TEXT,
+          multiRowPrompt: ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_ROW,
+          multiChoiceLabel: ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_CHOICE,
+        },
+      );
 
       expectPdfContainsOrderedComparableFragments(text, fragments);
     });
@@ -384,7 +422,7 @@ test.describe("H2T assessment", () => {
         .click();
 
       const gatePlaceholder = "Select…";
-      for (const { prompt } of H2T_GATE_SELECTION_PLAN) {
+      for (const { prompt } of ADULT_PHYSICAL_ASSESSMENT_GATE_SELECTION_PLAN) {
         const trigger = page.getByLabel(prompt, { exact: true });
         await trigger.scrollIntoViewIfNeeded();
         await expect(trigger).toHaveText(gatePlaceholder);
@@ -395,20 +433,24 @@ test.describe("H2T assessment", () => {
 
       await flowsheetScrollLocator(page)
         .getByRole("button", {
-          name: `View row information for ${H2T_COMMENT_GATE_PROMPT}`,
+          name: `View row information for ${ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT}`,
         })
         .scrollIntoViewIfNeeded();
       await flowsheetScrollLocator(page)
         .getByRole("button", {
-          name: `View row information for ${H2T_COMMENT_GATE_PROMPT}`,
+          name: `View row information for ${ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT}`,
         })
         .click();
 
       const giCommentPanel = page.locator("aside").filter({
-        has: page.getByText(H2T_COMMENT_GATE_PROMPT, { exact: true }),
+        has: page.getByText(ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT, {
+          exact: true,
+        }),
       });
       await expect(
-        giCommentPanel.getByText(H2T_COMMENT_TEXT, { exact: true }),
+        giCommentPanel.getByText(ADULT_PHYSICAL_ASSESSMENT_COMMENT_TEXT, {
+          exact: true,
+        }),
       ).not.toBeVisible();
     });
   });

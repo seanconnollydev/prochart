@@ -24,7 +24,6 @@ export default function StudentAssessmentsPage() {
           <Card key={a.templateId}>
             <CardHeader>
               <CardTitle className="text-base">{a.title}</CardTitle>
-              <CardDescription>Bundled assessment</CardDescription>
             </CardHeader>
             <CardContent>
               <Button asChild size="sm">

@@ -1,4 +1,5 @@
-export const H2T_ASSESSMENT_TEMPLATE_ID = "h2t_head_to_toe_v1" as const;
+export const ADULT_PHYSICAL_ASSESSMENT_TEMPLATE_ID =
+  "adult_physical_assessment_v1" as const;
 
 /** Built-in assessments authors can attach to case studies. */
 export const BUILTIN_ASSESSMENT_CATALOG: ReadonlyArray<{
@@ -6,7 +7,7 @@ export const BUILTIN_ASSESSMENT_CATALOG: ReadonlyArray<{
   title: string;
 }> = [
   {
-    templateId: H2T_ASSESSMENT_TEMPLATE_ID,
-    title: "Head-to-Toe Assessment (H2T)",
+    templateId: ADULT_PHYSICAL_ASSESSMENT_TEMPLATE_ID,
+    title: "Adult Physical Assessment",
   },
 ];

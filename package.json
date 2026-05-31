@@ -11,7 +11,7 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:codegen": "playwright codegen",
-    "build:h2t": "node scripts/build-h2t-assessment.mjs"
+    "build:adult-physical-assessment": "node scripts/build-adult-physical-assessment.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",

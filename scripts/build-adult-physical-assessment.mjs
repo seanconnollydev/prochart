@@ -1,6 +1,6 @@
 /**
- * Reads the H2T workbook `data` sheet and emits lib/assessments/h2t-head-to-toe.generated.json
- * Run: node scripts/build-h2t-assessment.mjs
+ * Reads the H2T workbook `data` sheet and emits lib/assessments/adult-physical-assessment.generated.json
+ * Run: node scripts/build-adult-physical-assessment.mjs
  */
 import { createHash } from "node:crypto";
 import { mkdirSync, writeFileSync } from "node:fs";
@@ -15,9 +15,9 @@ const xlsxPath = join(
   "docs/H2T_Assessment_Workbook_5_14_2025 (2).xlsx",
 );
 const outDir = join(repoRoot, "lib/assessments");
-const outPath = join(outDir, "h2t-head-to-toe.generated.json");
+const outPath = join(outDir, "adult-physical-assessment.generated.json");
 
-const TEMPLATE_ID = "h2t_head_to_toe_v1";
+const TEMPLATE_ID = "adult_physical_assessment_v1";
 const SCHEMA_VERSION = "assessmentTemplate@0.1";
 
 /** Body system flattened to a single root group + hierarchical gates (see NV/MSK plan). */
@@ -30,19 +30,19 @@ function h16(parts) {
 }
 
 function grpRoot(bodySystem) {
-  return `grp_${h16(["h2t", "root", bodySystem])}`;
+  return `grp_${h16(["adult_physical_assessment", "root", bodySystem])}`;
 }
 
 function grpChild(bodySystem, bodySub) {
-  return `grp_${h16(["h2t", "child", bodySystem, bodySub])}`;
+  return `grp_${h16(["adult_physical_assessment", "child", bodySystem, bodySub])}`;
 }
 
 function itemId(bodySystem, bodySub, tag) {
-  return `itm_${h16(["h2t", "item", bodySystem, bodySub, tag])}`;
+  return `itm_${h16(["adult_physical_assessment", "item", bodySystem, bodySub, tag])}`;
 }
 
 function choiceId(itemId_, label, idx) {
-  return `ch_${h16(["h2t", "choice", itemId_, label, String(idx)])}`;
+  return `ch_${h16(["adult_physical_assessment", "choice", itemId_, label, String(idx)])}`;
 }
 
 /** Matches workbook lines that carry the narrative after `WDL=` (same idea as flowsheet.ts). */
@@ -464,7 +464,7 @@ function pushNvMskBlock() {
 
   if (!rollupKey) {
     throw new Error(
-      `[h2t] Missing NeuroVascular/Musculoskeletal section rollup (${NV_MSK_ROLLUP_CONCEPT})`,
+      `[adult-physical-assessment] Missing NeuroVascular/Musculoskeletal section rollup (${NV_MSK_ROLLUP_CONCEPT})`,
     );
   }
 
@@ -494,7 +494,7 @@ function pushNvMskBlock() {
       !firstPlainRollup
     ) {
       throw new Error(
-        `[h2t] NeuroVascular/Musculoskeletal rollup row has empty WDL / list choices`,
+        `[adult-physical-assessment] NeuroVascular/Musculoskeletal rollup row has empty WDL / list choices`,
       );
     }
     const gate = {
@@ -597,7 +597,7 @@ function pushNvMskBlock() {
         const agg = aggregateWdlNarrativeByPair.get(pairAggKey);
         if (!agg) {
           throw new Error(
-            `[h2t] NV/MSK exception-only row lacks subsection aggregate: ${kk}`,
+            `[adult-physical-assessment] NV/MSK exception-only row lacks subsection aggregate: ${kk}`,
           );
         }
         const firstAgg =
@@ -714,9 +714,9 @@ const now = new Date().toISOString();
 const doc = {
   schemaVersion: SCHEMA_VERSION,
   id: TEMPLATE_ID,
-  title: "Head-to-Toe Assessment (H2T)",
+  title: "Adult Physical Assessment",
   description:
-    "NKBDS H2T head-to-toe assessment workbook — grouped by body system and sub-system.",
+    "Adult physical assessment — grouped by body system and sub-system.",
   createdAt: now,
   updatedAt: now,
   status: "published",

@@ -60,7 +60,7 @@ export function AssessmentWorksheetLayout({
               </TableHeader>
               <TableBody>
                 {block.items.map((item) => {
-                  const selId = `h2t-select-${item.id}`;
+                  const selId = `adult-physical-assessment-select-${item.id}`;
                   const val = String(responses[item.id]?.value ?? "");
                   return (
                     <TableRow key={item.id}>

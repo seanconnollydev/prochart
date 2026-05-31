@@ -1,9 +1,9 @@
 import type { AssessmentTemplate } from "@/lib/types/assessment-template";
 import { tryNormalizeAssessmentTemplate } from "@/lib/types/assessment-template";
-import h2tHeadToToe from "./h2t-head-to-toe.generated.json";
+import adultPhysicalAssessment from "./adult-physical-assessment.generated.json";
 
 const rawBuiltins: Record<string, unknown> = {
-  h2t_head_to_toe_v1: h2tHeadToToe,
+  adult_physical_assessment_v1: adultPhysicalAssessment,
 };
 
 export const BUILTIN_TEMPLATE_IDS = Object.keys(

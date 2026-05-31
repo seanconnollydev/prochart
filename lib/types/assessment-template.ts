@@ -49,7 +49,7 @@ export type AssessmentTemplate = {
   items: AssessmentItem[];
   /** How to render the taker UI (default: cards). */
   presentation?: { layout?: AssessmentPresentationLayout };
-  /** Optional license / attribution (e.g. bundled H2T workbook). */
+  /** Optional license / attribution (e.g. bundled adult physical assessment workbook). */
   licenseNotice?: string;
 };
 

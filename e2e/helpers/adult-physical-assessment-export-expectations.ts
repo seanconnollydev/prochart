@@ -1,4 +1,4 @@
-import rawH2t from "@/lib/assessments/h2t-head-to-toe.generated.json";
+import rawAdultPhysicalAssessment from "@/lib/assessments/adult-physical-assessment.generated.json";
 import {
   buildFlowsheetExportRows,
   type FlowsheetExportRow,
@@ -16,7 +16,7 @@ import {
 import type { AssessmentItemResponse } from "@/lib/types/assessment-submission";
 import { expect } from "@playwright/test";
 
-export type H2TExportScenario = {
+export type AdultPhysicalAssessmentExportScenario = {
   gateSelectionPlan: readonly Readonly<{
     prompt: string;
     choice: "WDL" | "X";
@@ -52,7 +52,7 @@ export function flowsheetExportRowsToOrderedPdfFragments(
 
 function scenarioResponsesFromTemplate(
   prepared: AssessmentTemplate,
-  scenario: H2TExportScenario,
+  scenario: AdultPhysicalAssessmentExportScenario,
 ): Record<string, AssessmentItemResponse> {
   const responses: Record<string, AssessmentItemResponse> = {};
 
@@ -64,7 +64,9 @@ function scenarioResponsesFromTemplate(
         isFlowsheetWdlXComboboxItem(i),
     );
     if (!item?.id) {
-      throw new Error(`H2T export scenario: missing WDL/X gate "${prompt}".`);
+      throw new Error(
+        `Adult physical assessment export scenario: missing WDL/X gate "${prompt}".`,
+      );
     }
     const gates = [...(item.choices ?? [])];
     const wdlChoice =
@@ -77,7 +79,9 @@ function scenarioResponsesFromTemplate(
       responses[item.id].value !== FLOWSHEET_EXCEPTION_CHOICE_ID &&
       !responses[item.id].value
     ) {
-      throw new Error(`H2T export scenario: no WDL choice for "${prompt}".`);
+      throw new Error(
+        `Adult physical assessment export scenario: no WDL choice for "${prompt}".`,
+      );
     }
   }
 
@@ -87,7 +91,7 @@ function scenarioResponsesFromTemplate(
   );
   if (!abdomen?.id) {
     throw new Error(
-      `H2T export scenario: missing multi-row "${scenario.multiRowPrompt}".`,
+      `Adult physical assessment export scenario: missing multi-row "${scenario.multiRowPrompt}".`,
     );
   }
   const distended = abdomen.choices?.find(
@@ -95,7 +99,7 @@ function scenarioResponsesFromTemplate(
   );
   if (!distended?.id) {
     throw new Error(
-      `H2T export scenario: choice "${scenario.multiChoiceLabel}" not found on Abdomen.`,
+      `Adult physical assessment export scenario: choice "${scenario.multiChoiceLabel}" not found on Abdomen.`,
     );
   }
   responses[abdomen.id] = { value: [distended.id] };
@@ -106,7 +110,7 @@ function scenarioResponsesFromTemplate(
   );
   if (!rollup?.id) {
     throw new Error(
-      `H2T export scenario: missing section rollup "${scenario.commentGatePrompt}".`,
+      `Adult physical assessment export scenario: missing section rollup "${scenario.commentGatePrompt}".`,
     );
   }
   responses[rollup.id] = {
@@ -118,10 +122,10 @@ function scenarioResponsesFromTemplate(
 }
 
 /** Expected ordered PDF snippets for template + persisted scenario (matches {@link exportFlowsheetAssessmentPdf}). */
-export function buildH2TScenarioOrderedPdfFragments(
-  scenario: H2TExportScenario,
+export function buildAdultPhysicalAssessmentScenarioOrderedPdfFragments(
+  scenario: AdultPhysicalAssessmentExportScenario,
 ): string[] {
-  const normalized = normalizeAssessmentTemplate(rawH2t);
+  const normalized = normalizeAssessmentTemplate(rawAdultPhysicalAssessment);
   const prepared = prepareFlowsheetTemplate(normalized);
   const responses = scenarioResponsesFromTemplate(prepared, scenario);
   const rows = buildFlowsheetExportRows(prepared, responses);
