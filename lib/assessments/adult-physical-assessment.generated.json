@@ -3,13 +3,28 @@
   "id": "adult_physical_assessment_v1",
   "title": "Adult Physical Assessment",
   "description": "Adult physical assessment — grouped by body system and sub-system.",
-  "createdAt": "2026-05-31T15:41:47.974Z",
-  "updatedAt": "2026-05-31T15:41:47.974Z",
+  "createdAt": "2026-06-11T19:39:25.763Z",
+  "updatedAt": "2026-06-11T19:39:25.763Z",
   "status": "published",
   "groups": [
     {
-      "id": "grp_f67e742de651dbcf",
-      "label": "Behavioral",
+      "id": "grp_8670436c7fa8674f",
+      "label": "Neuro",
+      "parentGroupId": null
+    },
+    {
+      "id": "grp_8b3ee63b666cf25c",
+      "label": "NeuroVascular/Musculoskeletal",
+      "parentGroupId": null
+    },
+    {
+      "id": "grp_d47bcdeb83d60885",
+      "label": "HEENT",
+      "parentGroupId": null
+    },
+    {
+      "id": "grp_dafd361a017f7351",
+      "label": "Respiratory",
       "parentGroupId": null
     },
     {
@@ -23,23 +38,8 @@
       "parentGroupId": null
     },
     {
-      "id": "grp_d47bcdeb83d60885",
-      "label": "HEENT",
-      "parentGroupId": null
-    },
-    {
-      "id": "grp_8670436c7fa8674f",
-      "label": "Neuro",
-      "parentGroupId": null
-    },
-    {
-      "id": "grp_8b3ee63b666cf25c",
-      "label": "NeuroVascular/Musculoskeletal",
-      "parentGroupId": null
-    },
-    {
-      "id": "grp_dafd361a017f7351",
-      "label": "Respiratory",
+      "id": "grp_25f686f8816e984a",
+      "label": "Urinary Symptoms",
       "parentGroupId": null
     },
     {
@@ -48,14 +48,24 @@
       "parentGroupId": null
     },
     {
-      "id": "grp_25f686f8816e984a",
-      "label": "Urinary Symptoms",
+      "id": "grp_f67e742de651dbcf",
+      "label": "Behavioral",
       "parentGroupId": null
     },
     {
-      "id": "grp_feb1a99c138095cf",
-      "label": "Behavioral",
-      "parentGroupId": "grp_f67e742de651dbcf"
+      "id": "grp_7c39fc415cadb35c",
+      "label": "Neuro",
+      "parentGroupId": "grp_8670436c7fa8674f"
+    },
+    {
+      "id": "grp_a03fee7f560fcfc3",
+      "label": "HEENT",
+      "parentGroupId": "grp_d47bcdeb83d60885"
+    },
+    {
+      "id": "grp_42c55559f068871b",
+      "label": "Respiratory",
+      "parentGroupId": "grp_dafd361a017f7351"
     },
     {
       "id": "grp_adec4e21968034e9",
@@ -68,19 +78,9 @@
       "parentGroupId": "grp_81a73f25293f87df"
     },
     {
-      "id": "grp_a03fee7f560fcfc3",
-      "label": "HEENT",
-      "parentGroupId": "grp_d47bcdeb83d60885"
-    },
-    {
-      "id": "grp_7c39fc415cadb35c",
-      "label": "Neuro",
-      "parentGroupId": "grp_8670436c7fa8674f"
-    },
-    {
-      "id": "grp_42c55559f068871b",
-      "label": "Respiratory",
-      "parentGroupId": "grp_dafd361a017f7351"
+      "id": "grp_a7656d2e8cd25431",
+      "label": "Urinary Symptoms",
+      "parentGroupId": "grp_25f686f8816e984a"
     },
     {
       "id": "grp_23c7579f5e2bfbb1",
@@ -88,630 +88,271 @@
       "parentGroupId": "grp_7f5e225feeb0db6c"
     },
     {
-      "id": "grp_a7656d2e8cd25431",
-      "label": "Urinary Symptoms",
-      "parentGroupId": "grp_25f686f8816e984a"
+      "id": "grp_feb1a99c138095cf",
+      "label": "Behavioral",
+      "parentGroupId": "grp_f67e742de651dbcf"
     }
   ],
   "items": [
     {
-      "id": "itm_3c1bf28c5d9b9a11",
-      "groupId": "grp_feb1a99c138095cf",
-      "prompt": "Behavior WDL",
+      "id": "itm_3c80b3d7669d0cc8",
+      "groupId": "grp_7c39fc415cadb35c",
+      "prompt": "Neuro WDL",
       "responseType": "choice",
       "flowsheetSectionRollup": true,
       "choices": [
         {
-          "id": "ch_5fb090fb000b08c8",
-          "label": "Behavior appropriate to the situation, cooperative, appropriate eye contact; no unusual gestures, mannerisms or speech; no socially inappropriate behavior, verbal or physical aggressiveness toward self or others.  Mood and affect appropriate for situation; affect consistent with mood; no agitation, anxiety, euphoria, lability. Thought Process:  Thought processes appropriate to situation, logical, relevant; no delusions and hallucinations; no spontaneous self-reported suicidal thoughts (not asked q shift, full suicide assessment via risk tool)"
+          "id": "ch_fc011545cabfd6aa",
+          "label": "Alert, oriented x4.  Appropriate for age.  Face is symmetrical.  Follows commands, no memory loss noted or reported (document formal memory assessment separately if completed). No difficulities swallowing.  Pupils equal, reactive, and round.  Speech is clear."
         }
       ],
-      "flowsheetSectionAggregateWdlDefinition": "Behavior appropriate to the situation, cooperative, appropriate eye contact; no unusual gestures, mannerisms or speech; no socially inappropriate behavior, verbal or physical aggressiveness toward self or others.  Mood and affect appropriate for situation; affect consistent with mood; no agitation, anxiety, euphoria, lability. Thought Process:  Thought processes appropriate to situation, logical, relevant; no delusions and hallucinations; no spontaneous self-reported suicidal thoughts (not asked q shift, full suicide assessment via risk tool)"
+      "flowsheetSectionAggregateWdlDefinition": "Alert, oriented x4.  Appropriate for age.  Face is symmetrical.  Follows commands, no memory loss noted or reported (document formal memory assessment separately if completed). No difficulities swallowing.  Pupils equal, reactive, and round.  Speech is clear."
     },
     {
-      "id": "itm_f2374e816f1ea8de",
-      "groupId": "grp_feb1a99c138095cf",
-      "prompt": "Behavior",
+      "id": "itm_c7b23483eace271a",
+      "groupId": "grp_7c39fc415cadb35c",
+      "prompt": "Cognition",
       "responseType": "multiChoice",
       "choices": [
         {
-          "id": "ch_aa6162312b9e0b2b",
-          "label": "Hyperactive behavior or excessive activity"
+          "id": "ch_2b9ed047d1c50078",
+          "label": "Confused"
         },
         {
-          "id": "ch_f341d6ea9a01e94a",
-          "label": "Hypoactive (quiet, withdrawn)"
+          "id": "ch_6c476bcd1e89451f",
+          "label": "Impulsive"
         },
         {
-          "id": "ch_453a5c49c4c13dbd",
-          "label": "Inconsolable or excessive crying"
+          "id": "ch_4d400d0417ebd64d",
+          "label": "Long term memory loss noted or reported"
         },
         {
-          "id": "ch_505e373b5e37f9bf",
-          "label": "Physically threatening or aggressive (Combative or Defiant)"
+          "id": "ch_707a9b892e37351f",
+          "label": "Poor attention or concentration"
         },
         {
-          "id": "ch_f53e63a534e5ae8a",
-          "label": "Self-harm behavior"
+          "id": "ch_387c0f086277797c",
+          "label": "Short term memory loss noted or reported"
         },
         {
-          "id": "ch_bb1c686a14d42120",
-          "label": "Socially inappropriate or Poor boundaries"
-        },
-        {
-          "id": "ch_dc16f45214fd9d87",
-          "label": "Speech disorganized"
-        },
-        {
-          "id": "ch_aa32729224130413",
-          "label": "Uncooperative or Non-compliant"
-        },
-        {
-          "id": "ch_99da47f6eb97c1ca",
-          "label": "Unusual repeated requests orquestioning"
-        },
-        {
-          "id": "ch_29cefabebb901fda",
-          "label": "Verbally threatening"
-        },
-        {
-          "id": "ch_105fc1c45616b833",
-          "label": "Wandering or Pacing or Restless"
+          "id": "ch_2b93ccc27bc3c59c",
+          "label": "Unable to follow commands"
         }
       ],
-      "wdlListDefinition": "Appropriate to the situation, cooperative, appropriate eye contact; no unusual gestures, mannerisms or speech; no socially inappropriate behavior, verbal or physical aggressiveness toward self or others"
+      "wdlListDefinition": "Appropriate for age"
     },
     {
-      "id": "itm_11a5200fb36496e6",
-      "groupId": "grp_feb1a99c138095cf",
-      "prompt": "Mood and Affect",
+      "id": "itm_6b06738c31646e05",
+      "groupId": "grp_7c39fc415cadb35c",
+      "prompt": "Facial Symmetry",
       "responseType": "multiChoice",
       "choices": [
         {
-          "id": "ch_2da893f3ddeb58a9",
-          "label": "Agitation"
+          "id": "ch_c95a470f6a4702f4",
+          "label": "Left facial drooping"
         },
         {
-          "id": "ch_1a739066a4fe7dca",
-          "label": "Anxiety"
-        },
-        {
-          "id": "ch_893c76a89fb98eb5",
-          "label": "Euphoria"
-        },
-        {
-          "id": "ch_4732121aa67ae442",
-          "label": "Flat Affect"
-        },
-        {
-          "id": "ch_34126f6876774d68",
-          "label": "Mood lability or fluctuations"
+          "id": "ch_699ce6f619bc29b3",
+          "label": "Right facial drooping"
         }
       ],
-      "wdlListDefinition": "Mood and affect appropriate for situation; affect consistent with mood; no agitation, anxiety, euphoria, lability"
+      "wdlListDefinition": "Normal symmetry"
     },
     {
-      "id": "itm_502363f633da5fe6",
-      "groupId": "grp_feb1a99c138095cf",
-      "prompt": "Thought Process",
+      "id": "itm_f79eaac0bc4790e1",
+      "groupId": "grp_7c39fc415cadb35c",
+      "prompt": "Level of Consciousness",
       "responseType": "multiChoice",
       "choices": [
         {
-          "id": "ch_0a34dfd65753ee20",
-          "label": "Delusions"
+          "id": "ch_d6765d0ef6c1baf5",
+          "label": "Lethargic"
         },
         {
-          "id": "ch_054bd64207c1aec0",
-          "label": "Hallucinations"
+          "id": "ch_d0ae4cb4c44fb382",
+          "label": "Obtunded"
         },
         {
-          "id": "ch_c31b0d0b8e606793",
-          "label": "Suicidal thoughts"
-        }
-      ],
-      "wdlListDefinition": "Thought processes appropriate to situation, logical, relevant; no delusions and hallucinations; no spontaneous self-reported suicidal thoughts (not asked q shift, full suicide assessment via risk tool)"
-    },
-    {
-      "id": "itm_162f1e346aa610dc",
-      "groupId": "grp_adec4e21968034e9",
-      "prompt": "Cardiac WDL",
-      "responseType": "choice",
-      "flowsheetSectionRollup": true,
-      "choices": [
+          "id": "ch_464ccf8d9294d1df",
+          "label": "Restless"
+        },
         {
-          "id": "ch_ff857266eebc358e",
-          "label": "No cardiac symptoms. Regular rate.  S1, S2, no adventitious heart sounds."
+          "id": "ch_315631259fe7d8d6",
+          "label": "Unresponsive"
         }
       ],
-      "flowsheetSectionAggregateWdlDefinition": "No cardiac symptoms. Regular rate.  S1, S2, no adventitious heart sounds."
+      "wdlListDefinition": "Alert"
     },
     {
-      "id": "itm_0053f4d8db821149",
-      "groupId": "grp_adec4e21968034e9",
-      "prompt": "Cardiac Regularity",
+      "id": "itm_12106017a928244b",
+      "groupId": "grp_7c39fc415cadb35c",
+      "prompt": "Orientation Level",
       "responseType": "multiChoice",
       "choices": [
         {
-          "id": "ch_cf17c1bb470c7ab8",
+          "id": "ch_6841798949a812d1",
+          "label": "Disoriented to person"
+        },
+        {
+          "id": "ch_ec03f093a22494c5",
+          "label": "Disoriented to place"
+        },
+        {
+          "id": "ch_76400928182a601d",
+          "label": "Disoriented to situation"
+        },
+        {
+          "id": "ch_edca94308c5d9425",
+          "label": "Disoriented to time"
+        },
+        {
+          "id": "ch_9db9ffe1d3799004",
+          "label": "Disoriented X 4"
+        }
+      ],
+      "wdlListDefinition": "Oriented x 4"
+    },
+    {
+      "id": "itm_41444953ecc41e01",
+      "groupId": "grp_7c39fc415cadb35c",
+      "prompt": "Pupil Reaction Left",
+      "responseType": "multiChoice",
+      "choices": [
+        {
+          "id": "ch_0e05047034ecfc9a",
+          "label": "Nonreactive"
+        },
+        {
+          "id": "ch_c0e8c5cdd98425d8",
+          "label": "Sluggish"
+        }
+      ],
+      "wdlListDefinition": "Normal, Reactive"
+    },
+    {
+      "id": "itm_896d7521c65f2e6d",
+      "groupId": "grp_7c39fc415cadb35c",
+      "prompt": "Pupil Reaction Right",
+      "responseType": "multiChoice",
+      "choices": [
+        {
+          "id": "ch_71034f198e22e82e",
+          "label": "Nonreactive"
+        },
+        {
+          "id": "ch_2bf74a6d36f39af3",
+          "label": "Sluggish"
+        }
+      ],
+      "wdlListDefinition": "Normal, Reactive"
+    },
+    {
+      "id": "itm_9f68c826aa70a4d5",
+      "groupId": "grp_7c39fc415cadb35c",
+      "prompt": "Pupil Shape Left",
+      "responseType": "multiChoice",
+      "choices": [
+        {
+          "id": "ch_a6e139bc5fc7f9f6",
+          "label": "Dilated"
+        },
+        {
+          "id": "ch_a93db8d68408c397",
           "label": "Irregular"
+        },
+        {
+          "id": "ch_36037ac58bf42c08",
+          "label": "Keyhole"
+        },
+        {
+          "id": "ch_9da5ec1cc51808e1",
+          "label": "Oval"
+        },
+        {
+          "id": "ch_e8aab6ee3185dc19",
+          "label": "Pinpoint"
         }
       ],
-      "wdlListDefinition": "Regular rate"
+      "wdlListDefinition": "Normal, Round"
     },
     {
-      "id": "itm_56b27d229c35ff93",
-      "groupId": "grp_adec4e21968034e9",
-      "prompt": "Cardiac Symptoms",
+      "id": "itm_4d67d2c61471960c",
+      "groupId": "grp_7c39fc415cadb35c",
+      "prompt": "Pupil Shape Right",
       "responseType": "multiChoice",
       "choices": [
         {
-          "id": "ch_7f375c5cd1dc44eb",
-          "label": "Chest pain at rest"
+          "id": "ch_7e4e3505347952a6",
+          "label": "Dilated"
         },
         {
-          "id": "ch_eb12cd59409b51af",
-          "label": "Chest Pressure"
+          "id": "ch_068818f0cdfd9993",
+          "label": "Irregular"
         },
         {
-          "id": "ch_f4df760cef2d3cda",
-          "label": "Chest Tightness"
+          "id": "ch_e932ee1cdc29034c",
+          "label": "Keyhole"
         },
         {
-          "id": "ch_8b2de1add30b4967",
-          "label": "JVD"
+          "id": "ch_a6176cf9bd6e9e28",
+          "label": "Oval"
         },
         {
-          "id": "ch_39d5a2b2c0015ba8",
-          "label": "Lightheaded"
-        },
-        {
-          "id": "ch_a8c3697938b4a116",
-          "label": "Palpitations"
+          "id": "ch_3ca78c5c88d75fac",
+          "label": "Pinpoint"
         }
       ],
-      "wdlListDefinition": "No cardiac symptoms"
+      "wdlListDefinition": "Normal, Round"
     },
     {
-      "id": "itm_cbcf389fe178fd95",
-      "groupId": "grp_adec4e21968034e9",
-      "prompt": "Heart Sounds",
+      "id": "itm_e361b83d48b35424",
+      "groupId": "grp_7c39fc415cadb35c",
+      "prompt": "Speech",
       "responseType": "multiChoice",
       "choices": [
         {
-          "id": "ch_314f47d03da4239d",
-          "label": "Click"
+          "id": "ch_83bc2c84e2e7d5e2",
+          "label": "Dysarthric or slurred"
         },
         {
-          "id": "ch_c832bec66db36f0a",
-          "label": "Gallop"
+          "id": "ch_b89cc42a8a850324",
+          "label": "Expressive aphasia"
         },
         {
-          "id": "ch_16a7ffa42fffa989",
-          "label": "Murmur"
+          "id": "ch_d9c36e431f1a238e",
+          "label": "Global aphasia"
         },
         {
-          "id": "ch_a787d93edaa9c02e",
-          "label": "Rub"
+          "id": "ch_71b0c3aaa15173d5",
+          "label": "Incomprehensible"
+        },
+        {
+          "id": "ch_d34e0d96487ba9b8",
+          "label": "Nonverbal"
+        },
+        {
+          "id": "ch_861c768768cfdcd3",
+          "label": "Receptive aphasia"
         }
       ],
-      "wdlListDefinition": "S1S2, no adventitious heart sounds"
+      "wdlListDefinition": "Clear"
     },
     {
-      "id": "itm_b105f491d143b56a",
-      "groupId": "grp_ed95e6967d3401de",
-      "prompt": "GI WDL",
-      "responseType": "choice",
-      "flowsheetSectionRollup": true,
-      "choices": [
-        {
-          "id": "ch_4f1889ca11e7e88e",
-          "label": "Abdomen non-tender, non-distended and soft unless gravid.  Bowel sounds audible, bowel movements per patient's baseline.  No subjective GI symptoms reported (output is not documented here)"
-        }
-      ],
-      "flowsheetSectionAggregateWdlDefinition": "Abdomen non-tender, non-distended and soft unless gravid.  Bowel sounds audible, bowel movements per patient's baseline.  No subjective GI symptoms reported (output is not documented here)"
-    },
-    {
-      "id": "itm_c2fcc7b71bc2d750",
-      "groupId": "grp_ed95e6967d3401de",
-      "prompt": "Abdomen",
+      "id": "itm_c2d7405b477411d5",
+      "groupId": "grp_7c39fc415cadb35c",
+      "prompt": "Swallow",
       "responseType": "multiChoice",
       "choices": [
         {
-          "id": "ch_9fe84d1e23a57c46",
-          "label": "Concave"
+          "id": "ch_20ea4f9de423abb7",
+          "label": "Difficulty swallowing"
         },
         {
-          "id": "ch_fedd1e47feec1b04",
-          "label": "Distended"
-        },
-        {
-          "id": "ch_a803c8bd5f760cc3",
-          "label": "Palpable mass(es)"
-        },
-        {
-          "id": "ch_ea2c837e5499eee0",
-          "label": "Pulsating"
-        },
-        {
-          "id": "ch_2c427b3af5b72c24",
-          "label": "Rigid"
-        },
-        {
-          "id": "ch_b7afec48dadfcc2b",
-          "label": "Tender"
+          "id": "ch_804d3153c7bf4ba6",
+          "label": "Painful swallowing"
         }
       ],
-      "wdlListDefinition": "Abdomen soft, non-tender, non-distended unless gravid"
-    },
-    {
-      "id": "itm_f9081e37d66e73cf",
-      "groupId": "grp_ed95e6967d3401de",
-      "prompt": "Bowel Activity",
-      "responseType": "multiChoice",
-      "choices": [
-        {
-          "id": "ch_b19247825e82a8f2",
-          "label": "Bowel sounds inaudible"
-        },
-        {
-          "id": "ch_09180de58d818a9e",
-          "label": "No bowel movement"
-        },
-        {
-          "id": "ch_0f13f24a75b2c393",
-          "label": "No flatus"
-        },
-        {
-          "id": "ch_6062e1099b77881d",
-          "label": "Passing flatus"
-        }
-      ],
-      "wdlListDefinition": "Bowel sounds audible, bowel movements per patient's baseline"
-    },
-    {
-      "id": "itm_9ff2f064c1b6e561",
-      "groupId": "grp_ed95e6967d3401de",
-      "prompt": "GI Symptoms",
-      "responseType": "multiChoice",
-      "choices": [
-        {
-          "id": "ch_eeffffaf22676bb7",
-          "label": "Bloating or fullness"
-        },
-        {
-          "id": "ch_1ff122bea3fbcb87",
-          "label": "Cramping"
-        },
-        {
-          "id": "ch_11195c0b646e77b5",
-          "label": "Heartburn or indigestion"
-        },
-        {
-          "id": "ch_c562c6289190e11c",
-          "label": "Loss of appetite"
-        },
-        {
-          "id": "ch_14411a52aa6c8eb9",
-          "label": "Nausea"
-        }
-      ],
-      "wdlListDefinition": "No symptoms"
-    },
-    {
-      "id": "itm_24c20f03108ce777",
-      "groupId": "grp_a03fee7f560fcfc3",
-      "prompt": "HEENT WDL",
-      "responseType": "choice",
-      "flowsheetSectionRollup": true,
-      "choices": [
-        {
-          "id": "ch_db9c51175e18d63e",
-          "label": "No bleeding, trauma, drainage, congestion, dryness, redness, swelling, or tenderness. Mucosa and lips intact.  Neck symmetrical, soft.  No acute hearing changes, tinnitus or ear obstruction.  No involuntary movements in head and face.  Sclera white, no eye drooping, no acute vision change. Voice intact"
-        }
-      ],
-      "flowsheetSectionAggregateWdlDefinition": "No bleeding, trauma, drainage, congestion, dryness, redness, swelling, or tenderness. Mucosa and lips intact.  Neck symmetrical, soft.  No acute hearing changes, tinnitus or ear obstruction.  No involuntary movements in head and face.  Sclera white, no eye drooping, no acute vision change. Voice intact"
-    },
-    {
-      "id": "itm_0334977a5548a19b",
-      "groupId": "grp_a03fee7f560fcfc3",
-      "prompt": "Head and Face",
-      "responseType": "multiChoice",
-      "choices": [
-        {
-          "id": "ch_8cc204e63d94e334",
-          "label": "Flushing"
-        },
-        {
-          "id": "ch_5ce24df65dbeaf41",
-          "label": "Involuntary movements"
-        },
-        {
-          "id": "ch_f3ea61cb6af18494",
-          "label": "Swelling"
-        }
-      ],
-      "wdlListDefinition": "No involuntary movements in head and face"
-    },
-    {
-      "id": "itm_ee3efdc5952ee176",
-      "groupId": "grp_a03fee7f560fcfc3",
-      "prompt": "Left Ear",
-      "responseType": "multiChoice",
-      "choices": [
-        {
-          "id": "ch_eff21e1989415eea",
-          "label": "Drainage"
-        },
-        {
-          "id": "ch_65c6caa8ada27085",
-          "label": "Hearing loss"
-        },
-        {
-          "id": "ch_f79cf8d6e90f451f",
-          "label": "Obstruction or Foreign body"
-        },
-        {
-          "id": "ch_a43cf688074339be",
-          "label": "Redness"
-        },
-        {
-          "id": "ch_12d0e8519190d3c8",
-          "label": "Swelling"
-        },
-        {
-          "id": "ch_94da5c211a885964",
-          "label": "Tinnitus"
-        }
-      ],
-      "wdlListDefinition": "No drainage, Redness, swelling, obstruction.  No acute hearing changes"
-    },
-    {
-      "id": "itm_0993e4f6459b5c72",
-      "groupId": "grp_a03fee7f560fcfc3",
-      "prompt": "Left Eye",
-      "responseType": "multiChoice",
-      "choices": [
-        {
-          "id": "ch_52f8c709ea554d25",
-          "label": "Dry"
-        },
-        {
-          "id": "ch_7f2bb668d3f6b2b9",
-          "label": "Redness"
-        },
-        {
-          "id": "ch_a69f5c72460c1dc5",
-          "label": "Sclera yellow"
-        },
-        {
-          "id": "ch_97ecd8f65ae4eb5f",
-          "label": "Swelling"
-        },
-        {
-          "id": "ch_77008b2f95ca285f",
-          "label": "Trauma"
-        },
-        {
-          "id": "ch_c6ba95066edf90ec",
-          "label": "Vision changes"
-        },
-        {
-          "id": "ch_1779e1885c7b75ee",
-          "label": "Burning"
-        },
-        {
-          "id": "ch_ea9a2365969605d9",
-          "label": "Drainage"
-        },
-        {
-          "id": "ch_d929b0c26257a2dd",
-          "label": "Drooping"
-        }
-      ],
-      "wdlListDefinition": "Sclera white, No trauma, burning, drainage, drooping, dryness, Redness, swelling, acute vision change"
-    },
-    {
-      "id": "itm_fe0d7c7f559b19c8",
-      "groupId": "grp_a03fee7f560fcfc3",
-      "prompt": "Mouth and Teeth",
-      "responseType": "multiChoice",
-      "choices": [
-        {
-          "id": "ch_0aee9e6601b7b293",
-          "label": "Cracked lips"
-        },
-        {
-          "id": "ch_d7e9d14aeb507488",
-          "label": "Difficulty chewing"
-        },
-        {
-          "id": "ch_e4a1c7e0692105d8",
-          "label": "Drainage"
-        },
-        {
-          "id": "ch_d3836bb9e11b12a6",
-          "label": "Lesion(s)"
-        },
-        {
-          "id": "ch_8fd124a415d50c55",
-          "label": "Swelling"
-        }
-      ],
-      "wdlListDefinition": "Skin and mucosa intact; No swelling, lesion(s), drainage, difficulty chewing"
-    },
-    {
-      "id": "itm_fa0ba39d111239eb",
-      "groupId": "grp_a03fee7f560fcfc3",
-      "prompt": "Nasal Drainage Color",
-      "responseType": "multiChoice",
-      "choices": [
-        {
-          "id": "ch_03a4026593c29fa3",
-          "label": "Bloody"
-        },
-        {
-          "id": "ch_3d5f93a77adb2643",
-          "label": "Clear"
-        },
-        {
-          "id": "ch_2739923ff88c0ce0",
-          "label": "Cloudy"
-        },
-        {
-          "id": "ch_a65c17dcd1f3d3dc",
-          "label": "Green"
-        },
-        {
-          "id": "ch_49f8ba99b71eb4aa",
-          "label": "Yellow"
-        }
-      ],
-      "wdlListDefinition": "None"
-    },
-    {
-      "id": "itm_ccc7b725ef0a3d1f",
-      "groupId": "grp_a03fee7f560fcfc3",
-      "prompt": "Nasal Drainage Consistency",
-      "responseType": "multiChoice",
-      "choices": [
-        {
-          "id": "ch_f13296ffa1b2d0c3",
-          "label": "Thick"
-        },
-        {
-          "id": "ch_17f4641ca41bd945",
-          "label": "Thin"
-        }
-      ],
-      "wdlListDefinition": "None"
-    },
-    {
-      "id": "itm_c86019bf67e0b1f2",
-      "groupId": "grp_a03fee7f560fcfc3",
-      "prompt": "Neck and Throat",
-      "responseType": "multiChoice",
-      "choices": [
-        {
-          "id": "ch_5e1d2018d0fd22f0",
-          "label": "Hoarse voice"
-        },
-        {
-          "id": "ch_e15665d70dcdf564",
-          "label": "Mass(es)"
-        },
-        {
-          "id": "ch_2a19ab5250333cbf",
-          "label": "Rigid"
-        },
-        {
-          "id": "ch_a814239babbcb3cd",
-          "label": "Swelling"
-        },
-        {
-          "id": "ch_d83196f4fb976230",
-          "label": "Tenderness"
-        }
-      ],
-      "wdlListDefinition": "Neck soft, voice intact, no masses, swelling, or tenderness"
-    },
-    {
-      "id": "itm_1a07ecbcd5df96e7",
-      "groupId": "grp_a03fee7f560fcfc3",
-      "prompt": "Nose",
-      "responseType": "multiChoice",
-      "choices": [
-        {
-          "id": "ch_ef3145a8b9dfd8ed",
-          "label": "Congestion"
-        },
-        {
-          "id": "ch_d0cb710792218e04",
-          "label": "Drainage"
-        },
-        {
-          "id": "ch_b5977c697de60de9",
-          "label": "Nasal Dryness"
-        }
-      ],
-      "wdlListDefinition": "No drainage, congestion, dryness, postnasal drip.  No involuntary movements in head and face"
-    },
-    {
-      "id": "itm_ca382c779aac5447",
-      "groupId": "grp_a03fee7f560fcfc3",
-      "prompt": "Right Ear",
-      "responseType": "multiChoice",
-      "choices": [
-        {
-          "id": "ch_0d98f54d453a7e88",
-          "label": "Drainage"
-        },
-        {
-          "id": "ch_f249205bfc64ee40",
-          "label": "Hearing loss"
-        },
-        {
-          "id": "ch_8a84043e5b194aa2",
-          "label": "Obstruction or Foreign body"
-        },
-        {
-          "id": "ch_26bcf0102e3e0f5e",
-          "label": "Redness"
-        },
-        {
-          "id": "ch_8282085fe27f158b",
-          "label": "Swelling"
-        },
-        {
-          "id": "ch_df9372e40d9cb592",
-          "label": "Tinnitus"
-        }
-      ],
-      "wdlListDefinition": "No drainage, Redness, swelling, obstruction.  No acute hearing changes"
-    },
-    {
-      "id": "itm_f723c1c337baf608",
-      "groupId": "grp_a03fee7f560fcfc3",
-      "prompt": "Right Eye",
-      "responseType": "multiChoice",
-      "choices": [
-        {
-          "id": "ch_ff765299f638ce8f",
-          "label": "Burning"
-        },
-        {
-          "id": "ch_7a8f7a917828851a",
-          "label": "Drainage"
-        },
-        {
-          "id": "ch_986881b5c1d11179",
-          "label": "Drooping"
-        },
-        {
-          "id": "ch_c673dd698624497f",
-          "label": "Dry"
-        },
-        {
-          "id": "ch_d453079d40734a71",
-          "label": "Redness"
-        },
-        {
-          "id": "ch_1928f2f4b7ad7e77",
-          "label": "Sclera yellow"
-        },
-        {
-          "id": "ch_085c2baa94f6ab00",
-          "label": "Swelling"
-        },
-        {
-          "id": "ch_db43ffb5e11f24fb",
-          "label": "Trauma"
-        },
-        {
-          "id": "ch_e29ffd5ff0fa9ade",
-          "label": "Vision changes"
-        }
-      ],
-      "wdlListDefinition": "Sclera white, No trauma, burning, drainage, drooping, dryness, swelling, edema, acute vision change"
+      "wdlListDefinition": "No difficulties swallowing"
     },
     {
       "id": "itm_f454789bb02531c5",
@@ -2645,264 +2286,320 @@
       "wdlListDefinition": "No swelling, pain, weakness or injury in back.  Full range of motion"
     },
     {
-      "id": "itm_3c80b3d7669d0cc8",
-      "groupId": "grp_7c39fc415cadb35c",
-      "prompt": "Neuro WDL",
+      "id": "itm_24c20f03108ce777",
+      "groupId": "grp_a03fee7f560fcfc3",
+      "prompt": "HEENT WDL",
       "responseType": "choice",
       "flowsheetSectionRollup": true,
       "choices": [
         {
-          "id": "ch_fc011545cabfd6aa",
-          "label": "Alert, oriented x4.  Appropriate for age.  Face is symmetrical.  Follows commands, no memory loss noted or reported (document formal memory assessment separately if completed). No difficulities swallowing.  Pupils equal, reactive, and round.  Speech is clear."
+          "id": "ch_db9c51175e18d63e",
+          "label": "No bleeding, trauma, drainage, congestion, dryness, redness, swelling, or tenderness. Mucosa and lips intact.  Neck symmetrical, soft.  No acute hearing changes, tinnitus or ear obstruction.  No involuntary movements in head and face.  Sclera white, no eye drooping, no acute vision change. Voice intact"
         }
       ],
-      "flowsheetSectionAggregateWdlDefinition": "Alert, oriented x4.  Appropriate for age.  Face is symmetrical.  Follows commands, no memory loss noted or reported (document formal memory assessment separately if completed). No difficulities swallowing.  Pupils equal, reactive, and round.  Speech is clear."
+      "flowsheetSectionAggregateWdlDefinition": "No bleeding, trauma, drainage, congestion, dryness, redness, swelling, or tenderness. Mucosa and lips intact.  Neck symmetrical, soft.  No acute hearing changes, tinnitus or ear obstruction.  No involuntary movements in head and face.  Sclera white, no eye drooping, no acute vision change. Voice intact"
     },
     {
-      "id": "itm_c7b23483eace271a",
-      "groupId": "grp_7c39fc415cadb35c",
-      "prompt": "Cognition",
+      "id": "itm_0334977a5548a19b",
+      "groupId": "grp_a03fee7f560fcfc3",
+      "prompt": "Head and Face",
       "responseType": "multiChoice",
       "choices": [
         {
-          "id": "ch_2b9ed047d1c50078",
-          "label": "Confused"
+          "id": "ch_8cc204e63d94e334",
+          "label": "Flushing"
         },
         {
-          "id": "ch_6c476bcd1e89451f",
-          "label": "Impulsive"
+          "id": "ch_5ce24df65dbeaf41",
+          "label": "Involuntary movements"
         },
         {
-          "id": "ch_4d400d0417ebd64d",
-          "label": "Long term memory loss noted or reported"
-        },
-        {
-          "id": "ch_707a9b892e37351f",
-          "label": "Poor attention or concentration"
-        },
-        {
-          "id": "ch_387c0f086277797c",
-          "label": "Short term memory loss noted or reported"
-        },
-        {
-          "id": "ch_2b93ccc27bc3c59c",
-          "label": "Unable to follow commands"
+          "id": "ch_f3ea61cb6af18494",
+          "label": "Swelling"
         }
       ],
-      "wdlListDefinition": "Appropriate for age"
+      "wdlListDefinition": "No involuntary movements in head and face"
     },
     {
-      "id": "itm_6b06738c31646e05",
-      "groupId": "grp_7c39fc415cadb35c",
-      "prompt": "Facial Symmetry",
+      "id": "itm_ee3efdc5952ee176",
+      "groupId": "grp_a03fee7f560fcfc3",
+      "prompt": "Left Ear",
       "responseType": "multiChoice",
       "choices": [
         {
-          "id": "ch_c95a470f6a4702f4",
-          "label": "Left facial drooping"
+          "id": "ch_eff21e1989415eea",
+          "label": "Drainage"
         },
         {
-          "id": "ch_699ce6f619bc29b3",
-          "label": "Right facial drooping"
+          "id": "ch_65c6caa8ada27085",
+          "label": "Hearing loss"
+        },
+        {
+          "id": "ch_f79cf8d6e90f451f",
+          "label": "Obstruction or Foreign body"
+        },
+        {
+          "id": "ch_a43cf688074339be",
+          "label": "Redness"
+        },
+        {
+          "id": "ch_12d0e8519190d3c8",
+          "label": "Swelling"
+        },
+        {
+          "id": "ch_94da5c211a885964",
+          "label": "Tinnitus"
         }
       ],
-      "wdlListDefinition": "Normal symmetry"
+      "wdlListDefinition": "No drainage, Redness, swelling, obstruction.  No acute hearing changes"
     },
     {
-      "id": "itm_f79eaac0bc4790e1",
-      "groupId": "grp_7c39fc415cadb35c",
-      "prompt": "Level of Consciousness",
+      "id": "itm_0993e4f6459b5c72",
+      "groupId": "grp_a03fee7f560fcfc3",
+      "prompt": "Left Eye",
       "responseType": "multiChoice",
       "choices": [
         {
-          "id": "ch_d6765d0ef6c1baf5",
-          "label": "Lethargic"
+          "id": "ch_52f8c709ea554d25",
+          "label": "Dry"
         },
         {
-          "id": "ch_d0ae4cb4c44fb382",
-          "label": "Obtunded"
+          "id": "ch_7f2bb668d3f6b2b9",
+          "label": "Redness"
         },
         {
-          "id": "ch_464ccf8d9294d1df",
-          "label": "Restless"
+          "id": "ch_a69f5c72460c1dc5",
+          "label": "Sclera yellow"
         },
         {
-          "id": "ch_315631259fe7d8d6",
-          "label": "Unresponsive"
+          "id": "ch_97ecd8f65ae4eb5f",
+          "label": "Swelling"
+        },
+        {
+          "id": "ch_77008b2f95ca285f",
+          "label": "Trauma"
+        },
+        {
+          "id": "ch_c6ba95066edf90ec",
+          "label": "Vision changes"
+        },
+        {
+          "id": "ch_1779e1885c7b75ee",
+          "label": "Burning"
+        },
+        {
+          "id": "ch_ea9a2365969605d9",
+          "label": "Drainage"
+        },
+        {
+          "id": "ch_d929b0c26257a2dd",
+          "label": "Drooping"
         }
       ],
-      "wdlListDefinition": "Alert"
+      "wdlListDefinition": "Sclera white, No trauma, burning, drainage, drooping, dryness, Redness, swelling, acute vision change"
     },
     {
-      "id": "itm_12106017a928244b",
-      "groupId": "grp_7c39fc415cadb35c",
-      "prompt": "Orientation Level",
+      "id": "itm_fe0d7c7f559b19c8",
+      "groupId": "grp_a03fee7f560fcfc3",
+      "prompt": "Mouth and Teeth",
       "responseType": "multiChoice",
       "choices": [
         {
-          "id": "ch_6841798949a812d1",
-          "label": "Disoriented to person"
+          "id": "ch_0aee9e6601b7b293",
+          "label": "Cracked lips"
         },
         {
-          "id": "ch_ec03f093a22494c5",
-          "label": "Disoriented to place"
+          "id": "ch_d7e9d14aeb507488",
+          "label": "Difficulty chewing"
         },
         {
-          "id": "ch_76400928182a601d",
-          "label": "Disoriented to situation"
+          "id": "ch_e4a1c7e0692105d8",
+          "label": "Drainage"
         },
         {
-          "id": "ch_edca94308c5d9425",
-          "label": "Disoriented to time"
+          "id": "ch_d3836bb9e11b12a6",
+          "label": "Lesion(s)"
         },
         {
-          "id": "ch_9db9ffe1d3799004",
-          "label": "Disoriented X 4"
+          "id": "ch_8fd124a415d50c55",
+          "label": "Swelling"
         }
       ],
-      "wdlListDefinition": "Oriented x 4"
+      "wdlListDefinition": "Skin and mucosa intact; No swelling, lesion(s), drainage, difficulty chewing"
     },
     {
-      "id": "itm_41444953ecc41e01",
-      "groupId": "grp_7c39fc415cadb35c",
-      "prompt": "Pupil Reaction Left",
+      "id": "itm_fa0ba39d111239eb",
+      "groupId": "grp_a03fee7f560fcfc3",
+      "prompt": "Nasal Drainage Color",
       "responseType": "multiChoice",
       "choices": [
         {
-          "id": "ch_0e05047034ecfc9a",
-          "label": "Nonreactive"
+          "id": "ch_03a4026593c29fa3",
+          "label": "Bloody"
         },
         {
-          "id": "ch_c0e8c5cdd98425d8",
-          "label": "Sluggish"
+          "id": "ch_3d5f93a77adb2643",
+          "label": "Clear"
+        },
+        {
+          "id": "ch_2739923ff88c0ce0",
+          "label": "Cloudy"
+        },
+        {
+          "id": "ch_a65c17dcd1f3d3dc",
+          "label": "Green"
+        },
+        {
+          "id": "ch_49f8ba99b71eb4aa",
+          "label": "Yellow"
         }
       ],
-      "wdlListDefinition": "Normal, Reactive"
+      "wdlListDefinition": "None"
     },
     {
-      "id": "itm_896d7521c65f2e6d",
-      "groupId": "grp_7c39fc415cadb35c",
-      "prompt": "Pupil Reaction Right",
+      "id": "itm_ccc7b725ef0a3d1f",
+      "groupId": "grp_a03fee7f560fcfc3",
+      "prompt": "Nasal Drainage Consistency",
       "responseType": "multiChoice",
       "choices": [
         {
-          "id": "ch_71034f198e22e82e",
-          "label": "Nonreactive"
+          "id": "ch_f13296ffa1b2d0c3",
+          "label": "Thick"
         },
         {
-          "id": "ch_2bf74a6d36f39af3",
-          "label": "Sluggish"
+          "id": "ch_17f4641ca41bd945",
+          "label": "Thin"
         }
       ],
-      "wdlListDefinition": "Normal, Reactive"
+      "wdlListDefinition": "None"
     },
     {
-      "id": "itm_9f68c826aa70a4d5",
-      "groupId": "grp_7c39fc415cadb35c",
-      "prompt": "Pupil Shape Left",
+      "id": "itm_c86019bf67e0b1f2",
+      "groupId": "grp_a03fee7f560fcfc3",
+      "prompt": "Neck and Throat",
       "responseType": "multiChoice",
       "choices": [
         {
-          "id": "ch_a6e139bc5fc7f9f6",
-          "label": "Dilated"
+          "id": "ch_5e1d2018d0fd22f0",
+          "label": "Hoarse voice"
         },
         {
-          "id": "ch_a93db8d68408c397",
-          "label": "Irregular"
+          "id": "ch_e15665d70dcdf564",
+          "label": "Mass(es)"
         },
         {
-          "id": "ch_36037ac58bf42c08",
-          "label": "Keyhole"
+          "id": "ch_2a19ab5250333cbf",
+          "label": "Rigid"
         },
         {
-          "id": "ch_9da5ec1cc51808e1",
-          "label": "Oval"
+          "id": "ch_a814239babbcb3cd",
+          "label": "Swelling"
         },
         {
-          "id": "ch_e8aab6ee3185dc19",
-          "label": "Pinpoint"
+          "id": "ch_d83196f4fb976230",
+          "label": "Tenderness"
         }
       ],
-      "wdlListDefinition": "Normal, Round"
+      "wdlListDefinition": "Neck soft, voice intact, no masses, swelling, or tenderness"
     },
     {
-      "id": "itm_4d67d2c61471960c",
-      "groupId": "grp_7c39fc415cadb35c",
-      "prompt": "Pupil Shape Right",
+      "id": "itm_1a07ecbcd5df96e7",
+      "groupId": "grp_a03fee7f560fcfc3",
+      "prompt": "Nose",
       "responseType": "multiChoice",
       "choices": [
         {
-          "id": "ch_7e4e3505347952a6",
-          "label": "Dilated"
+          "id": "ch_ef3145a8b9dfd8ed",
+          "label": "Congestion"
         },
         {
-          "id": "ch_068818f0cdfd9993",
-          "label": "Irregular"
+          "id": "ch_d0cb710792218e04",
+          "label": "Drainage"
         },
         {
-          "id": "ch_e932ee1cdc29034c",
-          "label": "Keyhole"
-        },
-        {
-          "id": "ch_a6176cf9bd6e9e28",
-          "label": "Oval"
-        },
-        {
-          "id": "ch_3ca78c5c88d75fac",
-          "label": "Pinpoint"
+          "id": "ch_b5977c697de60de9",
+          "label": "Nasal Dryness"
         }
       ],
-      "wdlListDefinition": "Normal, Round"
+      "wdlListDefinition": "No drainage, congestion, dryness, postnasal drip.  No involuntary movements in head and face"
     },
     {
-      "id": "itm_e361b83d48b35424",
-      "groupId": "grp_7c39fc415cadb35c",
-      "prompt": "Speech",
+      "id": "itm_ca382c779aac5447",
+      "groupId": "grp_a03fee7f560fcfc3",
+      "prompt": "Right Ear",
       "responseType": "multiChoice",
       "choices": [
         {
-          "id": "ch_83bc2c84e2e7d5e2",
-          "label": "Dysarthric or slurred"
+          "id": "ch_0d98f54d453a7e88",
+          "label": "Drainage"
         },
         {
-          "id": "ch_b89cc42a8a850324",
-          "label": "Expressive aphasia"
+          "id": "ch_f249205bfc64ee40",
+          "label": "Hearing loss"
         },
         {
-          "id": "ch_d9c36e431f1a238e",
-          "label": "Global aphasia"
+          "id": "ch_8a84043e5b194aa2",
+          "label": "Obstruction or Foreign body"
         },
         {
-          "id": "ch_71b0c3aaa15173d5",
-          "label": "Incomprehensible"
+          "id": "ch_26bcf0102e3e0f5e",
+          "label": "Redness"
         },
         {
-          "id": "ch_d34e0d96487ba9b8",
-          "label": "Nonverbal"
+          "id": "ch_8282085fe27f158b",
+          "label": "Swelling"
         },
         {
-          "id": "ch_861c768768cfdcd3",
-          "label": "Receptive aphasia"
+          "id": "ch_df9372e40d9cb592",
+          "label": "Tinnitus"
         }
       ],
-      "wdlListDefinition": "Clear"
+      "wdlListDefinition": "No drainage, Redness, swelling, obstruction.  No acute hearing changes"
     },
     {
-      "id": "itm_c2d7405b477411d5",
-      "groupId": "grp_7c39fc415cadb35c",
-      "prompt": "Swallow",
+      "id": "itm_f723c1c337baf608",
+      "groupId": "grp_a03fee7f560fcfc3",
+      "prompt": "Right Eye",
       "responseType": "multiChoice",
       "choices": [
         {
-          "id": "ch_20ea4f9de423abb7",
-          "label": "Difficulty swallowing"
+          "id": "ch_ff765299f638ce8f",
+          "label": "Burning"
         },
         {
-          "id": "ch_804d3153c7bf4ba6",
-          "label": "Painful swallowing"
+          "id": "ch_7a8f7a917828851a",
+          "label": "Drainage"
+        },
+        {
+          "id": "ch_986881b5c1d11179",
+          "label": "Drooping"
+        },
+        {
+          "id": "ch_c673dd698624497f",
+          "label": "Dry"
+        },
+        {
+          "id": "ch_d453079d40734a71",
+          "label": "Redness"
+        },
+        {
+          "id": "ch_1928f2f4b7ad7e77",
+          "label": "Sclera yellow"
+        },
+        {
+          "id": "ch_085c2baa94f6ab00",
+          "label": "Swelling"
+        },
+        {
+          "id": "ch_db43ffb5e11f24fb",
+          "label": "Trauma"
+        },
+        {
+          "id": "ch_e29ffd5ff0fa9ade",
+          "label": "Vision changes"
         }
       ],
-      "wdlListDefinition": "No difficulties swallowing"
+      "wdlListDefinition": "Sclera white, No trauma, burning, drainage, drooping, dryness, swelling, edema, acute vision change"
     },
     {
       "id": "itm_1e56212f99b0b3b5",
@@ -3343,6 +3040,230 @@
       "wdlListDefinition": "no sputum"
     },
     {
+      "id": "itm_162f1e346aa610dc",
+      "groupId": "grp_adec4e21968034e9",
+      "prompt": "Cardiac WDL",
+      "responseType": "choice",
+      "flowsheetSectionRollup": true,
+      "choices": [
+        {
+          "id": "ch_ff857266eebc358e",
+          "label": "No cardiac symptoms. Regular rate.  S1, S2, no adventitious heart sounds."
+        }
+      ],
+      "flowsheetSectionAggregateWdlDefinition": "No cardiac symptoms. Regular rate.  S1, S2, no adventitious heart sounds."
+    },
+    {
+      "id": "itm_0053f4d8db821149",
+      "groupId": "grp_adec4e21968034e9",
+      "prompt": "Cardiac Regularity",
+      "responseType": "multiChoice",
+      "choices": [
+        {
+          "id": "ch_cf17c1bb470c7ab8",
+          "label": "Irregular"
+        }
+      ],
+      "wdlListDefinition": "Regular rate"
+    },
+    {
+      "id": "itm_56b27d229c35ff93",
+      "groupId": "grp_adec4e21968034e9",
+      "prompt": "Cardiac Symptoms",
+      "responseType": "multiChoice",
+      "choices": [
+        {
+          "id": "ch_7f375c5cd1dc44eb",
+          "label": "Chest pain at rest"
+        },
+        {
+          "id": "ch_eb12cd59409b51af",
+          "label": "Chest Pressure"
+        },
+        {
+          "id": "ch_f4df760cef2d3cda",
+          "label": "Chest Tightness"
+        },
+        {
+          "id": "ch_8b2de1add30b4967",
+          "label": "JVD"
+        },
+        {
+          "id": "ch_39d5a2b2c0015ba8",
+          "label": "Lightheaded"
+        },
+        {
+          "id": "ch_a8c3697938b4a116",
+          "label": "Palpitations"
+        }
+      ],
+      "wdlListDefinition": "No cardiac symptoms"
+    },
+    {
+      "id": "itm_cbcf389fe178fd95",
+      "groupId": "grp_adec4e21968034e9",
+      "prompt": "Heart Sounds",
+      "responseType": "multiChoice",
+      "choices": [
+        {
+          "id": "ch_314f47d03da4239d",
+          "label": "Click"
+        },
+        {
+          "id": "ch_c832bec66db36f0a",
+          "label": "Gallop"
+        },
+        {
+          "id": "ch_16a7ffa42fffa989",
+          "label": "Murmur"
+        },
+        {
+          "id": "ch_a787d93edaa9c02e",
+          "label": "Rub"
+        }
+      ],
+      "wdlListDefinition": "S1S2, no adventitious heart sounds"
+    },
+    {
+      "id": "itm_b105f491d143b56a",
+      "groupId": "grp_ed95e6967d3401de",
+      "prompt": "GI WDL",
+      "responseType": "choice",
+      "flowsheetSectionRollup": true,
+      "choices": [
+        {
+          "id": "ch_4f1889ca11e7e88e",
+          "label": "Abdomen non-tender, non-distended and soft unless gravid.  Bowel sounds audible, bowel movements per patient's baseline.  No subjective GI symptoms reported (output is not documented here)"
+        }
+      ],
+      "flowsheetSectionAggregateWdlDefinition": "Abdomen non-tender, non-distended and soft unless gravid.  Bowel sounds audible, bowel movements per patient's baseline.  No subjective GI symptoms reported (output is not documented here)"
+    },
+    {
+      "id": "itm_c2fcc7b71bc2d750",
+      "groupId": "grp_ed95e6967d3401de",
+      "prompt": "Abdomen",
+      "responseType": "multiChoice",
+      "choices": [
+        {
+          "id": "ch_9fe84d1e23a57c46",
+          "label": "Concave"
+        },
+        {
+          "id": "ch_fedd1e47feec1b04",
+          "label": "Distended"
+        },
+        {
+          "id": "ch_a803c8bd5f760cc3",
+          "label": "Palpable mass(es)"
+        },
+        {
+          "id": "ch_ea2c837e5499eee0",
+          "label": "Pulsating"
+        },
+        {
+          "id": "ch_2c427b3af5b72c24",
+          "label": "Rigid"
+        },
+        {
+          "id": "ch_b7afec48dadfcc2b",
+          "label": "Tender"
+        }
+      ],
+      "wdlListDefinition": "Abdomen soft, non-tender, non-distended unless gravid"
+    },
+    {
+      "id": "itm_f9081e37d66e73cf",
+      "groupId": "grp_ed95e6967d3401de",
+      "prompt": "Bowel Activity",
+      "responseType": "multiChoice",
+      "choices": [
+        {
+          "id": "ch_b19247825e82a8f2",
+          "label": "Bowel sounds inaudible"
+        },
+        {
+          "id": "ch_09180de58d818a9e",
+          "label": "No bowel movement"
+        },
+        {
+          "id": "ch_0f13f24a75b2c393",
+          "label": "No flatus"
+        },
+        {
+          "id": "ch_6062e1099b77881d",
+          "label": "Passing flatus"
+        }
+      ],
+      "wdlListDefinition": "Bowel sounds audible, bowel movements per patient's baseline"
+    },
+    {
+      "id": "itm_9ff2f064c1b6e561",
+      "groupId": "grp_ed95e6967d3401de",
+      "prompt": "GI Symptoms",
+      "responseType": "multiChoice",
+      "choices": [
+        {
+          "id": "ch_eeffffaf22676bb7",
+          "label": "Bloating or fullness"
+        },
+        {
+          "id": "ch_1ff122bea3fbcb87",
+          "label": "Cramping"
+        },
+        {
+          "id": "ch_11195c0b646e77b5",
+          "label": "Heartburn or indigestion"
+        },
+        {
+          "id": "ch_c562c6289190e11c",
+          "label": "Loss of appetite"
+        },
+        {
+          "id": "ch_14411a52aa6c8eb9",
+          "label": "Nausea"
+        }
+      ],
+      "wdlListDefinition": "No symptoms"
+    },
+    {
+      "id": "itm_d32ba978a06e2550",
+      "groupId": "grp_a7656d2e8cd25431",
+      "prompt": "Urinary Symptoms",
+      "responseType": "choice",
+      "choices": [
+        {
+          "id": "ch_1d609787e2389ef9",
+          "label": "Burning / Pain"
+        },
+        {
+          "id": "ch_2051b5739b93e2e0",
+          "label": "Incontinence"
+        },
+        {
+          "id": "ch_5b39d109d905ded9",
+          "label": "Increased frequency"
+        },
+        {
+          "id": "ch_1e5b96be0b0b232d",
+          "label": "Urgency"
+        }
+      ]
+    },
+    {
+      "id": "itm_8dd279ab2a000cef",
+      "groupId": "grp_a7656d2e8cd25431",
+      "prompt": "Urinary Symptoms WDL",
+      "responseType": "choice",
+      "flowsheetSectionRollup": true,
+      "choices": [
+        {
+          "id": "ch_dfbbcf18564fdd6a",
+          "label": "No symptoms reported  (output is documented in I/0, use Zero in I/o for anuria, bladder scanner results in I/O, incontinence might also be in I/O...needs discussion or keep here?)"
+        }
+      ],
+      "flowsheetSectionAggregateWdlDefinition": "No symptoms reported  (output is documented in I/0, use Zero in I/o for anuria, bladder scanner results in I/O, incontinence might also be in I/O...needs discussion or keep here?)"
+    },
+    {
       "id": "itm_80a4c27cc9f4712a",
       "groupId": "grp_23c7579f5e2bfbb1",
       "prompt": "Skin WDL",
@@ -3623,42 +3544,121 @@
       ]
     },
     {
-      "id": "itm_d32ba978a06e2550",
-      "groupId": "grp_a7656d2e8cd25431",
-      "prompt": "Urinary Symptoms",
-      "responseType": "choice",
-      "choices": [
-        {
-          "id": "ch_1d609787e2389ef9",
-          "label": "Burning / Pain"
-        },
-        {
-          "id": "ch_2051b5739b93e2e0",
-          "label": "Incontinence"
-        },
-        {
-          "id": "ch_5b39d109d905ded9",
-          "label": "Increased frequency"
-        },
-        {
-          "id": "ch_1e5b96be0b0b232d",
-          "label": "Urgency"
-        }
-      ]
-    },
-    {
-      "id": "itm_8dd279ab2a000cef",
-      "groupId": "grp_a7656d2e8cd25431",
-      "prompt": "Urinary Symptoms WDL",
+      "id": "itm_3c1bf28c5d9b9a11",
+      "groupId": "grp_feb1a99c138095cf",
+      "prompt": "Behavior WDL",
       "responseType": "choice",
       "flowsheetSectionRollup": true,
       "choices": [
         {
-          "id": "ch_dfbbcf18564fdd6a",
-          "label": "No symptoms reported  (output is documented in I/0, use Zero in I/o for anuria, bladder scanner results in I/O, incontinence might also be in I/O...needs discussion or keep here?)"
+          "id": "ch_5fb090fb000b08c8",
+          "label": "Behavior appropriate to the situation, cooperative, appropriate eye contact; no unusual gestures, mannerisms or speech; no socially inappropriate behavior, verbal or physical aggressiveness toward self or others.  Mood and affect appropriate for situation; affect consistent with mood; no agitation, anxiety, euphoria, lability. Thought Process:  Thought processes appropriate to situation, logical, relevant; no delusions and hallucinations; no spontaneous self-reported suicidal thoughts (not asked q shift, full suicide assessment via risk tool)"
         }
       ],
-      "flowsheetSectionAggregateWdlDefinition": "No symptoms reported  (output is documented in I/0, use Zero in I/o for anuria, bladder scanner results in I/O, incontinence might also be in I/O...needs discussion or keep here?)"
+      "flowsheetSectionAggregateWdlDefinition": "Behavior appropriate to the situation, cooperative, appropriate eye contact; no unusual gestures, mannerisms or speech; no socially inappropriate behavior, verbal or physical aggressiveness toward self or others.  Mood and affect appropriate for situation; affect consistent with mood; no agitation, anxiety, euphoria, lability. Thought Process:  Thought processes appropriate to situation, logical, relevant; no delusions and hallucinations; no spontaneous self-reported suicidal thoughts (not asked q shift, full suicide assessment via risk tool)"
+    },
+    {
+      "id": "itm_f2374e816f1ea8de",
+      "groupId": "grp_feb1a99c138095cf",
+      "prompt": "Behavior",
+      "responseType": "multiChoice",
+      "choices": [
+        {
+          "id": "ch_aa6162312b9e0b2b",
+          "label": "Hyperactive behavior or excessive activity"
+        },
+        {
+          "id": "ch_f341d6ea9a01e94a",
+          "label": "Hypoactive (quiet, withdrawn)"
+        },
+        {
+          "id": "ch_453a5c49c4c13dbd",
+          "label": "Inconsolable or excessive crying"
+        },
+        {
+          "id": "ch_505e373b5e37f9bf",
+          "label": "Physically threatening or aggressive (Combative or Defiant)"
+        },
+        {
+          "id": "ch_f53e63a534e5ae8a",
+          "label": "Self-harm behavior"
+        },
+        {
+          "id": "ch_bb1c686a14d42120",
+          "label": "Socially inappropriate or Poor boundaries"
+        },
+        {
+          "id": "ch_dc16f45214fd9d87",
+          "label": "Speech disorganized"
+        },
+        {
+          "id": "ch_aa32729224130413",
+          "label": "Uncooperative or Non-compliant"
+        },
+        {
+          "id": "ch_99da47f6eb97c1ca",
+          "label": "Unusual repeated requests orquestioning"
+        },
+        {
+          "id": "ch_29cefabebb901fda",
+          "label": "Verbally threatening"
+        },
+        {
+          "id": "ch_105fc1c45616b833",
+          "label": "Wandering or Pacing or Restless"
+        }
+      ],
+      "wdlListDefinition": "Appropriate to the situation, cooperative, appropriate eye contact; no unusual gestures, mannerisms or speech; no socially inappropriate behavior, verbal or physical aggressiveness toward self or others"
+    },
+    {
+      "id": "itm_11a5200fb36496e6",
+      "groupId": "grp_feb1a99c138095cf",
+      "prompt": "Mood and Affect",
+      "responseType": "multiChoice",
+      "choices": [
+        {
+          "id": "ch_2da893f3ddeb58a9",
+          "label": "Agitation"
+        },
+        {
+          "id": "ch_1a739066a4fe7dca",
+          "label": "Anxiety"
+        },
+        {
+          "id": "ch_893c76a89fb98eb5",
+          "label": "Euphoria"
+        },
+        {
+          "id": "ch_4732121aa67ae442",
+          "label": "Flat Affect"
+        },
+        {
+          "id": "ch_34126f6876774d68",
+          "label": "Mood lability or fluctuations"
+        }
+      ],
+      "wdlListDefinition": "Mood and affect appropriate for situation; affect consistent with mood; no agitation, anxiety, euphoria, lability"
+    },
+    {
+      "id": "itm_502363f633da5fe6",
+      "groupId": "grp_feb1a99c138095cf",
+      "prompt": "Thought Process",
+      "responseType": "multiChoice",
+      "choices": [
+        {
+          "id": "ch_0a34dfd65753ee20",
+          "label": "Delusions"
+        },
+        {
+          "id": "ch_054bd64207c1aec0",
+          "label": "Hallucinations"
+        },
+        {
+          "id": "ch_c31b0d0b8e606793",
+          "label": "Suicidal thoughts"
+        }
+      ],
+      "wdlListDefinition": "Thought processes appropriate to situation, logical, relevant; no delusions and hallucinations; no spontaneous self-reported suicidal thoughts (not asked q shift, full suicide assessment via risk tool)"
     }
   ],
   "presentation": {

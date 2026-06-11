@@ -25,6 +25,31 @@ const NV_MSK_SYSTEM = "NeuroVascular/Musculoskeletal";
 /** Concept row label for workbook section rollup (prompt / gate). */
 const NV_MSK_ROLLUP_CONCEPT = "NeuroVascular/Musculoskeletal WDL";
 
+/** Clinical display order for root body systems (flowsheet rail + section sequence). */
+const ROOT_SYSTEM_ORDER = [
+  "Neuro",
+  NV_MSK_SYSTEM,
+  "HEENT",
+  "Respiratory",
+  "Cardiac",
+  "GI",
+  "Urinary Symptoms",
+  "Skin",
+  "Behavioral",
+];
+
+/**
+ * @param {string} a
+ * @param {string} b
+ */
+function compareByRootSystemOrder(a, b) {
+  const ia = ROOT_SYSTEM_ORDER.indexOf(a);
+  const ib = ROOT_SYSTEM_ORDER.indexOf(b);
+  const ai = ia === -1 ? ROOT_SYSTEM_ORDER.length : ia;
+  const bi = ib === -1 ? ROOT_SYSTEM_ORDER.length : ib;
+  return ai - bi || a.localeCompare(b);
+}
+
 function h16(parts) {
   return createHash("sha256").update(parts.join("\u0001")).digest("hex").slice(0, 16);
 }
@@ -165,7 +190,30 @@ for (const key of sortedKeys) {
 /** @type {Array<{ id: string; label: string; parentGroupId: string | null }>} */
 const groups = [];
 
-for (const sys of [...systems].sort()) {
+/** @type {Map<string, number>} */
+const pairFirstOrder = new Map();
+for (const key of sortedKeys) {
+  const pair = key.split("\u0000").slice(0, 2).join("\u0000");
+  if (!pairFirstOrder.has(pair)) {
+    pairFirstOrder.set(pair, byConcept.get(key).order);
+  }
+}
+
+/**
+ * @param {string} a pair key `bodySystem\0bodySub`
+ * @param {string} b
+ */
+function comparePairs(a, b) {
+  const [sysA] = a.split("\u0000");
+  const [sysB] = b.split("\u0000");
+  const cmp = compareByRootSystemOrder(sysA, sysB);
+  if (cmp !== 0) {
+    return cmp;
+  }
+  return (pairFirstOrder.get(a) ?? 0) - (pairFirstOrder.get(b) ?? 0);
+}
+
+for (const sys of [...systems].sort(compareByRootSystemOrder)) {
   groups.push({
     id: grpRoot(sys),
     label: sys,
@@ -173,7 +221,7 @@ for (const sys of [...systems].sort()) {
   });
 }
 
-for (const pair of [...pairs].sort()) {
+for (const pair of [...pairs].sort(comparePairs)) {
   const [bodySystem, bodySub] = pair.split("\u0000");
   if (bodySystem === NV_MSK_SYSTEM) {
     continue;
@@ -655,58 +703,66 @@ function pushNvMskBlock() {
   }
 }
 
-let nvmskBlockEmitted = false;
+/**
+ * Emit all items for one non-NV/MSK body system in workbook row order.
+ * @param {string} bodySystem
+ */
+function pushItemsForSystem(bodySystem) {
+  for (const key of sortedKeys) {
+    const [bs] = key.split("\u0000");
+    if (bs !== bodySystem) {
+      continue;
+    }
+    if (keyEmitted.has(key)) {
+      continue;
+    }
+    const [, bodySub, conceptRow] = key.split("\u0000");
+    const pair = `${bodySystem}\u0000${bodySub}`;
+    const cl = wdlClusterByPair.get(pair);
+    if (cl && cl.L.includes(key) && key !== cl.head) {
+      continue;
+    }
+    if (cl && key === cl.head) {
+      const [pairBs, su] = pair.split("\u0000");
+      pushWdlCluster(pairBs, su, cl.primaryConceptRow, cl.L);
+      continue;
+    }
 
-for (const key of sortedKeys) {
-  const [bodySystemPre] = key.split("\u0000");
-  if (bodySystemPre === NV_MSK_SYSTEM && !nvmskBlockEmitted) {
+    const { choices } = byConcept.get(key);
+    if (choices.length === 0) {
+      continue;
+    }
+    const { wdl, exc } = partitionWdlChoices(choices);
+    if (wdl.length === 1 && exc.length >= 1) {
+      pushWdlCluster(bodySystem, bodySub, conceptRow, [key]);
+      continue;
+    }
+    if (conceptRow.endsWith(" WDL")) {
+      continue;
+    }
+
+    const iid = itemId(bodySystem, bodySub, conceptRow);
+    const choiceObjs = choices.map((label, idx) => ({
+      id: choiceId(iid, label, idx),
+      label,
+    }));
+    items.push({
+      id: iid,
+      groupId: grpChild(bodySystem, bodySub),
+      prompt: conceptRow,
+      responseType: "choice",
+      choices: choiceObjs,
+    });
+    keyEmitted.add(key);
+  }
+}
+
+for (const sys of ROOT_SYSTEM_ORDER) {
+  if (sys === NV_MSK_SYSTEM) {
     pushNvMskBlock();
-    nvmskBlockEmitted = true;
+  } else if (systems.has(sys)) {
+    pushItemsForSystem(sys);
   }
-  if (keyEmitted.has(key)) {
-    continue;
-  }
-  const [bodySystem, bodySub, conceptRow] = key.split("\u0000");
-  if (bodySystem === NV_MSK_SYSTEM) {
-    continue;
-  }
-  const pair = `${bodySystem}\u0000${bodySub}`;
-  const cl = wdlClusterByPair.get(pair);
-  if (cl && cl.L.includes(key) && key !== cl.head) {
-    continue;
-  }
-  if (cl && key === cl.head) {
-    const [bs, su] = pair.split("\u0000");
-    pushWdlCluster(bs, su, cl.primaryConceptRow, cl.L);
-    continue;
-  }
-
-  const { choices } = byConcept.get(key);
-  if (choices.length === 0) {
-    continue;
-  }
-  const { wdl, exc } = partitionWdlChoices(choices);
-  if (wdl.length === 1 && exc.length >= 1) {
-    pushWdlCluster(bodySystem, bodySub, conceptRow, [key]);
-    continue;
-  }
-  if (conceptRow.endsWith(" WDL")) {
-    continue;
-  }
-
-  const iid = itemId(bodySystem, bodySub, conceptRow);
-  const choiceObjs = choices.map((label, idx) => ({
-    id: choiceId(iid, label, idx),
-    label,
-  }));
-  items.push({
-    id: iid,
-    groupId: grpChild(bodySystem, bodySub),
-    prompt: conceptRow,
-    responseType: "choice",
-    choices: choiceObjs,
-  });
-  keyEmitted.add(key);
 }
 
 const now = new Date().toISOString();

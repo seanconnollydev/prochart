@@ -18,25 +18,25 @@ const ADULT_PHYSICAL_ASSESSMENT_SECTION_BLOCKS: ReadonlyArray<{
   heading: string;
   initialPrompt: string;
 }> = [
-  { heading: "Behavioral", initialPrompt: "Behavior WDL" },
-  { heading: "Cardiac", initialPrompt: "Cardiac WDL" },
-  { heading: "GI", initialPrompt: "GI WDL" },
-  { heading: "HEENT", initialPrompt: "HEENT WDL" },
+  { heading: "Neuro", initialPrompt: "Neuro WDL" },
   {
     heading: "NeuroVascular/Musculoskeletal",
     initialPrompt: "NeuroVascular/Musculoskeletal WDL",
   },
-  { heading: "Neuro", initialPrompt: "Neuro WDL" },
+  { heading: "HEENT", initialPrompt: "HEENT WDL" },
   { heading: "Respiratory", initialPrompt: "Respiratory WDL" },
-  { heading: "Skin", initialPrompt: "Skin WDL" },
+  { heading: "Cardiac", initialPrompt: "Cardiac WDL" },
+  { heading: "GI", initialPrompt: "GI WDL" },
   { heading: "Urinary Symptoms", initialPrompt: "Urinary Symptoms WDL" },
+  { heading: "Skin", initialPrompt: "Skin WDL" },
+  { heading: "Behavioral", initialPrompt: "Behavior WDL" },
 ] as const;
 
 /** Fixed WDL vs X choices per section gate (matches `ADULT_PHYSICAL_ASSESSMENT_SECTION_BLOCKS` order). */
 const ADULT_PHYSICAL_ASSESSMENT_GATE_SELECTION_PLAN =
-  ADULT_PHYSICAL_ASSESSMENT_SECTION_BLOCKS.map((b, i) => ({
+  ADULT_PHYSICAL_ASSESSMENT_SECTION_BLOCKS.map((b) => ({
     prompt: b.initialPrompt,
-    choice: i === 2 ? ("X" as const) : ("WDL" as const),
+    choice: b.initialPrompt === "GI WDL" ? ("X" as const) : ("WDL" as const),
   }));
 
 /** GI is X in `ADULT_PHYSICAL_ASSESSMENT_GATE_SELECTION_PLAN`, so these detail rows are visible in the flowsheet. */
