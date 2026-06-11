@@ -230,7 +230,7 @@ export function AssessmentFlowsheetInfoPanel({
                             return (
                               <div
                                 key={ch.id}
-                                className="flex items-start gap-2"
+                                className="flex items-center gap-2"
                               >
                                 <Checkbox
                                   id={`flowsheet-info-${item.id}-${ch.id}`}
@@ -244,11 +244,11 @@ export function AssessmentFlowsheetInfoPanel({
                                     }
                                     setResponse(item.id, [...next]);
                                   }}
-                                  className="mt-0.5"
+                                  className="cursor-pointer"
                                 />
                                 <Label
                                   htmlFor={`flowsheet-info-${item.id}-${ch.id}`}
-                                  className="text-foreground text-xs font-normal leading-snug"
+                                  className="text-foreground cursor-pointer text-xs font-normal leading-snug"
                                 >
                                   {ch.label}
                                 </Label>
