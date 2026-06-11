@@ -341,7 +341,7 @@ export function AssessmentFlowsheetLayout({
                 key={r.id}
                 type="button"
                 onClick={() => handleRailClick(r.id)}
-                className="hover:bg-muted text-foreground rounded-md px-2 py-1.5 text-left text-xs leading-tight transition-colors"
+                className="hover:bg-muted text-foreground cursor-pointer rounded-md px-2 py-1.5 text-left text-xs leading-tight transition-colors"
               >
                 {r.label}
               </button>
