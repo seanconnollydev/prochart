@@ -19,7 +19,7 @@ import { expect } from "@playwright/test";
 export type AdultPhysicalAssessmentExportScenario = {
   gateSelectionPlan: readonly Readonly<{
     prompt: string;
-    choice: "WDL" | "X";
+    choice: "WDL" | "Exception";
   }>[];
   commentGatePrompt: string;
   commentText: string;
@@ -73,7 +73,9 @@ function scenarioResponsesFromTemplate(
       gates.find((c) => c.id !== FLOWSHEET_EXCEPTION_CHOICE_ID) ?? gates[0];
     responses[item.id] = {
       value:
-        choice === "X" ? FLOWSHEET_EXCEPTION_CHOICE_ID : (wdlChoice?.id ?? ""),
+        choice === "Exception"
+          ? FLOWSHEET_EXCEPTION_CHOICE_ID
+          : (wdlChoice?.id ?? ""),
     };
     if (
       responses[item.id].value !== FLOWSHEET_EXCEPTION_CHOICE_ID &&

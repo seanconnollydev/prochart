@@ -32,14 +32,15 @@ const ADULT_PHYSICAL_ASSESSMENT_SECTION_BLOCKS: ReadonlyArray<{
   { heading: "Behavioral", initialPrompt: "Behavior WDL" },
 ] as const;
 
-/** Fixed WDL vs X choices per section gate (matches `ADULT_PHYSICAL_ASSESSMENT_SECTION_BLOCKS` order). */
+/** Fixed WDL vs Exception choices per section gate (matches `ADULT_PHYSICAL_ASSESSMENT_SECTION_BLOCKS` order). */
 const ADULT_PHYSICAL_ASSESSMENT_GATE_SELECTION_PLAN =
   ADULT_PHYSICAL_ASSESSMENT_SECTION_BLOCKS.map((b) => ({
     prompt: b.initialPrompt,
-    choice: b.initialPrompt === "GI WDL" ? ("X" as const) : ("WDL" as const),
+    choice:
+      b.initialPrompt === "GI WDL" ? ("Exception" as const) : ("WDL" as const),
   }));
 
-/** GI is X in `ADULT_PHYSICAL_ASSESSMENT_GATE_SELECTION_PLAN`, so these detail rows are visible in the flowsheet. */
+/** GI is Exception in `ADULT_PHYSICAL_ASSESSMENT_GATE_SELECTION_PLAN`, so these detail rows are visible in the flowsheet. */
 const ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_ROW = "Abdomen";
 const ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_CHOICE = "Distended";
 
@@ -71,7 +72,7 @@ async function openAdultPhysicalAssessmentPractice(page: Page): Promise<void> {
 async function setFlowsheetWdlGate(
   page: Page,
   prompt: string,
-  choice: "WDL" | "X",
+  choice: "WDL" | "Exception",
 ): Promise<void> {
   const trigger = page.getByLabel(prompt, { exact: true });
   await trigger.scrollIntoViewIfNeeded();
@@ -149,7 +150,7 @@ test.describe("Adult Physical Assessment", () => {
         page.getByText("Within Defined Limits (WDL) ="),
       ).toBeVisible();
       await expect(
-        page.getByText("WDL = Within defined limits. X = Exceptions to WDL."),
+        page.getByText("WDL = Within defined limits."),
       ).toBeVisible();
 
       await page.getByRole("button", { name: "Close info panel" }).click();
@@ -167,7 +168,7 @@ test.describe("Adult Physical Assessment", () => {
     await setFlowsheetWdlGate(
       page,
       ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT,
-      "X",
+      "Exception",
     );
     await openAbdomenInfoPanel(page);
 
@@ -200,7 +201,7 @@ test.describe("Adult Physical Assessment", () => {
     await setFlowsheetWdlGate(
       page,
       ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT,
-      "X",
+      "Exception",
     );
 
     /** Empty multiselect uses aria-label `Abdomen`; with one chip it becomes `Abdomen: Distended`. */
@@ -227,7 +228,7 @@ test.describe("Adult Physical Assessment", () => {
     await setFlowsheetWdlGate(
       page,
       ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT,
-      "X",
+      "Exception",
     );
 
     await openAbdomenInfoPanel(page);
@@ -253,7 +254,10 @@ test.describe("Adult Physical Assessment", () => {
       const exportPdf = page.getByRole("button", { name: "Export to PDF" });
       await expect(exportPdf).toBeDisabled();
 
-      for (const { prompt, choice } of ADULT_PHYSICAL_ASSESSMENT_GATE_SELECTION_PLAN) {
+      for (const {
+        prompt,
+        choice,
+      } of ADULT_PHYSICAL_ASSESSMENT_GATE_SELECTION_PLAN) {
         const trigger = page.getByLabel(prompt, { exact: true });
         await trigger.scrollIntoViewIfNeeded();
         await trigger.click();
@@ -328,7 +332,10 @@ test.describe("Adult Physical Assessment", () => {
         }),
       ).toBeVisible();
 
-      for (const { prompt, choice } of ADULT_PHYSICAL_ASSESSMENT_GATE_SELECTION_PLAN) {
+      for (const {
+        prompt,
+        choice,
+      } of ADULT_PHYSICAL_ASSESSMENT_GATE_SELECTION_PLAN) {
         const trigger = page.getByLabel(prompt, { exact: true });
         await trigger.scrollIntoViewIfNeeded();
         await expect(trigger).toContainText(choice);
@@ -371,10 +378,9 @@ test.describe("Adult Physical Assessment", () => {
         page
           .locator("aside")
           .filter({
-            has: page.getByText(
-              ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT,
-              { exact: true },
-            ),
+            has: page.getByText(ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT, {
+              exact: true,
+            }),
           })
           .getByText(ADULT_PHYSICAL_ASSESSMENT_COMMENT_TEXT),
       ).toBeVisible();
@@ -389,7 +395,9 @@ test.describe("Adult Physical Assessment", () => {
         exportBtn.click(),
       ]);
 
-      const pdfPath = testInfo.outputPath("adult-physical-assessment-export.pdf");
+      const pdfPath = testInfo.outputPath(
+        "adult-physical-assessment-export.pdf",
+      );
       await download.saveAs(pdfPath);
 
       const parser = new PDFParse({ data: readFileSync(pdfPath) });
@@ -428,7 +436,9 @@ test.describe("Adult Physical Assessment", () => {
         await expect(trigger).toHaveText(gatePlaceholder);
       }
 
-      await expect(page.getByRole("button", { name: "Export to PDF" })).toBeDisabled();
+      await expect(
+        page.getByRole("button", { name: "Export to PDF" }),
+      ).toBeDisabled();
       await expect(page.getByRole("button", { name: "Reset" })).toBeDisabled();
 
       await flowsheetScrollLocator(page)

@@ -7,10 +7,10 @@ import type {
 } from "@/lib/types/assessment-template";
 import type { AssessmentItemResponse } from "@/lib/types/assessment-submission";
 
-/** Synthetic choice id appended to WDL gate rows for Epic-style “X” (exception) documentation. */
+/** Synthetic choice id appended to WDL gate rows for exception documentation. */
 export const FLOWSHEET_EXCEPTION_CHOICE_ID = "ch_flowsheet_exception";
 
-export const FLOWSHEET_EXCEPTION_CHOICE_LABEL = "X";
+export const FLOWSHEET_EXCEPTION_CHOICE_LABEL = "Exception";
 
 const WDL_EQUALS_PREFIX = /^\s*WDL\s*=\s*/i;
 

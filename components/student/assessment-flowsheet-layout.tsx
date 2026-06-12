@@ -11,6 +11,7 @@ import {
   buildFlowsheetBlocks,
   coerceFlowsheetMultiselectValue,
   FLOWSHEET_EXCEPTION_CHOICE_ID,
+  FLOWSHEET_EXCEPTION_CHOICE_LABEL,
   findSectionRollupGate,
   flowsheetMultiselectChoicesForItem,
   getFlowsheetItemIdsToClearWhenLeavingException,
@@ -85,7 +86,7 @@ function FlowsheetItemTableRow({
     item.responseType === "choice" && wdlGateCombo
       ? (item.choices ?? []).map((ch) => ({
           ...ch,
-          label: ch.id === FLOWSHEET_EXCEPTION_CHOICE_ID ? "X" : "WDL",
+          label: ch.id === FLOWSHEET_EXCEPTION_CHOICE_ID ? FLOWSHEET_EXCEPTION_CHOICE_LABEL : "WDL",
         }))
       : [];
 

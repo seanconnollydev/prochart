@@ -2,6 +2,7 @@ import {
   buildFlowsheetBlocks,
   coerceFlowsheetMultiselectValue,
   FLOWSHEET_EXCEPTION_CHOICE_ID,
+  FLOWSHEET_EXCEPTION_CHOICE_LABEL,
   findSectionRollupGate,
   isFlowsheetExceptionSelected,
   isFlowsheetWdlXComboboxItem,
@@ -45,7 +46,7 @@ function choiceDisplay(
   if (isFlowsheetWdlXComboboxItem(item)) {
     const id = typeof raw === "string" ? raw : "";
     if (id === FLOWSHEET_EXCEPTION_CHOICE_ID) {
-      return "X";
+      return FLOWSHEET_EXCEPTION_CHOICE_LABEL;
     }
     if (!id) {
       return "—";

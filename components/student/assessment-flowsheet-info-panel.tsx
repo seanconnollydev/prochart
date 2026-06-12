@@ -199,7 +199,7 @@ export function AssessmentFlowsheetInfoPanel({
             </div>
             {isFlowsheetWdlGateItem(item) ? (
               <p className="text-muted-foreground mt-2 text-[10px] leading-snug">
-                WDL = Within defined limits. X = Exceptions to WDL.
+                WDL = Within defined limits.
               </p>
             ) : null}
           </div>
