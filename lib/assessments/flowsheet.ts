@@ -8,7 +8,7 @@ import type {
 import type { AssessmentItemResponse } from "@/lib/types/assessment-submission";
 
 /** Synthetic choice id appended to WDL gate rows for exception documentation. */
-export const FLOWSHEET_EXCEPTION_CHOICE_ID = "ch_flowsheet_exception";
+export const FLOWSHEET_EXCEPTION_CHOICE_ID = "ch_exception";
 
 export const FLOWSHEET_EXCEPTION_CHOICE_LABEL = "Exception";
 
