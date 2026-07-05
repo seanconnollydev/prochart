@@ -1,0 +1,704 @@
+{
+  "schemaVersion": "simulationTemplate@0.1",
+  "id": "atypical_chest_pain_female_v1",
+  "title": "Atypical Chest Pain Female",
+  "description": "Post-PCI care simulation. Maria I. Franco returns from cardiac catheterization and angioplasty. Students implement standard post-PCI orders, manage post-procedural concerns, and respond to an emergent loss of perfusion in the left leg.",
+  "createdAt": "2016-09-20T00:00:00.000Z",
+  "updatedAt": "2016-09-20T00:00:00.000Z",
+  "status": "published",
+  "meta": {
+    "skillFocus": "Management of Patient post-PCI",
+    "discipline": "Nursing",
+    "level": 4,
+    "estimatedTimeMinutes": 60,
+    "debriefingTimeMinutes": 60
+  },
+  "learningObjectives": [
+    {
+      "id": "lo_1",
+      "text": "Provide post-procedural care to a patient post cardiac angioplasty"
+    },
+    {
+      "id": "lo_2",
+      "text": "Develop a discharge teaching plan for a patient following STEMI with PCI"
+    },
+    {
+      "id": "lo_3",
+      "text": "Recognize and respond to abnormal post-procedure findings"
+    },
+    {
+      "id": "lo_4",
+      "text": "Communicate therapeutically with a patient experiencing critical/life threatening situations"
+    },
+    {
+      "id": "lo_5",
+      "text": "Report complete, accurate, and pertinent information to the health care team"
+    }
+  ],
+  "curriculumMapping": [
+    {
+      "id": "cm_wtcs",
+      "category": "WTCS Nursing Program Outcomes",
+      "outcomes": [
+        "Implement one's role as a nurse in ways that reflect integrity, responsibility, ethical practices, and an evolving professional identity as a nurse committed to evidence-based practice, caring, advocacy and quality care",
+        "Demonstrate appropriate written, verbal, and nonverbal communication in a variety of clinical contexts",
+        "Integrate social, mathematical, and physical sciences, pharmacology, and pathophysiology in clinical decision making",
+        "Provide patient centered care by utilizing the nursing process across diverse populations and health care settings",
+        "Minimize risk of harm to patients, members of the healthcare team and self through safe individual performance and participation in system effectiveness",
+        "Lead the multidisciplinary health care team to provide effective patient care throughout the lifespan",
+        "Use information and technology to communicate, manage data, mitigate error, and support decision-making"
+      ]
+    },
+    {
+      "id": "cm_basic",
+      "category": "Basic Skills",
+      "outcomes": [
+        "Perform mathematical calculations related to clinical practice",
+        "Manage oxygen therapy",
+        "Manage intravenous therapy"
+      ]
+    },
+    {
+      "id": "cm_fundamentals",
+      "category": "Nursing Fundamentals",
+      "outcomes": [
+        "Maintain a safe, effective care environment for adults of all ages",
+        "Use appropriate communication techniques",
+        "Use the nursing process",
+        "Provide nursing care for patients with comfort alterations"
+      ]
+    },
+    {
+      "id": "cm_complex1",
+      "category": "Complex Health Alterations 1",
+      "outcomes": [
+        "Evaluate nursing care for patients with coronary artery disease"
+      ]
+    },
+    {
+      "id": "cm_complex2",
+      "category": "Complex Health Alterations 2",
+      "outcomes": [
+        "Evaluate nursing care for patients with critical/life threatening situations"
+      ]
+    }
+  ],
+  "patient": {
+    "displayName": "Maria I. Franco",
+    "dateOfBirth": "07/16/19XX",
+    "age": 47,
+    "mrn": "1316",
+    "gender": "Female",
+    "height": "157 cm (62 inches)",
+    "weight": "72 kg (160 lbs)",
+    "codeStatus": "Full code",
+    "primaryLanguage": "English",
+    "allergies": ["Shellfish"],
+    "currentMedications": ["None"],
+    "admittingDiagnoses": [
+      "Heartburn (R12)",
+      "Chest Pain (R07.89)"
+    ],
+    "medicalHistory": [
+      "Diabetes Mellitus (E11.9)",
+      "Hypertension (I10)",
+      "Hyperlipidemia (E78.5)",
+      "Smoker, nicotine addiction (F17.210)"
+    ]
+  },
+  "setup": {
+    "insideRoom": [
+      "Patient on bed, Cardiac Care Unit setting",
+      "Hand sanitizer or sink",
+      "ECG machine/cart"
+    ],
+    "outsideRoom": [
+      "Computer or form(s) for documentation",
+      "Medications with QR codes"
+    ],
+    "patientSetup": [
+      "Hospital gown",
+      "ID band with QR code",
+      "Tegaderm over left femoral insertion site from angioplasty; scant blood at site",
+      "Nasal cannula at 1 lpm",
+      "0.9% NS at 75 ml/hour hanging and running (IV Site #1)",
+      "Eptifibatide IV hanging but not running (IV Site #2)"
+    ],
+    "monitorSettings": {
+      "initialVitals": {
+        "BP": "120/85",
+        "HR": "80",
+        "RR": "20",
+        "O2Sat": "91%",
+        "Temp": "37.5",
+        "Pain": "3/10"
+      },
+      "notes": [
+        "On continuous cardiac monitor and pulse oximetry",
+        "Initially approximately 2 PVCs/minute; PVCs gradually increase to 5/minute during the scenario",
+        "Heart sounds with S4 present",
+        "Lung sounds normal",
+        "Bowel sounds hypoactive"
+      ]
+    },
+    "supplies": {
+      "general": [
+        "Equipment to obtain vital signs including pulse oximetry and ECG",
+        "Phone",
+        "NS IV flushes"
+      ],
+      "medications": [
+        "Hydrocodone/acetaminophen 5/325 tablets",
+        "Morphine 5 mg vial for IV",
+        "Metoprolol 12.5 mg PO",
+        "Lisinopril 10 mg PO",
+        "Atorvastatin 10 mg PO",
+        "Aspirin 81 mg PO",
+        "Clopidogrel (Plavix) 75 mg PO"
+      ]
+    }
+  },
+  "historyAndPhysical": {
+    "displayName": "Maria I. Franco",
+    "mrn": "1316",
+    "dateOfBirth": "07/16/19XX",
+    "chiefComplaint": "Abdominal pain and indigestion",
+    "hpi": "Maria presented to the Emergency Room with abdominal pain and indigestion that she related to a sub sandwich that she ate for lunch. However, she also complained of associated symptoms of diaphoresis and dyspnea, so a STAT EKG and cardiac enzymes were ordered.",
+    "pastMedicalHistory": "Hyperlipidemia, diabetes mellitus Type 2, hypertension.",
+    "pastSurgicalHistory": "No previous surgeries.",
+    "recentHospitalizations": "None in the last 12 months.",
+    "medications": [
+      "Metformin",
+      "Lisinopril",
+      "Lipitor"
+    ],
+    "allergies": ["Shellfish"],
+    "familyHistory": "Father had MI at age 50.",
+    "reviewOfSystems": [
+      {
+        "system": "HEENT",
+        "findings": "Denies injury, change in level of consciousness, headaches, or change in vision."
+      },
+      {
+        "system": "Respiratory",
+        "findings": "Complains of mild shortness of breath that started with feelings of indigestion."
+      },
+      {
+        "system": "Cardiovascular",
+        "findings": "Denies chest pain and palpitations. No history of murmur or valve disorder. History of hypertension and hyperlipidemia."
+      },
+      {
+        "system": "Peripheral Vascular",
+        "findings": "Denies claudication, leg cramps, paresthesias, or edema."
+      },
+      {
+        "system": "Gastrointestinal",
+        "findings": "Denies change in appetite or weight gain/loss. New onset indigestion and heartburn described as a \"burning sensation above her belly button\" rated 9/10, related to a sub sandwich eaten 45 minutes ago."
+      },
+      {
+        "system": "Endocrine",
+        "findings": "History of diabetes mellitus. Denies polydipsia or polyuria."
+      }
+    ],
+    "examVitals": {
+      "BP": "108/70",
+      "Temp": "37.5°C",
+      "Pulse": "120",
+      "Respirations": "20",
+      "O2Sat": "91% on RA",
+      "Height": "157 cm (5'2\")",
+      "Weight": "72 kg",
+      "PainScale": "9/10"
+    },
+    "physicalExam": [
+      {
+        "system": "General Appearance",
+        "findings": "47-year-old female who appears stated age and is well developed, well hydrated, and well nourished. Maintains good eye contact and interacts appropriately. Alert and oriented x3."
+      },
+      {
+        "system": "HEENT",
+        "findings": "Unremarkable."
+      },
+      {
+        "system": "Integument",
+        "findings": "Normal turgor."
+      },
+      {
+        "system": "Respiratory/Chest",
+        "findings": "Breath sounds clear. No wheezes, rales, or crackles. Minimal effort. No cyanosis or clubbing."
+      },
+      {
+        "system": "Cardiovascular",
+        "findings": "Regular S1S2 rhythm without murmur. S4 present."
+      },
+      {
+        "system": "Vascular/Extremities",
+        "findings": "Pedal pulses — L 2/4, R 2/4. Capillary refill time less than three seconds. Extremities normal color. No edema."
+      },
+      {
+        "system": "Gastrointestinal/Abdomen",
+        "findings": "Epigastric tenderness with mild guarding. Bowel sounds positive in four quadrants."
+      },
+      {
+        "system": "Genitourinary",
+        "findings": "No CVA tenderness."
+      }
+    ],
+    "assessmentAndPlan": "STAT EKG and cardiac enzyme results. If positive, STAT cardiac consult.",
+    "signedBy": "Dr. Bernard, MD"
+  },
+  "orders": [
+    {
+      "id": "ord_vs",
+      "category": "monitoring",
+      "text": "Vital signs every 30 minutes"
+    },
+    {
+      "id": "ord_cardiac_monitor",
+      "category": "monitoring",
+      "text": "Continuous cardiac monitor and pulse oximetry"
+    },
+    {
+      "id": "ord_extremity",
+      "category": "monitoring",
+      "text": "Assess insertion site and left extremity every 15 minutes",
+      "details": "Monitor color, warmth, sensation, and movement of left leg. Keep extremity straight for 6 hours post sheath pull. Monitor insertion site for bleeding and bruit."
+    },
+    {
+      "id": "ord_o2",
+      "category": "nursing",
+      "text": "Oxygen via nasal cannula at 1 lpm"
+    },
+    {
+      "id": "ord_ns",
+      "category": "ivFluids",
+      "text": "0.9% Normal Saline IV at 75 ml/hour (IV Site #1)"
+    },
+    {
+      "id": "ord_eptifibatide",
+      "category": "ivFluids",
+      "text": "Eptifibatide IV at 2 mcg/kg/minute (IV Site #2)",
+      "details": "Calculate infusion rate based on patient weight. For 72 kg patient: 11.5 ml/hr. Currently hanging but not running — start infusion."
+    },
+    {
+      "id": "ord_ecg",
+      "category": "diagnostic",
+      "text": "Post-procedure 12-lead ECG"
+    },
+    {
+      "id": "ord_labs",
+      "category": "diagnostic",
+      "text": "Cardiac enzymes, CBC, BMP, lipid profile, Hemoglobin A1C"
+    },
+    {
+      "id": "ord_cxr",
+      "category": "diagnostic",
+      "text": "Chest X-ray (optional review)"
+    },
+    {
+      "id": "ord_diet",
+      "category": "diet",
+      "text": "Clear liquids; may advance to meal tray as tolerated"
+    },
+    {
+      "id": "ord_metoprolol",
+      "category": "medication",
+      "text": "Metoprolol 12.5 mg PO"
+    },
+    {
+      "id": "ord_lisinopril",
+      "category": "medication",
+      "text": "Lisinopril 10 mg PO"
+    },
+    {
+      "id": "ord_atorvastatin",
+      "category": "medication",
+      "text": "Atorvastatin 10 mg PO"
+    },
+    {
+      "id": "ord_aspirin",
+      "category": "medication",
+      "text": "Aspirin 81 mg PO"
+    },
+    {
+      "id": "ord_clopidogrel",
+      "category": "medication",
+      "text": "Clopidogrel (Plavix) 75 mg PO"
+    },
+    {
+      "id": "ord_hydrocodone_prn",
+      "category": "medication",
+      "text": "Hydrocodone/acetaminophen 5/325 mg PO PRN pain"
+    },
+    {
+      "id": "ord_morphine_prn",
+      "category": "medication",
+      "text": "Morphine 5 mg IV PRN pain",
+      "details": "Preferred over oral analgesic given cardiac condition. Perform math calculation, consider dilution, and administer slowly."
+    }
+  ],
+  "mar": [
+    {
+      "id": "mar_metoprolol",
+      "medication": "Metoprolol",
+      "dose": "12.5 mg",
+      "route": "PO",
+      "frequency": "Daily",
+      "prn": false
+    },
+    {
+      "id": "mar_lisinopril",
+      "medication": "Lisinopril",
+      "dose": "10 mg",
+      "route": "PO",
+      "frequency": "Daily",
+      "prn": false
+    },
+    {
+      "id": "mar_atorvastatin",
+      "medication": "Atorvastatin",
+      "dose": "10 mg",
+      "route": "PO",
+      "frequency": "Daily",
+      "prn": false
+    },
+    {
+      "id": "mar_aspirin",
+      "medication": "Aspirin",
+      "dose": "81 mg",
+      "route": "PO",
+      "frequency": "Daily",
+      "prn": false
+    },
+    {
+      "id": "mar_clopidogrel",
+      "medication": "Clopidogrel (Plavix)",
+      "dose": "75 mg",
+      "route": "PO",
+      "frequency": "Daily",
+      "prn": false
+    },
+    {
+      "id": "mar_eptifibatide",
+      "medication": "Eptifibatide",
+      "dose": "2 mcg/kg/min (11.5 ml/hr for 72 kg patient)",
+      "route": "IV continuous infusion",
+      "frequency": "Continuous",
+      "prn": false,
+      "instructions": "Hanging at IV Site #2. Student must calculate rate and initiate infusion."
+    },
+    {
+      "id": "mar_ns",
+      "medication": "0.9% Normal Saline",
+      "dose": "75 ml/hr",
+      "route": "IV",
+      "frequency": "Continuous",
+      "prn": false,
+      "instructions": "Running at IV Site #1."
+    },
+    {
+      "id": "mar_hydrocodone_prn",
+      "medication": "Hydrocodone/Acetaminophen",
+      "dose": "5/325 mg",
+      "route": "PO",
+      "frequency": "PRN",
+      "prn": true,
+      "prnIndication": "Pain"
+    },
+    {
+      "id": "mar_morphine_prn",
+      "medication": "Morphine",
+      "dose": "5 mg",
+      "route": "IV",
+      "frequency": "PRN",
+      "prn": true,
+      "prnIndication": "Pain",
+      "instructions": "Preferred analgesic for this patient given cardiac condition. Perform math calculation, consider dilution, administer slowly."
+    }
+  ],
+  "labPanels": [],
+  "imagingResults": [],
+  "ecgResults": [],
+  "progressNotes": [],
+  "states": [
+    {
+      "id": "state_1",
+      "stateNumber": 1,
+      "title": "Assess Patient & Implement Orders",
+      "patientOverview": "Patient returned from cardiac catheterization and angioplasty about 30 minutes ago. Sheath has already been removed. Patient is feeling sad/anxious about her \"heart attack\" and is still worried her children will \"lose her.\" She has chest pain 3/10 related to the procedure. As the scenario progresses, she develops increasing PVCs.",
+      "expectedStudentBehaviors": [
+        "Introduce themselves",
+        "Verify the patient (Scan QR Code: Patient ID)",
+        "Obtain and interpret vital signs every 30 minutes per orders",
+        "Perform focused assessments on patient post-cardiac catheterization: assess heart sounds (S4 present, typical post LAD MI)",
+        "Assess insertion site and left leg — keep extremity straight for 6 hours post sheath pull; monitor insertion site for bleeding and bruit; monitor extremity color, warmth, and sensation every 15 minutes per orders (assessment is normal at this time)",
+        "Assess voiding status — carefully keep leg straight and use a bedpan; document output (patient voids 300 ml of yellow urine)",
+        "Respond therapeutically to patient concerns about recent MI and procedure",
+        "Assess IV fluids/medications: 0.9% NS running at 75 ml/hr at IV Site #1; Eptifibatide hanging but not running at IV Site #2 — calculate dose at 2 mcg/kg/min (= 11.5 ml/hr) and start infusion",
+        "Assess cardiac monitor and pulse oximetry — note occasional PVCs; pulse oximetry at 91%; increase O2 flow rate and reassess PVC status",
+        "Review previous ECG results and obtain post-procedure ECG per orders",
+        "May offer patient clear liquids and/or meal tray",
+        "Note elevated glucose level; no sliding scale insulin available — call provider for order",
+        "Administer oral medications: Metoprolol, Lisinopril, Atorvastatin, Aspirin, Clopidogrel",
+        "(Optional) Review chest x-ray",
+        "Assess chest pain that develops as scenario progresses — determine it is post-procedural; decide whether to administer Hydrocodone/Acetaminophen PO or Morphine IV (Morphine IV is the best choice given cardiac condition)"
+      ],
+      "technicianPrompts": [
+        {
+          "id": "tp1_initial",
+          "trigger": "initial",
+          "response": "Patient is alert and oriented, but sad and concerned, stating \"chest aches\" for her kids."
+        },
+        {
+          "id": "tp1_leg_straight",
+          "trigger": "when students ask about keeping leg straight",
+          "response": "\"How long do I have to keep my leg straight?\""
+        },
+        {
+          "id": "tp1_pain",
+          "trigger": "when students ask about pain",
+          "response": "\"Chest heaviness\" because she is sad for her kids to see her like this and worried for her. Rates pain as 3. Denies shortness of breath. Has \"some discomfort\" at insertion site."
+        },
+        {
+          "id": "tp1_ecg",
+          "trigger": "as students prepare to get another ECG",
+          "response": "\"Why do I have to have another one of those?\" / \"Is something wrong?\""
+        },
+        {
+          "id": "tp1_pvcs",
+          "trigger": "after students increase O2",
+          "response": "The number of PVCs/minute should decrease on the monitor (technician decreases PVC count)."
+        },
+        {
+          "id": "tp1_void",
+          "trigger": "after students ask if patient needs to void",
+          "response": "\"Yes.\" Students should keep leg straight and use bedpan. Patient voids 300 ml of yellow urine."
+        },
+        {
+          "id": "tp1_food",
+          "trigger": "after students ask if patient would like something to eat",
+          "response": "\"Yes. I'm a little hungry.\""
+        },
+        {
+          "id": "tp1_left_leg",
+          "trigger": "after students ask about left leg",
+          "response": "\"It feels fine.\" The patient can feel her toes and wiggle them."
+        }
+      ],
+      "facilitatorQuestions": [
+        "Prioritize orders: what should be done first and why?",
+        "Organize timeframe for implementing orders.",
+        "What is ACT and how is it used to determine time of sheath removal?",
+        "Why is Eptifibatide ordered post PCI?",
+        "What kind of chest pain is \"expected\" after a PCI? What type of chest pain would indicate another infarction is occurring from mobilization of plaque emboli?",
+        "What pain medication is best for Maria at this time and why?",
+        "Why might her urine output be decreased post PCI? Why are we concerned about urine output?",
+        "As students interpret cardiac monitor and/or ECG: What are PVCs? What are possible causes of PVCs?",
+        "Why are ECG, cardiac enzymes, CBC, BMP, lipid profile and Hemoglobin A1C ordered post-catheterization?",
+        "Review the Chest X-ray anatomy.",
+        "Review the cause of S4 heard while listening to heart sounds.",
+        "What are the indications for Metoprolol, Lisinopril, Atorvastatin, ASA and Plavix for this patient? What are your pre- and post-assessments when administering these medications?"
+      ],
+      "tabContentChanges": [
+        {
+          "tab": "Vitals",
+          "condition": "before Patient ID scan",
+          "content": "No reports available. You must verify the patient before vitals can be taken."
+        },
+        {
+          "tab": "Vitals",
+          "condition": "after Patient ID scan",
+          "content": "Students can enter vitals here. Not tied to any iPad programming."
+        },
+        {
+          "tab": "ECG",
+          "condition": "before Patient ID scan",
+          "content": "Verify patient ID before obtaining an ECG."
+        },
+        {
+          "tab": "ECG – Lead Placement",
+          "condition": "after Patient ID scan",
+          "content": "The ECG tab automatically changes to ECG – Lead Placement. Shows an image of proper ECG lead placement."
+        },
+        {
+          "tab": "New ECG Result",
+          "condition": "after lead placement viewed",
+          "content": "Shows ECG with a few PVCs. Results state: \"Awaiting MD Interpretation.\" Image is zoomable."
+        },
+        {
+          "tab": "Level Up",
+          "condition": "before Morphine IV or Hydrocodone/Acetaminophen scan",
+          "content": "Option not available yet."
+        },
+        {
+          "tab": "Level Up",
+          "condition": "after Morphine IV or Hydrocodone/Acetaminophen scan",
+          "content": "The iPad is now set to Level 2."
+        }
+      ],
+      "levelUpTriggers": [
+        {
+          "id": "lu1_morphine",
+          "condition": "QR Code: Morphine IV scanned",
+          "advancesToStateId": "state_2"
+        },
+        {
+          "id": "lu1_hydrocodone",
+          "condition": "QR Code: Hydrocodone/Acetaminophen scanned",
+          "advancesToStateId": "state_2"
+        },
+        {
+          "id": "lu1_time",
+          "condition": "30 minutes have passed in the scenario",
+          "advancesToStateId": "state_2"
+        }
+      ]
+    },
+    {
+      "id": "state_2",
+      "stateNumber": 2,
+      "title": "No Perfusion in Left Leg & Rapid Notification of Cardiologist",
+      "patientOverview": "This state begins after students administer Morphine IV or Hydrocodone/Acetaminophen PO (or 30 minutes have passed in the scenario). Patient becomes concerned about pain in her left foot and lack of ability to feel or move her toes.",
+      "expectedStudentBehaviors": [
+        "Reassess extremities per orders by scanning QR Code: Leg — assess pulses, warmth, sensation, and movement of left leg",
+        "Recognize the medical emergency of lack of perfusion",
+        "Immediately call the cardiologist"
+      ],
+      "technicianPrompts": [
+        {
+          "id": "tp2_initial",
+          "trigger": "initial",
+          "response": "Patient is becoming increasingly concerned and anxious about her left foot."
+        },
+        {
+          "id": "tp2_concerned",
+          "trigger": "as condition changes",
+          "response": "\"What's wrong?\" / \"What is happening? My grandmother had to have her left foot cut off… is that what's going to happen to me?\""
+        }
+      ],
+      "facilitatorQuestions": [
+        "What could be causing her foot to be cool and painful with decreased sensation and movement?",
+        "What treatment is required? (Answer: emergent STAT embolectomy)"
+      ],
+      "tabContentChanges": [
+        {
+          "tab": "Level Up",
+          "condition": "before QR Code: Leg scan",
+          "content": "The iPad is now set to Level 2."
+        },
+        {
+          "tab": "Level Up",
+          "condition": "after QR Code: Leg scan",
+          "content": "Have you called the cardiologist? [Yes / No]"
+        },
+        {
+          "tab": "Level Up",
+          "condition": "cardiologist called = No",
+          "content": "You need to call the cardiologist."
+        },
+        {
+          "tab": "Level Up",
+          "condition": "cardiologist called = Yes",
+          "content": "Have you called the OR and given SBAR report about patient condition? [Yes / No]"
+        },
+        {
+          "tab": "Level Up",
+          "condition": "OR called = No",
+          "content": "You need to call the OR and give report."
+        },
+        {
+          "tab": "Level Up",
+          "condition": "OR called = Yes",
+          "content": "You have completed the scenario."
+        },
+        {
+          "tab": "Exit",
+          "condition": "after Level Up tab tapped",
+          "content": "Exit tab becomes available."
+        }
+      ],
+      "levelUpTriggers": [
+        {
+          "id": "lu2_leg_scan",
+          "condition": "QR Code: Leg scanned"
+        }
+      ]
+    }
+  ],
+  "debrief": {
+    "questions": [
+      {
+        "id": "dbq_1",
+        "text": "How did you feel this scenario went?"
+      },
+      {
+        "id": "dbq_2",
+        "text": "Review understanding of learning objective: Provide post-procedural care to a patient post cardiac angioplasty",
+        "linkedObjectiveId": "lo_1",
+        "subQuestions": [
+          "What were your priority assessments for Maria when taking over her care post-PCI?",
+          "What were your priority interventions based on the post-PCI order set?"
+        ]
+      },
+      {
+        "id": "dbq_3",
+        "text": "Review understanding of learning objective: Develop a discharge teaching plan for a patient following STEMI with PCI",
+        "linkedObjectiveId": "lo_2",
+        "subQuestions": [
+          "What teaching topics received priority as you took over the care for Maria?",
+          "What discharge teaching topics are important for a patient who underwent a PCI for a STEMI?"
+        ]
+      },
+      {
+        "id": "dbq_4",
+        "text": "Review understanding of learning objective: Recognize and respond to abnormal post-procedure findings",
+        "linkedObjectiveId": "lo_3",
+        "subQuestions": [
+          "What abnormal findings did you discover?",
+          "How did you address these findings?"
+        ]
+      },
+      {
+        "id": "dbq_5",
+        "text": "Review understanding of learning objective: Communicate therapeutically with a patient experiencing critical/life threatening situations",
+        "linkedObjectiveId": "lo_4",
+        "subQuestions": [
+          "What cues did you initially notice that indicated Maria needed therapeutic communication?",
+          "What type of therapeutic communication did you use? Was it effective?",
+          "When Maria's condition changed, how did you address her anxiety?",
+          "If you could \"do over,\" would you change anything about how you communicated with Maria?"
+        ]
+      },
+      {
+        "id": "dbq_6",
+        "text": "Review understanding of learning objective: Report complete, accurate, and pertinent information to the health care team",
+        "linkedObjectiveId": "lo_5",
+        "subQuestions": [
+          "What did you include in the SBAR report to the cardiologist when Maria experienced a change in condition? If you could \"do over,\" would you change anything about your SBAR report?",
+          "What did you include in the SBAR report to the OR nurse? If you could \"do over,\" would you change anything about your SBAR report?",
+          "As a group, create a \"best response\" for both SBAR reports for Maria."
+        ]
+      },
+      {
+        "id": "dbq_7",
+        "text": "Tie the scenario back to the nursing process in a large group discussion. Concept mapping can be used to facilitate discussion.",
+        "subQuestions": [
+          "Identify 3 priority nursing problems you identified for Ms. Franco at the beginning of the scenario.",
+          "Create a patient centered goal for each nursing problem you identified.",
+          "Discuss focused assessments for each nursing problem.",
+          "Discuss nursing interventions for each nursing diagnosis.",
+          "Re-evaluate the simulation in terms of the nursing process: what was actually accomplished? What could be improved in the future?"
+        ]
+      },
+      {
+        "id": "dbq_8",
+        "text": "Summary/Take Away Points",
+        "subQuestions": [
+          "\"Today you cared for a patient post-cardiac catheterization who experienced some post-procedural complications. What is one take-away point you learned from participating in this scenario that you will take into your nursing practice?\" (Each student must share something different from what the others share.)"
+        ]
+      }
+    ],
+    "facilitatorNotes": "Debriefing technique is based on INACSL Standards for Debriefing and NLN Theory-Based Debriefing by Dreifuerst."
+  },
+  "licenseNotice": "This work by the Wisconsin Technical College System TAACCCT IV Consortium is licensed under a Creative Commons Attribution 4.0 International license. Medication information from National Library of Medicine: Daily Med at http://dailymed.nlm.nih.gov/dailymed/. ECG used from Life in the Fast Lane at www.lifeinthefastlane.com. Heart sounds used with permission from Thinklabs Medical, LLC, Centennial, CO at www.thinklabs.com."
+}
