@@ -3,8 +3,8 @@
   "id": "adult_physical_assessment_v1",
   "title": "Adult Physical Assessment",
   "description": "Adult physical assessment — grouped by body system and sub-system.",
-  "createdAt": "2026-06-11T19:39:25.763Z",
-  "updatedAt": "2026-06-11T19:39:25.763Z",
+  "createdAt": "2026-07-23T21:07:38.304Z",
+  "updatedAt": "2026-07-23T21:07:38.304Z",
   "status": "published",
   "groups": [
     {
@@ -362,11 +362,11 @@
       "flowsheetSectionRollup": true,
       "choices": [
         {
-          "id": "ch_d8fe3877b3ba06d4",
-          "label": "All extremities with full 5 out of 5 and equal strength and range of motion. Capillary refill time less than, equal to 3 seconds. Pulses +3 palpable. No edema, pain, weakness, numbness and tingling, sensation intact"
+          "id": "ch_12eef09c529319f3",
+          "label": "All extremities with full 5 out of 5 and equal strength and range of motion. Capillary refill time less than, equal to 3 seconds. Pulses + 3 palpable. No edema, pain, weakness, numbness and tingling, sensation intact"
         }
       ],
-      "flowsheetSectionAggregateWdlDefinition": "All extremities with full 5 out of 5 and equal strength and range of motion. Capillary refill time less than, equal to 3 seconds. Pulses +3 palpable. No edema, pain, weakness, numbness and tingling, sensation intact"
+      "flowsheetSectionAggregateWdlDefinition": "All extremities with full 5 out of 5 and equal strength and range of motion. Capillary refill time less than, equal to 3 seconds. Pulses + 3 palpable. No edema, pain, weakness, numbness and tingling, sensation intact"
     },
     {
       "id": "itm_81cc60be88c80cbe",
@@ -436,16 +436,16 @@
       "responseType": "choice",
       "choices": [
         {
-          "id": "ch_2888c10720ca7dbd",
-          "label": "+1 =Weak"
+          "id": "ch_5c09887af472bc03",
+          "label": "+ 1 = Weak"
         },
         {
-          "id": "ch_ec7ebc9069f8c900",
-          "label": "+2 = Moderate"
+          "id": "ch_f454103d1ba99752",
+          "label": "+ 2 = Moderate"
         },
         {
-          "id": "ch_53c7a4dd687c49b5",
-          "label": "+4 = Bounding"
+          "id": "ch_58ad23751d086f42",
+          "label": "+ 4 = Bounding"
         },
         {
           "id": "ch_be222747f65a3c2d",
@@ -456,7 +456,7 @@
           "label": "Only detectable via doppler"
         }
       ],
-      "wdlListDefinition": "Pulses +3 Palpable"
+      "wdlListDefinition": "Pulses + 3 Palpable"
     },
     {
       "id": "itm_cb8c89e13ccecde0",
@@ -662,20 +662,20 @@
       "responseType": "choice",
       "choices": [
         {
-          "id": "ch_a26d553048e4f2d9",
-          "label": "+ 1 Mild pitting, slight indentation"
+          "id": "ch_1a929b86aa508ec4",
+          "label": "+ 1 = Mild pitting, slight indentation"
         },
         {
-          "id": "ch_8d8c23b65cbc18e5",
+          "id": "ch_22b795d948bf87b4",
+          "label": "+ 2 = Moderate pitting, indentation subsides rapidly"
+        },
+        {
+          "id": "ch_a7156173bebdac1a",
           "label": "+ 3 = Deep pitting, indentation remains for a short time"
         },
         {
-          "id": "ch_385b9ef27866af38",
+          "id": "ch_47b17798c7c1c1f4",
           "label": "+ 4 = Very Deep pitting, indentiation lasts a long time"
-        },
-        {
-          "id": "ch_b563d2182519d579",
-          "label": "+2 = Moderate pitting, indentation subsides rapidly"
         }
       ],
       "wdlListDefinition": "No edema"
@@ -752,35 +752,6 @@
       "wdlListDefinition": "Warm"
     },
     {
-      "id": "itm_dd5920031fa3d8f4",
-      "groupId": "grp_8b3ee63b666cf25c",
-      "prompt": "Posterior Tibial Pulse L",
-      "responseType": "choice",
-      "choices": [
-        {
-          "id": "ch_07394c3b12437859",
-          "label": "+1 =Weak"
-        },
-        {
-          "id": "ch_5a909fc8056c7d74",
-          "label": "+2 = Moderate"
-        },
-        {
-          "id": "ch_93e112086310c81c",
-          "label": "+4 = Bounding"
-        },
-        {
-          "id": "ch_e42d31c44fdb3f36",
-          "label": "0 = Absent"
-        },
-        {
-          "id": "ch_458548d4d94febe6",
-          "label": "Only detectable via doppler"
-        }
-      ],
-      "wdlListDefinition": "Pulses +3 Palpable"
-    },
-    {
       "id": "itm_fcdc97779558094a",
       "groupId": "grp_8b3ee63b666cf25c",
       "prompt": "LLE  Musculoskeletal",
@@ -828,6 +799,35 @@
         }
       ],
       "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists.  Full range of motion."
+    },
+    {
+      "id": "itm_dd5920031fa3d8f4",
+      "groupId": "grp_8b3ee63b666cf25c",
+      "prompt": "Posterior Tibial Pulse L",
+      "responseType": "choice",
+      "choices": [
+        {
+          "id": "ch_8f031928d89f71f6",
+          "label": "+ 1 = Weak"
+        },
+        {
+          "id": "ch_545d1d0a0b1d6ceb",
+          "label": "+ 2 = Moderate"
+        },
+        {
+          "id": "ch_3a38083c4be523d6",
+          "label": "+ 4 = Bounding"
+        },
+        {
+          "id": "ch_e42d31c44fdb3f36",
+          "label": "0 = Absent"
+        },
+        {
+          "id": "ch_458548d4d94febe6",
+          "label": "Only detectable via doppler"
+        }
+      ],
+      "wdlListDefinition": "Pulses + 3 Palpable"
     },
     {
       "id": "itm_8f6ab8ba187cf463",
@@ -898,20 +898,20 @@
       "responseType": "choice",
       "choices": [
         {
-          "id": "ch_000baa92042c3b3a",
-          "label": "+ 1 Mild pitting, slight indentation"
+          "id": "ch_a172e1bd47b1546a",
+          "label": "+ 1 = Mild pitting, slight indentation"
         },
         {
-          "id": "ch_1c09d0f696a2eb12",
+          "id": "ch_2839795fd5c63844",
+          "label": "+ 2 = Moderate pitting, indentation subsides rapidly"
+        },
+        {
+          "id": "ch_c8a5a64e508cc2de",
           "label": "+ 3 = Deep pitting, indentation remains for a short time"
         },
         {
-          "id": "ch_25c7637030910570",
+          "id": "ch_a1487f60f0c32e02",
           "label": "+ 4 = Very Deep pitting, indentiation lasts a long time"
-        },
-        {
-          "id": "ch_bc3e8409cf09de90",
-          "label": "+2 = Moderate pitting, indentation subsides rapidly"
         }
       ],
       "wdlListDefinition": "No edema"
@@ -1090,22 +1090,71 @@
       "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists.  Full range of motion."
     },
     {
+      "id": "itm_652c3b1effbc3ced",
+      "groupId": "grp_8b3ee63b666cf25c",
+      "prompt": "LUE Musculoskeletal",
+      "responseType": "choice",
+      "choices": [
+        {
+          "id": "ch_3e8b4a695df38522",
+          "label": "Amputation"
+        },
+        {
+          "id": "ch_0c5833b24d328ecf",
+          "label": "Contracture"
+        },
+        {
+          "id": "ch_2754658c2de72ed2",
+          "label": "Deformity"
+        },
+        {
+          "id": "ch_959ba407560bf398",
+          "label": "Injury or Trauma"
+        },
+        {
+          "id": "ch_ea3202eb375ad64b",
+          "label": "Limited aBduction"
+        },
+        {
+          "id": "ch_5cf13e0092404186",
+          "label": "Limited aDduction"
+        },
+        {
+          "id": "ch_77ef6f6d16a7f238",
+          "label": "Limited Movement"
+        },
+        {
+          "id": "ch_f5d134f6d5861eaa",
+          "label": "Paralysis"
+        },
+        {
+          "id": "ch_40d04d1b6d6a1d42",
+          "label": "Swelling"
+        },
+        {
+          "id": "ch_b7bdf217dd1cd2f8",
+          "label": "Weakness"
+        }
+      ],
+      "wdlListDefinition": "No swelling, pain, weakness or injury in extremities, ankles, elbows, fingers, hips, knees, shoulders, toes, and wrists.  Full range of motion."
+    },
+    {
       "id": "itm_fca30678672d90b9",
       "groupId": "grp_8b3ee63b666cf25c",
       "prompt": "Radial Pulse L",
       "responseType": "choice",
       "choices": [
         {
-          "id": "ch_a8860b9259cf3401",
-          "label": "+1 =Weak"
+          "id": "ch_4ae145fbade2c4a5",
+          "label": "+ 1 = Weak"
         },
         {
-          "id": "ch_d7a1b8a4ab502da5",
-          "label": "+2 = Moderate"
+          "id": "ch_070d92ffc3cea6c0",
+          "label": "+ 2 = Moderate"
         },
         {
-          "id": "ch_10ee12985bfa09b3",
-          "label": "+4 = Bounding"
+          "id": "ch_b98716258ae9badf",
+          "label": "+ 4 = Bounding"
         },
         {
           "id": "ch_5f8bbc9776010ed0",
@@ -1116,7 +1165,7 @@
           "label": "Only detectable via doppler"
         }
       ],
-      "wdlListDefinition": "pulses +3 Palpable"
+      "wdlListDefinition": "pulses + 3 Palpable"
     },
     {
       "id": "itm_154b34c5217d6ce6",
@@ -1217,55 +1266,6 @@
       "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists.  Full range of motion."
     },
     {
-      "id": "itm_652c3b1effbc3ced",
-      "groupId": "grp_8b3ee63b666cf25c",
-      "prompt": "LUE Musculoskeletal",
-      "responseType": "choice",
-      "choices": [
-        {
-          "id": "ch_3e8b4a695df38522",
-          "label": "Amputation"
-        },
-        {
-          "id": "ch_0c5833b24d328ecf",
-          "label": "Contracture"
-        },
-        {
-          "id": "ch_2754658c2de72ed2",
-          "label": "Deformity"
-        },
-        {
-          "id": "ch_959ba407560bf398",
-          "label": "Injury or Trauma"
-        },
-        {
-          "id": "ch_ea3202eb375ad64b",
-          "label": "Limited aBduction"
-        },
-        {
-          "id": "ch_5cf13e0092404186",
-          "label": "Limited aDduction"
-        },
-        {
-          "id": "ch_77ef6f6d16a7f238",
-          "label": "Limited Movement"
-        },
-        {
-          "id": "ch_f5d134f6d5861eaa",
-          "label": "Paralysis"
-        },
-        {
-          "id": "ch_40d04d1b6d6a1d42",
-          "label": "Swelling"
-        },
-        {
-          "id": "ch_b7bdf217dd1cd2f8",
-          "label": "Weakness"
-        }
-      ],
-      "wdlListDefinition": "No swelling, pain, weakness or injury in extremities, ankles, elbows, fingers, hips, knees, shoulders, toes, and wrists.  Full range of motion."
-    },
-    {
       "id": "itm_edf9161a799225a4",
       "groupId": "grp_8b3ee63b666cf25c",
       "prompt": "Right Lower Extremity WDL",
@@ -1278,22 +1278,71 @@
       ]
     },
     {
+      "id": "itm_984a8892e1377bbe",
+      "groupId": "grp_8b3ee63b666cf25c",
+      "prompt": "Ankle Musculoskeletal Additional Assessment R",
+      "responseType": "choice",
+      "choices": [
+        {
+          "id": "ch_555f23f9c36a9607",
+          "label": "Amputation"
+        },
+        {
+          "id": "ch_1e46d5225aa60e10",
+          "label": "Contracture"
+        },
+        {
+          "id": "ch_9e375a39eb9f1ad8",
+          "label": "Deformity"
+        },
+        {
+          "id": "ch_f7fe5cc481961024",
+          "label": "Injury or Trauma"
+        },
+        {
+          "id": "ch_0f67b78ad73784e9",
+          "label": "Limited aBduction"
+        },
+        {
+          "id": "ch_2e940bb7ed4aabc0",
+          "label": "Limited aDduction"
+        },
+        {
+          "id": "ch_12f3b5055569e798",
+          "label": "Limited Movement"
+        },
+        {
+          "id": "ch_f7d958adec401104",
+          "label": "Paralysis"
+        },
+        {
+          "id": "ch_bc1278959cbf2b52",
+          "label": "Swelling"
+        },
+        {
+          "id": "ch_13af1c566c35fbe1",
+          "label": "Weakness"
+        }
+      ],
+      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists.  Full range of motion."
+    },
+    {
       "id": "itm_f0aa45175ad90352",
       "groupId": "grp_8b3ee63b666cf25c",
       "prompt": "Dorsalis Pedis Pulse R",
       "responseType": "choice",
       "choices": [
         {
-          "id": "ch_f38a6e8ad116347d",
-          "label": "+1 =Weak"
+          "id": "ch_6f496cf3d6f093ca",
+          "label": "+ 1 = Weak"
         },
         {
-          "id": "ch_9b32709458b14a37",
-          "label": "+2 = Moderate"
+          "id": "ch_ee79414c78b59e11",
+          "label": "+ 2 = Moderate"
         },
         {
-          "id": "ch_a8f51b91ebcf0685",
-          "label": "+4 = Bounding"
+          "id": "ch_d51261f50e1f3b3d",
+          "label": "+ 4 = Bounding"
         },
         {
           "id": "ch_271b02bfc97317c7",
@@ -1304,7 +1353,7 @@
           "label": "Only detectable via doppler"
         }
       ],
-      "wdlListDefinition": "Pulses +3 Palpable"
+      "wdlListDefinition": "Pulses + 3 Palpable"
     },
     {
       "id": "itm_4fc02c54c36a4132",
@@ -1510,20 +1559,20 @@
       "responseType": "choice",
       "choices": [
         {
-          "id": "ch_0c1f62909d33b220",
-          "label": "+ 1 Mild pitting, slight indentation"
+          "id": "ch_a88ce2212589ce98",
+          "label": "+ 1 = Mild pitting, slight indentation"
         },
         {
-          "id": "ch_b4a859ab5ce01715",
+          "id": "ch_a81afc26ad560d67",
+          "label": "+ 2 = Moderate pitting, indentation subsides rapidly"
+        },
+        {
+          "id": "ch_39671cb437de3b48",
           "label": "+ 3 = Deep pitting, indentation remains for a short time"
         },
         {
-          "id": "ch_f59f6723aad14660",
+          "id": "ch_980e1aa94e13b5d9",
           "label": "+ 4 = Very Deep pitting, indentiation lasts a long time"
-        },
-        {
-          "id": "ch_bfb5cc4448d58eb4",
-          "label": "+2 = Moderate pitting, indentation subsides rapidly"
         }
       ],
       "wdlListDefinition": "No edema"
@@ -1606,16 +1655,16 @@
       "responseType": "choice",
       "choices": [
         {
-          "id": "ch_dc901c38b515768e",
-          "label": "+1 =Weak"
+          "id": "ch_89ac6cf482be82c0",
+          "label": "+ 1 = Weak"
         },
         {
-          "id": "ch_6e9bb88aa05df591",
-          "label": "+2 = Moderate"
+          "id": "ch_df1c4d9e3417ffee",
+          "label": "+ 2 = Moderate"
         },
         {
-          "id": "ch_31a9b2283b78eb06",
-          "label": "+4 = Bounding"
+          "id": "ch_cc8451efca71347a",
+          "label": "+ 4 = Bounding"
         },
         {
           "id": "ch_14a23dbdef5fd06f",
@@ -1626,7 +1675,7 @@
           "label": "Only detectable via doppler"
         }
       ],
-      "wdlListDefinition": "pulses +3 Palpable"
+      "wdlListDefinition": "pulses + 3 Palpable"
     },
     {
       "id": "itm_d32bb206f2c255df",
@@ -1672,55 +1721,6 @@
         },
         {
           "id": "ch_99757f831eea375d",
-          "label": "Weakness"
-        }
-      ],
-      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists.  Full range of motion."
-    },
-    {
-      "id": "itm_984a8892e1377bbe",
-      "groupId": "grp_8b3ee63b666cf25c",
-      "prompt": "Ankle Musculoskeletal Additional Assessment R",
-      "responseType": "choice",
-      "choices": [
-        {
-          "id": "ch_555f23f9c36a9607",
-          "label": "Amputation"
-        },
-        {
-          "id": "ch_1e46d5225aa60e10",
-          "label": "Contracture"
-        },
-        {
-          "id": "ch_9e375a39eb9f1ad8",
-          "label": "Deformity"
-        },
-        {
-          "id": "ch_f7fe5cc481961024",
-          "label": "Injury or Trauma"
-        },
-        {
-          "id": "ch_0f67b78ad73784e9",
-          "label": "Limited aBduction"
-        },
-        {
-          "id": "ch_2e940bb7ed4aabc0",
-          "label": "Limited aDduction"
-        },
-        {
-          "id": "ch_12f3b5055569e798",
-          "label": "Limited Movement"
-        },
-        {
-          "id": "ch_f7d958adec401104",
-          "label": "Paralysis"
-        },
-        {
-          "id": "ch_bc1278959cbf2b52",
-          "label": "Swelling"
-        },
-        {
-          "id": "ch_13af1c566c35fbe1",
           "label": "Weakness"
         }
       ],
@@ -1795,20 +1795,20 @@
       "responseType": "choice",
       "choices": [
         {
-          "id": "ch_502f1c02622812a0",
-          "label": "+ 1 Mild pitting, slight indentation"
+          "id": "ch_2f4bd75de99d12fe",
+          "label": "+ 1 = Mild pitting, slight indentation"
         },
         {
-          "id": "ch_830204c0411b128f",
+          "id": "ch_08aa57757f6ab191",
+          "label": "+ 2 = Moderate pitting, indentation subsides rapidly"
+        },
+        {
+          "id": "ch_33ff44bb594bc0f5",
           "label": "+ 3 = Deep pitting, indentation remains for a short time"
         },
         {
-          "id": "ch_70500d382457808c",
+          "id": "ch_1abae7d58013711c",
           "label": "+ 4 = Very Deep pitting, indentiation lasts a long time"
-        },
-        {
-          "id": "ch_e10690b6e0747b28",
-          "label": "+2 = Moderate pitting, indentation subsides rapidly"
         }
       ],
       "wdlListDefinition": "No edema"
@@ -1993,27 +1993,76 @@
       "responseType": "choice",
       "choices": [
         {
-          "id": "ch_9dac39e3aa13f850",
+          "id": "ch_e021b30d19994cb0",
+          "label": "+ 1 = Weak"
+        },
+        {
+          "id": "ch_5df690ffa57c9dcb",
           "label": "+ 2 = moderate"
         },
         {
-          "id": "ch_88b971a0b5e320b1",
+          "id": "ch_9411195344fe5921",
           "label": "+ 4 = Bounding"
         },
         {
-          "id": "ch_27a3d5066149776a",
+          "id": "ch_87627ce9e1b55257",
           "label": "0 = Absent"
-        },
-        {
-          "id": "ch_e78566064569de10",
-          "label": "+1=Weak"
         },
         {
           "id": "ch_f0e93a167404e494",
           "label": "Only detectable via doppler"
         }
       ],
-      "wdlListDefinition": "Pulses +3 Palpable"
+      "wdlListDefinition": "Pulses + 3 Palpable"
+    },
+    {
+      "id": "itm_a0baa23e4eceb223",
+      "groupId": "grp_8b3ee63b666cf25c",
+      "prompt": "RUE Musculoskeletal",
+      "responseType": "choice",
+      "choices": [
+        {
+          "id": "ch_fcf20e3ae6747cbd",
+          "label": "Amputation"
+        },
+        {
+          "id": "ch_e09f64f40a8c9468",
+          "label": "Contracture"
+        },
+        {
+          "id": "ch_42f597b791f154e8",
+          "label": "Deformity"
+        },
+        {
+          "id": "ch_475a4a97c6abc0b9",
+          "label": "Injury/Trauma"
+        },
+        {
+          "id": "ch_e4826f6f040d804d",
+          "label": "Limited aBduction"
+        },
+        {
+          "id": "ch_1b4efb0a57a69cfc",
+          "label": "Limited aDduction"
+        },
+        {
+          "id": "ch_0472a0719cb8372c",
+          "label": "Limited Movement"
+        },
+        {
+          "id": "ch_eee9e60f8d01bae8",
+          "label": "Paralysis"
+        },
+        {
+          "id": "ch_247753085b2b93cf",
+          "label": "Swelling"
+        },
+        {
+          "id": "ch_d508d5a389f4bcb6",
+          "label": "Weakness"
+        }
+      ],
+      "wdlListDefinition": "No swelling, pain, weakness or injury in extremities, ankles, elbows, fingers, hips, knees, shoulders, toes, and wrists.  Full range of motion."
     },
     {
       "id": "itm_8ef93c71c8dadd8f",
@@ -2114,55 +2163,6 @@
       "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists.  Full range of motion."
     },
     {
-      "id": "itm_a0baa23e4eceb223",
-      "groupId": "grp_8b3ee63b666cf25c",
-      "prompt": "RUE Musculoskeletal",
-      "responseType": "choice",
-      "choices": [
-        {
-          "id": "ch_fcf20e3ae6747cbd",
-          "label": "Amputation"
-        },
-        {
-          "id": "ch_e09f64f40a8c9468",
-          "label": "Contracture"
-        },
-        {
-          "id": "ch_42f597b791f154e8",
-          "label": "Deformity"
-        },
-        {
-          "id": "ch_475a4a97c6abc0b9",
-          "label": "Injury/Trauma"
-        },
-        {
-          "id": "ch_e4826f6f040d804d",
-          "label": "Limited aBduction"
-        },
-        {
-          "id": "ch_1b4efb0a57a69cfc",
-          "label": "Limited aDduction"
-        },
-        {
-          "id": "ch_0472a0719cb8372c",
-          "label": "Limited Movement"
-        },
-        {
-          "id": "ch_eee9e60f8d01bae8",
-          "label": "Paralysis"
-        },
-        {
-          "id": "ch_247753085b2b93cf",
-          "label": "Swelling"
-        },
-        {
-          "id": "ch_d508d5a389f4bcb6",
-          "label": "Weakness"
-        }
-      ],
-      "wdlListDefinition": "No swelling, pain, weakness or injury in extremities, ankles, elbows, fingers, hips, knees, shoulders, toes, and wrists.  Full range of motion."
-    },
-    {
       "id": "itm_c38a2ccc76b759f6",
       "groupId": "grp_8b3ee63b666cf25c",
       "prompt": "Spine WDL",
@@ -2173,6 +2173,43 @@
           "label": "Within defined limits"
         }
       ]
+    },
+    {
+      "id": "itm_881ecccf280cc9d4",
+      "groupId": "grp_8b3ee63b666cf25c",
+      "prompt": "Back",
+      "responseType": "choice",
+      "choices": [
+        {
+          "id": "ch_1330136c32755611",
+          "label": "Contracture"
+        },
+        {
+          "id": "ch_e759394123ae3bfd",
+          "label": "Deformity"
+        },
+        {
+          "id": "ch_d87dfdc721b9e77d",
+          "label": "Injury or Trauma"
+        },
+        {
+          "id": "ch_4f83822048465976",
+          "label": "Limited Movement"
+        },
+        {
+          "id": "ch_009cfb6f1075739a",
+          "label": "Paralysis"
+        },
+        {
+          "id": "ch_f979310e60b3acbc",
+          "label": "Swelling"
+        },
+        {
+          "id": "ch_2b8fe2ebd3eacf88",
+          "label": "Weakness"
+        }
+      ],
+      "wdlListDefinition": "No swelling, pain, weakness or injury in back.  Full range of motion"
     },
     {
       "id": "itm_f0ac14391dfd5e79",
@@ -2247,43 +2284,6 @@
         }
       ],
       "wdlListDefinition": "No swelling, pain, weakness or injury in L-spine.  Full range of motion"
-    },
-    {
-      "id": "itm_881ecccf280cc9d4",
-      "groupId": "grp_8b3ee63b666cf25c",
-      "prompt": "Back",
-      "responseType": "choice",
-      "choices": [
-        {
-          "id": "ch_1330136c32755611",
-          "label": "Contracture"
-        },
-        {
-          "id": "ch_e759394123ae3bfd",
-          "label": "Deformity"
-        },
-        {
-          "id": "ch_d87dfdc721b9e77d",
-          "label": "Injury or Trauma"
-        },
-        {
-          "id": "ch_4f83822048465976",
-          "label": "Limited Movement"
-        },
-        {
-          "id": "ch_009cfb6f1075739a",
-          "label": "Paralysis"
-        },
-        {
-          "id": "ch_f979310e60b3acbc",
-          "label": "Swelling"
-        },
-        {
-          "id": "ch_2b8fe2ebd3eacf88",
-          "label": "Weakness"
-        }
-      ],
-      "wdlListDefinition": "No swelling, pain, weakness or injury in back.  Full range of motion"
     },
     {
       "id": "itm_24c20f03108ce777",
@@ -3264,74 +3264,6 @@
       "flowsheetSectionAggregateWdlDefinition": "No symptoms reported  (output is documented in I/0, use Zero in I/o for anuria, bladder scanner results in I/O, incontinence might also be in I/O...needs discussion or keep here?)"
     },
     {
-      "id": "itm_80a4c27cc9f4712a",
-      "groupId": "grp_23c7579f5e2bfbb1",
-      "prompt": "Skin WDL",
-      "responseType": "choice",
-      "flowsheetSectionRollup": true,
-      "choices": [
-        {
-          "id": "ch_6d3f787d2f72e327",
-          "label": "Warm, dry, intact, with appropriate, even tone. No generalized skin abnormalities. No minor skin integrity findings (see table).  Major skin findings documented in LDA."
-        }
-      ],
-      "flowsheetSectionAggregateWdlDefinition": "Warm, dry, intact, with appropriate, even tone. No generalized skin abnormalities. No minor skin integrity findings (see table).  Major skin findings documented in LDA."
-    },
-    {
-      "id": "itm_4c3bd43057c46ae6",
-      "groupId": "grp_23c7579f5e2bfbb1",
-      "prompt": "General Skin Color",
-      "responseType": "multiChoice",
-      "choices": [
-        {
-          "id": "ch_64cbe30773bfb81b",
-          "label": "Dusky"
-        },
-        {
-          "id": "ch_62bbe8cd3ed6a675",
-          "label": "Generalized cyanosis"
-        },
-        {
-          "id": "ch_fc915d714c5b4752",
-          "label": "Jaundiced"
-        },
-        {
-          "id": "ch_31f0421b386229d2",
-          "label": "Mottled"
-        },
-        {
-          "id": "ch_77934043e6c47627",
-          "label": "Pale"
-        },
-        {
-          "id": "ch_d21dec398c842e67",
-          "label": "Ruddy"
-        }
-      ],
-      "wdlListDefinition": "Appropriate, even tone, No generalized skin abnormalities"
-    },
-    {
-      "id": "itm_be6380b56a7cfda6",
-      "groupId": "grp_23c7579f5e2bfbb1",
-      "prompt": "Skin Temp",
-      "responseType": "multiChoice",
-      "choices": [
-        {
-          "id": "ch_7a81dc38d8158261",
-          "label": "Cold"
-        },
-        {
-          "id": "ch_9a6f2f30cb09510c",
-          "label": "Cool"
-        },
-        {
-          "id": "ch_1a6448e5d900b8ef",
-          "label": "Hot"
-        }
-      ],
-      "wdlListDefinition": "Warm, dry, intact, with appropriate, even tone. No generalized skin abnormalities. No minor skin integrity findings (see table).  Major skin findings documented in LDA."
-    },
-    {
       "id": "itm_f634cdc0900b44ce",
       "groupId": "grp_23c7579f5e2bfbb1",
       "prompt": "Locations",
@@ -3542,6 +3474,74 @@
           "label": "Itchy"
         }
       ]
+    },
+    {
+      "id": "itm_80a4c27cc9f4712a",
+      "groupId": "grp_23c7579f5e2bfbb1",
+      "prompt": "Skin WDL",
+      "responseType": "choice",
+      "flowsheetSectionRollup": true,
+      "choices": [
+        {
+          "id": "ch_6d3f787d2f72e327",
+          "label": "Warm, dry, intact, with appropriate, even tone. No generalized skin abnormalities. No minor skin integrity findings (see table).  Major skin findings documented in LDA."
+        }
+      ],
+      "flowsheetSectionAggregateWdlDefinition": "Warm, dry, intact, with appropriate, even tone. No generalized skin abnormalities. No minor skin integrity findings (see table).  Major skin findings documented in LDA."
+    },
+    {
+      "id": "itm_4c3bd43057c46ae6",
+      "groupId": "grp_23c7579f5e2bfbb1",
+      "prompt": "General Skin Color",
+      "responseType": "multiChoice",
+      "choices": [
+        {
+          "id": "ch_64cbe30773bfb81b",
+          "label": "Dusky"
+        },
+        {
+          "id": "ch_62bbe8cd3ed6a675",
+          "label": "Generalized cyanosis"
+        },
+        {
+          "id": "ch_fc915d714c5b4752",
+          "label": "Jaundiced"
+        },
+        {
+          "id": "ch_31f0421b386229d2",
+          "label": "Mottled"
+        },
+        {
+          "id": "ch_77934043e6c47627",
+          "label": "Pale"
+        },
+        {
+          "id": "ch_d21dec398c842e67",
+          "label": "Ruddy"
+        }
+      ],
+      "wdlListDefinition": "Appropriate, even tone, No generalized skin abnormalities"
+    },
+    {
+      "id": "itm_be6380b56a7cfda6",
+      "groupId": "grp_23c7579f5e2bfbb1",
+      "prompt": "Skin Temp",
+      "responseType": "multiChoice",
+      "choices": [
+        {
+          "id": "ch_7a81dc38d8158261",
+          "label": "Cold"
+        },
+        {
+          "id": "ch_9a6f2f30cb09510c",
+          "label": "Cool"
+        },
+        {
+          "id": "ch_1a6448e5d900b8ef",
+          "label": "Hot"
+        }
+      ],
+      "wdlListDefinition": "Warm, dry, intact, with appropriate, even tone. No generalized skin abnormalities. No minor skin integrity findings (see table).  Major skin findings documented in LDA."
     },
     {
       "id": "itm_3c1bf28c5d9b9a11",
