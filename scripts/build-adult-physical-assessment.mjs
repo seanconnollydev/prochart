@@ -157,6 +157,19 @@ function partitionWdlChoices(labels) {
 }
 
 /**
+ * Remove workbook “see table” references that don't apply in the app UI.
+ * @param {string} text
+ */
+function stripSeeTableMentions(text) {
+  return String(text)
+    .replace(/\(\s*see\s+table\s*\)/gi, "")
+    .replace(/\bsee\s+table\b/gi, "")
+    .replace(/\s{2,}/g, " ")
+    .replace(/\s+([.,;:])/g, "$1")
+    .trim();
+}
+
+/**
  * @param {string} label
  */
 function narrativeAfterWdlEquals(label) {
@@ -166,7 +179,7 @@ function narrativeAfterWdlEquals(label) {
     match && match.index !== undefined
       ? t.slice(match.index + match[0].length).trim()
       : t;
-  return normalizeListChoiceLabel(body);
+  return normalizeListChoiceLabel(stripSeeTableMentions(body));
 }
 
 /** Strip `WDL=` prefixes from workbook aggregate lines; join into side-panel narrative. */
