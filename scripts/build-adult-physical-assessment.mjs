@@ -172,9 +172,35 @@ for (let i = 1; i < matrix.length; i++) {
   }
 }
 
-const sortedKeys = [...byConcept.keys()].sort(
-  (a, b) => byConcept.get(a).order - byConcept.get(b).order,
-);
+/**
+ * Body sub-system sequence follows first appearance on the `data` sheet.
+ * Concepts within each sub-system follow Pivot A–Z Concept Row order.
+ * @type {Map<string, number>}
+ */
+const pairFirstOrder = new Map();
+for (const key of byConcept.keys()) {
+  const pair = key.split("\u0000").slice(0, 2).join("\u0000");
+  const sheetOrder = byConcept.get(key).order;
+  if (!pairFirstOrder.has(pair) || sheetOrder < pairFirstOrder.get(pair)) {
+    pairFirstOrder.set(pair, sheetOrder);
+  }
+}
+
+const sortedKeys = [...byConcept.keys()].sort((a, b) => {
+  const [sysA, subA, conceptA] = a.split("\u0000");
+  const [sysB, subB, conceptB] = b.split("\u0000");
+  const sysCmp = compareByRootSystemOrder(sysA, sysB);
+  if (sysCmp !== 0) {
+    return sysCmp;
+  }
+  const pairCmp =
+    (pairFirstOrder.get(`${sysA}\u0000${subA}`) ?? 0) -
+    (pairFirstOrder.get(`${sysB}\u0000${subB}`) ?? 0);
+  if (pairCmp !== 0) {
+    return pairCmp;
+  }
+  return conceptA.localeCompare(conceptB);
+});
 
 /** @type {Set<string>} */
 const systems = new Set();
@@ -189,15 +215,6 @@ for (const key of sortedKeys) {
 
 /** @type {Array<{ id: string; label: string; parentGroupId: string | null }>} */
 const groups = [];
-
-/** @type {Map<string, number>} */
-const pairFirstOrder = new Map();
-for (const key of sortedKeys) {
-  const pair = key.split("\u0000").slice(0, 2).join("\u0000");
-  if (!pairFirstOrder.has(pair)) {
-    pairFirstOrder.set(pair, byConcept.get(key).order);
-  }
-}
 
 /**
  * @param {string} a pair key `bodySystem\0bodySub`
@@ -587,7 +604,7 @@ function pushNvMskBlock() {
     }
     items.push(extGate);
 
-    /** @type {string[]} keys for this extremity, sheet order */
+    /** @type {string[]} keys for this extremity, A–Z Concept Row within sub */
     const subKeys = sortedKeys.filter((kk) => {
       const [bs, bodySub] = kk.split("\u0000");
       return bs === NV_MSK_SYSTEM && bodySub === sub;
