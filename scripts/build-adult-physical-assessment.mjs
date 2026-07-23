@@ -826,9 +826,141 @@ function pushItemsForSystem(bodySystem) {
   }
 }
 
+const SKIN_SYSTEM = "Skin";
+
+/**
+ * Skin: section rollup + one locationScoped composite (locations first, then
+ * Integrity / Symptom / Color / Temp per selected site).
+ */
+function pushSkinBlock() {
+  const bodySystem = SKIN_SYSTEM;
+  const bodySub = SKIN_SYSTEM;
+  const pair = `${bodySystem}\u0000${bodySub}`;
+  const gid = grpChild(bodySystem, bodySub);
+
+  /** @type {Map<string, string>} conceptRow -> key */
+  const keyByConcept = new Map();
+  for (const k of sortedKeys) {
+    const [bs, sub, cr] = k.split("\u0000");
+    if (bs !== bodySystem || sub !== bodySub) {
+      continue;
+    }
+    keyByConcept.set(cr, k);
+  }
+
+  const wdlKey = keyByConcept.get("Skin WDL");
+  if (!wdlKey) {
+    throw new Error("[adult-physical-assessment] Missing Skin WDL concept row");
+  }
+  const locationsKey = keyByConcept.get("Locations");
+  if (!locationsKey) {
+    throw new Error("[adult-physical-assessment] Missing Skin Locations concept row");
+  }
+
+  const fieldSpecs = [
+    {
+      key: "integrity",
+      conceptRow: "Skin Integrity Exceptions (Minor findings when LDA not needed)",
+    },
+    { key: "symptom", conceptRow: "Skin Symptom" },
+    { key: "color", conceptRow: "General Skin Color" },
+    { key: "temp", conceptRow: "Skin Temp" },
+  ];
+
+  for (const spec of fieldSpecs) {
+    if (!keyByConcept.has(spec.conceptRow)) {
+      throw new Error(
+        `[adult-physical-assessment] Missing Skin concept row: ${spec.conceptRow}`,
+      );
+    }
+  }
+
+  const rawWdlChoices = byConcept.get(wdlKey).choices;
+  const { wdl } = partitionWdlChoices(rawWdlChoices);
+  const firstPlain = String(rawWdlChoices[0] ?? "").trim();
+  const aggregateNarrative = aggregateWdlNarrativeByPair.get(pair);
+  const primaryWdlAggregateFallback =
+    wdl.length > 0 ? normalizeAggregateWdlNarrative(wdl.join("\n\n")) : "";
+  const gateChoiceLabel = gateWdlChoiceLabel(
+    wdl,
+    firstPlain,
+    aggregateNarrative,
+  );
+  const gateId = itemId(bodySystem, bodySub, "Skin WDL\0section_rollup");
+  const gate = {
+    id: gateId,
+    groupId: gid,
+    prompt: "Skin WDL",
+    responseType: "choice",
+    flowsheetSectionRollup: true,
+    choices: [
+      {
+        id: choiceId(gateId, gateChoiceLabel, 0),
+        label: gateChoiceLabel,
+      },
+    ],
+  };
+  if (aggregateNarrative) {
+    gate.flowsheetSectionAggregateWdlDefinition = aggregateNarrative;
+  } else if (primaryWdlAggregateFallback) {
+    gate.flowsheetSectionAggregateWdlDefinition = primaryWdlAggregateFallback;
+  }
+  items.push(gate);
+  keyEmitted.add(wdlKey);
+
+  const compositeId = itemId(bodySystem, bodySub, "location_scoped");
+  const locationLabels = partitionWdlChoices(
+    byConcept.get(locationsKey).choices,
+  ).exc;
+  const locationChoices = choiceObjsFromLabels(compositeId, locationLabels);
+
+  /** @type {Array<Record<string, unknown>>} */
+  const locationScopedFields = [];
+  for (const spec of fieldSpecs) {
+    const fk = keyByConcept.get(spec.conceptRow);
+    const { choices: rawChoices } = byConcept.get(fk);
+    const { wdl: fieldWdl, exc } = partitionWdlChoices(rawChoices);
+    const fieldItemId = itemId(
+      bodySystem,
+      bodySub,
+      `location_scoped\0${spec.key}`,
+    );
+    /** @type {Record<string, unknown>} */
+    const field = {
+      key: spec.key,
+      prompt: spec.conceptRow,
+      choices: choiceObjsFromLabels(fieldItemId, exc),
+    };
+    if (fieldWdl.length >= 1) {
+      field.wdlListDefinition = narrativeAfterWdlEquals(fieldWdl[0]);
+    }
+    locationScopedFields.push(field);
+    keyEmitted.add(fk);
+  }
+  keyEmitted.add(locationsKey);
+
+  items.push({
+    id: compositeId,
+    groupId: gid,
+    prompt: "Skin findings by location",
+    responseType: "locationScoped",
+    locationChoices,
+    locationScopedFields,
+  });
+
+  for (const k of sortedKeys) {
+    const [bs, sub] = k.split("\u0000");
+    if (bs === bodySystem && sub === bodySub && !keyEmitted.has(k)) {
+      keyEmitted.add(k);
+    }
+  }
+}
+
 for (const sys of ROOT_SYSTEM_ORDER) {
   if (sys === NV_MSK_SYSTEM) {
     pushNvMskBlock();
+  } else if (sys === SKIN_SYSTEM) {
+    pushSkinBlock();
   } else if (systems.has(sys)) {
     pushItemsForSystem(sys);
   }

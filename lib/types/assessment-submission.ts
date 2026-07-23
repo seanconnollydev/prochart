@@ -2,11 +2,21 @@ export const ASSESSMENT_SUBMISSION_SCHEMA_VERSION = "assessmentSubmission@0.1" a
 
 export type AssessmentSubmissionStatus = "in_progress" | "submitted";
 
+/** One selected location with nested field multiselect values (choice ids). */
+export type LocationScopedFindingEntry = {
+  locationId: string;
+  fields: Record<string, string[]>;
+};
+
+/** Ordered list of location entries for a `locationScoped` template item. */
+export type LocationScopedFindingValue = LocationScopedFindingEntry[];
+
 export type AssessmentResponseValue =
   | boolean
   | string
   | string[]
   | number
+  | LocationScopedFindingValue
   | null
   | undefined;
 

@@ -37,12 +37,20 @@ const ADULT_PHYSICAL_ASSESSMENT_GATE_SELECTION_PLAN =
   ADULT_PHYSICAL_ASSESSMENT_SECTION_BLOCKS.map((b) => ({
     prompt: b.initialPrompt,
     choice:
-      b.initialPrompt === "GI WDL" ? ("Exception" as const) : ("WDL" as const),
+      b.initialPrompt === "GI WDL" || b.initialPrompt === "Skin WDL"
+        ? ("Exception" as const)
+        : ("WDL" as const),
   }));
 
 /** GI is Exception in `ADULT_PHYSICAL_ASSESSMENT_GATE_SELECTION_PLAN`, so these detail rows are visible in the flowsheet. */
 const ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_ROW = "Abdomen";
 const ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_CHOICE = "Distended";
+
+/** Skin location-scoped findings (Skin WDL = Exception in the gate plan). */
+const ADULT_PHYSICAL_ASSESSMENT_SKIN_GATE_PROMPT = "Skin WDL";
+const ADULT_PHYSICAL_ASSESSMENT_SKIN_LOCATION = "L forearm";
+const ADULT_PHYSICAL_ASSESSMENT_SKIN_INTEGRITY_CHOICE = "Bruising";
+const ADULT_PHYSICAL_ASSESSMENT_SKIN_COLOR_CHOICE = "Pale";
 
 const ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT = "GI WDL";
 const ADULT_PHYSICAL_ASSESSMENT_COMMENT_TEXT =
@@ -99,6 +107,72 @@ async function openAbdomenInfoPanel(page: Page): Promise<void> {
       name: `View row information for ${ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_ROW}`,
     })
     .click();
+}
+
+async function selectSkinLocationAndFindings(page: Page): Promise<void> {
+  const locationsCombo = page.getByLabel("Locations", { exact: true });
+  await locationsCombo.scrollIntoViewIfNeeded();
+  await locationsCombo.click();
+  await page
+    .getByRole("option", {
+      name: ADULT_PHYSICAL_ASSESSMENT_SKIN_LOCATION,
+      exact: true,
+    })
+    .click();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("listbox")).toBeHidden();
+
+  await expect(
+    page.getByText(ADULT_PHYSICAL_ASSESSMENT_SKIN_LOCATION, { exact: true }),
+  ).toBeVisible();
+
+  const integrityCombo = page.getByLabel(
+    `${ADULT_PHYSICAL_ASSESSMENT_SKIN_LOCATION}: Skin Integrity Exceptions (Minor findings when LDA not needed)`,
+  );
+  await integrityCombo.scrollIntoViewIfNeeded();
+  await integrityCombo.click();
+  await page
+    .getByRole("option", {
+      name: ADULT_PHYSICAL_ASSESSMENT_SKIN_INTEGRITY_CHOICE,
+      exact: true,
+    })
+    .click();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("listbox")).toBeHidden();
+
+  const colorCombo = page.getByLabel(
+    `${ADULT_PHYSICAL_ASSESSMENT_SKIN_LOCATION}: General Skin Color`,
+  );
+  await colorCombo.scrollIntoViewIfNeeded();
+  await colorCombo.click();
+  await page
+    .getByRole("option", {
+      name: ADULT_PHYSICAL_ASSESSMENT_SKIN_COLOR_CHOICE,
+      exact: true,
+    })
+    .click();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("listbox")).toBeHidden();
+}
+
+async function openSkinIntegrityInfoPanel(page: Page): Promise<void> {
+  const flowsheetScroll = flowsheetScrollLocator(page);
+  await flowsheetScroll
+    .getByRole("button", {
+      name: "View row information for Skin Integrity Exceptions (Minor findings when LDA not needed)",
+    })
+    .scrollIntoViewIfNeeded();
+  await flowsheetScroll
+    .getByRole("button", {
+      name: "View row information for Skin Integrity Exceptions (Minor findings when LDA not needed)",
+    })
+    .click();
+}
+
+function skinIntegrityPanelOptions(page: Page) {
+  return page.getByRole("group", {
+    name: "Options for Skin Integrity Exceptions (Minor findings when LDA not needed)",
+  });
 }
 
 test.describe("Adult Physical Assessment", () => {
@@ -249,6 +323,48 @@ test.describe("Adult Physical Assessment", () => {
     ).not.toBeChecked();
   });
 
+  test("clears Skin location findings when Skin gate returns to WDL", async ({
+    page,
+  }) => {
+    await openAdultPhysicalAssessmentPractice(page);
+
+    await setFlowsheetWdlGate(
+      page,
+      ADULT_PHYSICAL_ASSESSMENT_SKIN_GATE_PROMPT,
+      "Exception",
+    );
+    await selectSkinLocationAndFindings(page);
+
+    await openSkinIntegrityInfoPanel(page);
+    await expect(
+      skinIntegrityPanelOptions(page).getByRole("checkbox", {
+        name: ADULT_PHYSICAL_ASSESSMENT_SKIN_INTEGRITY_CHOICE,
+        exact: true,
+      }),
+    ).toBeChecked();
+
+    await setFlowsheetWdlGate(
+      page,
+      ADULT_PHYSICAL_ASSESSMENT_SKIN_GATE_PROMPT,
+      "WDL",
+    );
+    await setFlowsheetWdlGate(
+      page,
+      ADULT_PHYSICAL_ASSESSMENT_SKIN_GATE_PROMPT,
+      "Exception",
+    );
+
+    const locationsCombo = page.getByLabel("Locations", { exact: true });
+    await expect(locationsCombo).toBeVisible();
+    await expect(locationsCombo).toHaveAccessibleName("Locations");
+    await expect(
+      page.getByRole("cell", {
+        name: ADULT_PHYSICAL_ASSESSMENT_SKIN_LOCATION,
+        exact: true,
+      }),
+    ).toHaveCount(0);
+  });
+
   test.describe("selections, persistence, and export", () => {
     test.describe.configure({ mode: "serial" });
 
@@ -297,6 +413,8 @@ test.describe("Adult Physical Assessment", () => {
       });
       await distended.check();
       await expect(distended).toBeChecked();
+
+      await selectSkinLocationAndFindings(page);
 
       await flowsheetScrollLocator(page)
         .getByRole("button", {
@@ -373,6 +491,21 @@ test.describe("Adult Physical Assessment", () => {
 
       await page.getByRole("button", { name: "Close info panel" }).click();
 
+      await expect(
+        page.getByText(ADULT_PHYSICAL_ASSESSMENT_SKIN_LOCATION, {
+          exact: true,
+        }),
+      ).toBeVisible();
+      await openSkinIntegrityInfoPanel(page);
+      await expect(
+        skinIntegrityPanelOptions(page).getByRole("checkbox", {
+          name: ADULT_PHYSICAL_ASSESSMENT_SKIN_INTEGRITY_CHOICE,
+          exact: true,
+        }),
+      ).toBeChecked();
+
+      await page.getByRole("button", { name: "Close info panel" }).click();
+
       await flowsheetScrollLocator(page)
         .getByRole("button", {
           name: `View row information for ${ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT}`,
@@ -424,6 +557,10 @@ test.describe("Adult Physical Assessment", () => {
           commentText: ADULT_PHYSICAL_ASSESSMENT_COMMENT_TEXT,
           multiRowPrompt: ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_ROW,
           multiChoiceLabel: ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_CHOICE,
+          skinLocationLabel: ADULT_PHYSICAL_ASSESSMENT_SKIN_LOCATION,
+          skinIntegrityChoiceLabel:
+            ADULT_PHYSICAL_ASSESSMENT_SKIN_INTEGRITY_CHOICE,
+          skinColorChoiceLabel: ADULT_PHYSICAL_ASSESSMENT_SKIN_COLOR_CHOICE,
         },
       );
 

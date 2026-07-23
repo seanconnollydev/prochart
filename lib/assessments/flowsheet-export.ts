@@ -1,16 +1,21 @@
 import {
   buildFlowsheetBlocks,
   coerceFlowsheetMultiselectValue,
+  coerceLocationScopedFindingValue,
   FLOWSHEET_EXCEPTION_CHOICE_ID,
   FLOWSHEET_EXCEPTION_CHOICE_LABEL,
   findSectionRollupGate,
+  getLocationScopedFieldValue,
   isFlowsheetExceptionSelected,
   isFlowsheetWdlXComboboxItem,
+  isLocationScopedItem,
+  locationChoiceLabel,
   segmentFlowsheetRowItems,
 } from "@/lib/assessments/flowsheet";
 import type {
   AssessmentItem,
   AssessmentTemplate,
+  LocationScopedField,
 } from "@/lib/types/assessment-template";
 import type { AssessmentItemResponse } from "@/lib/types/assessment-submission";
 
@@ -96,6 +101,19 @@ function textDisplay(
   return s || "—";
 }
 
+function fieldChoiceDisplay(
+  field: LocationScopedField,
+  selectedIds: string[],
+): string {
+  if (selectedIds.length === 0) {
+    return "—";
+  }
+  const labels = field.choices
+    .filter((c) => selectedIds.includes(c.id))
+    .map((c) => c.label);
+  return labels.length > 0 ? labels.join(", ") : "—";
+}
+
 function formatItemValue(
   item: AssessmentItem,
   responses: Record<string, AssessmentItemResponse>,
@@ -125,6 +143,58 @@ function exportValueDisplayWithComment(
     return main;
   }
   return `${main}\n\nComment: ${c}`;
+}
+
+function appendLocationScopedExportRows(
+  out: FlowsheetExportRow[],
+  item: AssessmentItem,
+  responses: Record<string, AssessmentItemResponse>,
+  indent: number,
+): void {
+  const value = coerceLocationScopedFindingValue(responses[item.id]?.value);
+  const fields = item.locationScopedFields ?? [];
+  const locationIds = value.map((e) => e.locationId);
+  const locationLabels = locationIds.map((id) => locationChoiceLabel(item, id));
+
+  out.push({
+    kind: "item",
+    prompt: "Locations",
+    valueDisplay:
+      locationLabels.length > 0 ? locationLabels.join(", ") : "—",
+    indent,
+  });
+
+  for (const entry of value) {
+    const locLabel = locationChoiceLabel(item, entry.locationId);
+    out.push({
+      kind: "item",
+      prompt: locLabel,
+      valueDisplay: "—",
+      indent: indent + 1,
+    });
+    for (const field of fields) {
+      out.push({
+        kind: "item",
+        prompt: field.prompt,
+        valueDisplay: fieldChoiceDisplay(
+          field,
+          getLocationScopedFieldValue(entry, field.key),
+        ),
+        indent: indent + 2,
+      });
+    }
+  }
+
+  const rawComment = responses[item.id]?.comment;
+  const comment = typeof rawComment === "string" ? rawComment.trim() : "";
+  if (comment) {
+    out.push({
+      kind: "item",
+      prompt: item.prompt,
+      valueDisplay: `Comment: ${comment}`,
+      indent,
+    });
+  }
 }
 
 export function buildFlowsheetExportRows(
@@ -175,22 +245,40 @@ export function buildFlowsheetExportRows(
           });
           if (isFlowsheetExceptionSelected(responses, seg.gate.id)) {
             for (const d of seg.details) {
-              out.push({
-                kind: "item",
-                prompt: promptForRow(d),
-                valueDisplay: exportValueDisplayWithComment(d, responses),
-                indent: sectionBodyIndent + 1,
-              });
+              if (isLocationScopedItem(d)) {
+                appendLocationScopedExportRows(
+                  out,
+                  d,
+                  responses,
+                  sectionBodyIndent + 1,
+                );
+              } else {
+                out.push({
+                  kind: "item",
+                  prompt: promptForRow(d),
+                  valueDisplay: exportValueDisplayWithComment(d, responses),
+                  indent: sectionBodyIndent + 1,
+                });
+              }
             }
           }
         } else {
           for (const d of seg.details) {
-            out.push({
-              kind: "item",
-              prompt: promptForRow(d),
-              valueDisplay: exportValueDisplayWithComment(d, responses),
-              indent: sectionBodyIndent,
-            });
+            if (isLocationScopedItem(d)) {
+              appendLocationScopedExportRows(
+                out,
+                d,
+                responses,
+                sectionBodyIndent,
+              );
+            } else {
+              out.push({
+                kind: "item",
+                prompt: promptForRow(d),
+                valueDisplay: exportValueDisplayWithComment(d, responses),
+                indent: sectionBodyIndent,
+              });
+            }
           }
         }
       }

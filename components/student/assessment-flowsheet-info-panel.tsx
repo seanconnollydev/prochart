@@ -1,15 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import type { AssessmentItem } from "@/lib/types/assessment-template";
+import type { AssessmentChoice } from "@/lib/types/assessment-template";
 import type { AssessmentItemResponse } from "@/lib/types/assessment-submission";
-import {
-  coerceFlowsheetMultiselectValue,
-  flowsheetMultiselectChoicesForItem,
-  isFlowsheetMultiselectPresentationItem,
-  isFlowsheetWdlGateItem,
-  segmentWdlDefinitionText,
-} from "@/lib/assessments/flowsheet";
+import { segmentWdlDefinitionText } from "@/lib/assessments/flowsheet";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -22,23 +16,25 @@ import { Cancel01Icon, QuillWrite02Icon } from "@hugeicons/core-free-icons";
 const COMMENT_MAX_LENGTH = 2000;
 
 function InfoPanelCommentSection({
-  item,
+  commentItemId,
+  promptLabel,
   responses,
   setItemComment,
 }: {
-  item: AssessmentItem;
+  commentItemId: string;
+  promptLabel: string;
   responses: Record<string, AssessmentItemResponse>;
   setItemComment: (itemId: string, comment: string | undefined) => void;
 }) {
   const [commentEditing, setCommentEditing] = useState(false);
   const [commentDraft, setCommentDraft] = useState("");
 
-  const storedCommentRaw = responses[item.id]?.comment;
+  const storedCommentRaw = responses[commentItemId]?.comment;
   const storedComment =
     typeof storedCommentRaw === "string" ? storedCommentRaw.trim() : "";
   const hasStoredComment = storedComment.length > 0;
 
-  const commentFieldId = `flowsheet-info-comment-${item.id}`;
+  const commentFieldId = `flowsheet-info-comment-${commentItemId}`;
 
   function beginAddComment() {
     setCommentDraft("");
@@ -51,7 +47,7 @@ function InfoPanelCommentSection({
   }
 
   function saveComment() {
-    setItemComment(item.id, commentDraft);
+    setItemComment(commentItemId, commentDraft);
     setCommentEditing(false);
     setCommentDraft("");
   }
@@ -69,7 +65,7 @@ function InfoPanelCommentSection({
       {commentEditing ? (
         <div className="space-y-2">
           <Label htmlFor={commentFieldId} className="sr-only">
-            Comment for {item.prompt}
+            Comment for {promptLabel}
           </Label>
           <Textarea
             id={commentFieldId}
@@ -139,30 +135,42 @@ function InfoPanelCommentSection({
   );
 }
 
+type OptionsProps = {
+  choices: AssessmentChoice[];
+  selectedIds: string[];
+  onChange: (ids: string[]) => void;
+  groupLabel: string;
+};
+
 type Props = {
   open: boolean;
-  item: AssessmentItem | null;
-  definition: string | null;
+  title: string;
   pathLine: string;
+  definition: string | null;
+  isWdlGate: boolean;
+  options: OptionsProps | null;
+  commentItemId: string | null;
   responses: Record<string, AssessmentItemResponse>;
-  setResponse: (itemId: string, value: AssessmentItemResponse["value"]) => void;
   setItemComment: (itemId: string, comment: string | undefined) => void;
   onClose: () => void;
 };
 
 export function AssessmentFlowsheetInfoPanel({
   open,
-  item,
-  definition,
+  title,
   pathLine,
+  definition,
+  isWdlGate,
+  options,
+  commentItemId,
   responses,
-  setResponse,
   setItemComment,
   onClose,
 }: Props) {
   const trimmedDefinition = definition?.trim() ?? "";
   const hasWdlDefinition = trimmedDefinition !== "";
   const wdlSegments = segmentWdlDefinitionText(trimmedDefinition);
+  const showBody = open && Boolean(title);
 
   return (
     <aside
@@ -174,7 +182,7 @@ export function AssessmentFlowsheetInfoPanel({
       )}
       aria-hidden={!open}
     >
-      {item ? (
+      {showBody ? (
         <div className="flex h-full min-h-0 min-w-[min(22rem,40vw)] flex-1 flex-col overflow-hidden">
           <div className="border-b px-3 py-2.5 shrink-0">
             <div className="flex items-start justify-between gap-2">
@@ -183,7 +191,7 @@ export function AssessmentFlowsheetInfoPanel({
                   {pathLine || "—"}
                 </p>
                 <p className="text-foreground mt-0.5 text-xs font-semibold leading-snug">
-                  {item.prompt}
+                  {title}
                 </p>
               </div>
               <Button
@@ -197,7 +205,7 @@ export function AssessmentFlowsheetInfoPanel({
                 <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} />
               </Button>
             </div>
-            {isFlowsheetWdlGateItem(item) ? (
+            {isWdlGate ? (
               <p className="text-muted-foreground mt-2 text-[10px] leading-snug">
                 WDL = Within defined limits.
               </p>
@@ -205,64 +213,47 @@ export function AssessmentFlowsheetInfoPanel({
           </div>
           <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
             <div className="p-3">
-              {isFlowsheetMultiselectPresentationItem(item)
-                ? (() => {
-                    const panelChoices =
-                      flowsheetMultiselectChoicesForItem(item);
-                    if (panelChoices.length === 0) {
-                      return null;
-                    }
-                    const selectedIds = coerceFlowsheetMultiselectValue(
-                      responses[item.id]?.value,
-                    );
-                    return (
-                      <>
-                        <p className="text-muted-foreground mb-2 text-[10px] font-medium tracking-wide uppercase">
-                          Options
-                        </p>
-                        <div
-                          className="mb-3 space-y-2"
-                          role="group"
-                          aria-label={`Options for ${item.prompt}`}
-                        >
-                          {panelChoices.map((ch) => {
-                            const checked = selectedIds.includes(ch.id);
-                            return (
-                              <div
-                                key={ch.id}
-                                className="flex items-center gap-2"
-                              >
-                                <Checkbox
-                                  id={`flowsheet-info-${item.id}-${ch.id}`}
-                                  checked={checked}
-                                  onCheckedChange={(c) => {
-                                    const next = new Set(selectedIds);
-                                    if (c === true) {
-                                      next.add(ch.id);
-                                    } else {
-                                      next.delete(ch.id);
-                                    }
-                                    setResponse(item.id, [...next]);
-                                  }}
-                                  className="cursor-pointer"
-                                />
-                                <Label
-                                  htmlFor={`flowsheet-info-${item.id}-${ch.id}`}
-                                  className="text-foreground cursor-pointer text-xs font-normal leading-snug"
-                                >
-                                  {ch.label}
-                                </Label>
-                              </div>
-                            );
-                          })}
+              {options && options.choices.length > 0 ? (
+                <>
+                  <p className="text-muted-foreground mb-2 text-[10px] font-medium tracking-wide uppercase">
+                    Options
+                  </p>
+                  <div
+                    className="mb-3 space-y-2"
+                    role="group"
+                    aria-label={options.groupLabel}
+                  >
+                    {options.choices.map((ch) => {
+                      const checked = options.selectedIds.includes(ch.id);
+                      return (
+                        <div key={ch.id} className="flex items-center gap-2">
+                          <Checkbox
+                            id={`flowsheet-info-${commentItemId ?? "row"}-${ch.id}`}
+                            checked={checked}
+                            onCheckedChange={(c) => {
+                              const next = new Set(options.selectedIds);
+                              if (c === true) {
+                                next.add(ch.id);
+                              } else {
+                                next.delete(ch.id);
+                              }
+                              options.onChange([...next]);
+                            }}
+                            className="cursor-pointer"
+                          />
+                          <Label
+                            htmlFor={`flowsheet-info-${commentItemId ?? "row"}-${ch.id}`}
+                            className="text-foreground cursor-pointer text-xs font-normal leading-snug"
+                          >
+                            {ch.label}
+                          </Label>
                         </div>
-                        {hasWdlDefinition ? (
-                          <Separator className="mb-3" />
-                        ) : null}
-                      </>
-                    );
-                  })()
-                : null}
+                      );
+                    })}
+                  </div>
+                  {hasWdlDefinition ? <Separator className="mb-3" /> : null}
+                </>
+              ) : null}
               {hasWdlDefinition ? (
                 <>
                   <p className="text-muted-foreground mb-2 text-[10px] font-medium leading-snug">
@@ -284,12 +275,15 @@ export function AssessmentFlowsheetInfoPanel({
             </div>
           </div>
 
-          <InfoPanelCommentSection
-            key={item.id}
-            item={item}
-            responses={responses}
-            setItemComment={setItemComment}
-          />
+          {commentItemId ? (
+            <InfoPanelCommentSection
+              key={commentItemId}
+              commentItemId={commentItemId}
+              promptLabel={title}
+              responses={responses}
+              setItemComment={setItemComment}
+            />
+          ) : null}
         </div>
       ) : null}
     </aside>

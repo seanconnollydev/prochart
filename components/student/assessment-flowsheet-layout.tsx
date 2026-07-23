@@ -1,7 +1,8 @@
 "use client";
 
-import { useCallback, useMemo, useState, type ReactNode } from "react";
+import { useCallback, useMemo, useState, type ReactElement, type ReactNode } from "react";
 import type {
+  AssessmentChoice,
   AssessmentItem,
   AssessmentTemplate,
 } from "@/lib/types/assessment-template";
@@ -10,21 +11,32 @@ import { groupPathLabels } from "@/lib/assessments/group-path";
 import {
   buildFlowsheetBlocks,
   coerceFlowsheetMultiselectValue,
+  coerceLocationScopedFindingValue,
+  findLocationScopedField,
   FLOWSHEET_EXCEPTION_CHOICE_ID,
   FLOWSHEET_EXCEPTION_CHOICE_LABEL,
   findSectionRollupGate,
   flowsheetMultiselectChoicesForItem,
   getFlowsheetItemIdsToClearWhenLeavingException,
+  getLocationScopedFieldValue,
   getTemplateStoredWdlDefinition,
   isFlowsheetExceptionSelected,
   isFlowsheetMultiselectPresentationItem,
   isFlowsheetWdlGateItem,
   isFlowsheetWdlXComboboxItem,
+  isLocationScopedItem,
+  locationChoiceLabel,
   prepareFlowsheetTemplate,
   segmentFlowsheetRowItems,
+  setLocationScopedFieldValue,
+  setLocationScopedLocations,
 } from "@/lib/assessments/flowsheet";
 import { AssessmentChoiceCombobox } from "@/components/student/assessment-choice-combobox";
 import { AssessmentFlowsheetInfoPanel } from "@/components/student/assessment-flowsheet-info-panel";
+import {
+  FlowsheetLocationScopedRows,
+  type LocationScopedInfoTarget,
+} from "@/components/student/assessment-flowsheet-location-scoped";
 import { AssessmentFlowsheetMultiselect } from "@/components/student/assessment-flowsheet-multiselect";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -49,6 +61,20 @@ type Props = {
   /** Merged onto the root layout wrapper (e.g. height constraints from the parent page). */
   className?: string;
 };
+
+type InfoPanelTarget =
+  | { kind: "item"; itemId: string }
+  | LocationScopedInfoTarget;
+
+function infoPanelTargetKey(target: InfoPanelTarget): string {
+  if (target.kind === "item") {
+    return `item:${target.itemId}`;
+  }
+  if (target.kind === "locations") {
+    return `locations:${target.itemId}`;
+  }
+  return `field:${target.itemId}:${target.locationId}:${target.fieldKey}`;
+}
 
 function FlowsheetItemTableRow({
   item,
@@ -88,7 +114,10 @@ function FlowsheetItemTableRow({
     item.responseType === "choice" && wdlGateCombo
       ? (item.choices ?? []).map((ch) => ({
           ...ch,
-          label: ch.id === FLOWSHEET_EXCEPTION_CHOICE_ID ? FLOWSHEET_EXCEPTION_CHOICE_LABEL : "WDL",
+          label:
+            ch.id === FLOWSHEET_EXCEPTION_CHOICE_ID
+              ? FLOWSHEET_EXCEPTION_CHOICE_LABEL
+              : "WDL",
         }))
       : [];
 
@@ -243,22 +272,111 @@ export function AssessmentFlowsheetLayout({
   const groups = useMemo(() => template.groups ?? [], [template.groups]);
   const items = template.items;
   const [railQuery, setRailQuery] = useState("");
-  const [infoPanelItemId, setInfoPanelItemId] = useState<string | null>(null);
+  const [infoPanelTarget, setInfoPanelTarget] = useState<InfoPanelTarget | null>(
+    null,
+  );
 
   function syncInfoPanelOnRowFocus(itemId: string) {
-    if (infoPanelItemId == null) return;
-    if (infoPanelItemId === itemId) return;
-    setInfoPanelItemId(itemId);
+    if (infoPanelTarget == null) return;
+    const next: InfoPanelTarget = { kind: "item", itemId };
+    if (infoPanelTargetKey(infoPanelTarget) === infoPanelTargetKey(next)) {
+      return;
+    }
+    setInfoPanelTarget(next);
   }
 
-  const infoPanelItem = infoPanelItemId
-    ? items.find((i) => i.id === infoPanelItemId)
-    : undefined;
-  const infoPanelDefinition =
-    infoPanelItem && getTemplateStoredWdlDefinition(infoPanelItem);
-  const infoPanelPathLine = infoPanelItem
-    ? groupPathLabels(groups, infoPanelItem.groupId).join(" → ")
-    : "";
+  function syncInfoPanelOnLocationScopedFocus(target: LocationScopedInfoTarget) {
+    if (infoPanelTarget == null) return;
+    if (infoPanelTargetKey(infoPanelTarget) === infoPanelTargetKey(target)) {
+      return;
+    }
+    setInfoPanelTarget(target);
+  }
+
+  const infoPanelView = useMemo(() => {
+    if (!infoPanelTarget) {
+      return null;
+    }
+    if (infoPanelTarget.kind === "item") {
+      const item = items.find((i) => i.id === infoPanelTarget.itemId);
+      if (!item) {
+        return null;
+      }
+      return {
+        title: item.prompt,
+        pathLine: groupPathLabels(groups, item.groupId).join(" → "),
+        definition: getTemplateStoredWdlDefinition(item),
+        isWdlGate: isFlowsheetWdlGateItem(item),
+        commentItemId: item.id,
+        options: isFlowsheetMultiselectPresentationItem(item)
+          ? {
+              choices: flowsheetMultiselectChoicesForItem(item),
+              selectedIds: coerceFlowsheetMultiselectValue(
+                responses[item.id]?.value,
+              ),
+              onChange: (ids: string[]) => setResponse(item.id, ids),
+              groupLabel: `Options for ${item.prompt}`,
+            }
+          : null,
+      };
+    }
+
+    const item = items.find((i) => i.id === infoPanelTarget.itemId);
+    if (!item || !isLocationScopedItem(item)) {
+      return null;
+    }
+    const pathLine = groupPathLabels(groups, item.groupId).join(" → ");
+    const scoped = coerceLocationScopedFindingValue(responses[item.id]?.value);
+
+    if (infoPanelTarget.kind === "locations") {
+      const choices = item.locationChoices ?? [];
+      return {
+        title: "Locations",
+        pathLine,
+        definition: null as string | null,
+        isWdlGate: false,
+        commentItemId: item.id,
+        options: {
+          choices,
+          selectedIds: scoped.map((e) => e.locationId),
+          onChange: (ids: string[]) =>
+            setResponse(item.id, setLocationScopedLocations(scoped, ids)),
+          groupLabel: "Options for Locations",
+        },
+      };
+    }
+
+    const field = findLocationScopedField(item, infoPanelTarget.fieldKey);
+    if (!field) {
+      return null;
+    }
+    const entry = scoped.find((e) => e.locationId === infoPanelTarget.locationId);
+    const locLabel = locationChoiceLabel(item, infoPanelTarget.locationId);
+    return {
+      title: field.prompt,
+      pathLine: pathLine ? `${pathLine} → ${locLabel}` : locLabel,
+      definition: field.wdlListDefinition?.trim()
+        ? field.wdlListDefinition
+        : null,
+      isWdlGate: false,
+      commentItemId: item.id,
+      options: {
+        choices: field.choices,
+        selectedIds: getLocationScopedFieldValue(entry, field.key),
+        onChange: (ids: string[]) =>
+          setResponse(
+            item.id,
+            setLocationScopedFieldValue(
+              scoped,
+              infoPanelTarget.locationId,
+              field.key,
+              ids,
+            ),
+          ),
+        groupLabel: `Options for ${field.prompt}`,
+      },
+    };
+  }, [groups, infoPanelTarget, items, responses, setResponse]);
 
   const rootGroups = useMemo(
     () => groups.filter((g) => g.parentGroupId === null),
@@ -333,6 +451,39 @@ export function AssessmentFlowsheetLayout({
     }
   }
 
+  function renderDetailItem(
+    d: AssessmentItem,
+    indentLevel: number,
+  ): ReactElement {
+    if (isLocationScopedItem(d)) {
+      return (
+        <FlowsheetLocationScopedRows
+          key={d.id}
+          item={d}
+          responses={responses}
+          setResponse={setResponse}
+          indentLevel={indentLevel}
+          onOpenInfo={setInfoPanelTarget}
+          onSyncInfoPanelOnFocus={syncInfoPanelOnLocationScopedFocus}
+        />
+      );
+    }
+    return (
+      <FlowsheetItemTableRow
+        key={d.id}
+        item={d}
+        indentLevel={indentLevel}
+        responses={responses}
+        setResponse={setResponse}
+        onWdlXChoiceChange={handleFlowsheetResponse}
+        onOpenInfoPanel={(itemId) =>
+          setInfoPanelTarget({ kind: "item", itemId })
+        }
+        onSyncInfoPanelOnFocus={syncInfoPanelOnRowFocus}
+      />
+    );
+  }
+
   return (
     <div
       className={cn(
@@ -398,7 +549,8 @@ export function AssessmentFlowsheetLayout({
                 responses,
                 setResponse,
                 onWdlXChoiceChange: handleFlowsheetResponse,
-                onOpenInfoPanel: setInfoPanelItemId,
+                onOpenInfoPanel: (itemId: string) =>
+                  setInfoPanelTarget({ kind: "item", itemId }),
                 onSyncInfoPanelOnFocus: syncInfoPanelOnRowFocus,
               };
 
@@ -422,7 +574,7 @@ export function AssessmentFlowsheetLayout({
                   {sectionExpanded
                     ? rowSegments.flatMap((seg) => {
                         if (seg.gate) {
-                          const out = [
+                          const out: ReactElement[] = [
                             <FlowsheetItemTableRow
                               key={seg.gate.id}
                               item={seg.gate}
@@ -435,25 +587,15 @@ export function AssessmentFlowsheetLayout({
                           ) {
                             for (const d of seg.details) {
                               out.push(
-                                <FlowsheetItemTableRow
-                                  key={d.id}
-                                  item={d}
-                                  indentLevel={sectionBodyIndent + 1}
-                                  {...rowProps}
-                                />,
+                                renderDetailItem(d, sectionBodyIndent + 1),
                               );
                             }
                           }
                           return out;
                         }
-                        return seg.details.map((d) => (
-                          <FlowsheetItemTableRow
-                            key={d.id}
-                            item={d}
-                            indentLevel={sectionBodyIndent}
-                            {...rowProps}
-                          />
-                        ));
+                        return seg.details.map((d) =>
+                          renderDetailItem(d, sectionBodyIndent),
+                        );
                       })
                     : null}
                 </TableBody>
@@ -463,14 +605,25 @@ export function AssessmentFlowsheetLayout({
         </div>
 
         <AssessmentFlowsheetInfoPanel
-          open={Boolean(infoPanelItemId)}
-          item={infoPanelItem ?? null}
-          definition={infoPanelDefinition ?? null}
-          pathLine={infoPanelPathLine}
+          open={Boolean(infoPanelView)}
+          title={infoPanelView?.title ?? ""}
+          pathLine={infoPanelView?.pathLine ?? ""}
+          definition={infoPanelView?.definition ?? null}
+          isWdlGate={infoPanelView?.isWdlGate ?? false}
+          options={
+            infoPanelView?.options
+              ? {
+                  choices: infoPanelView.options.choices as AssessmentChoice[],
+                  selectedIds: infoPanelView.options.selectedIds,
+                  onChange: infoPanelView.options.onChange,
+                  groupLabel: infoPanelView.options.groupLabel,
+                }
+              : null
+          }
+          commentItemId={infoPanelView?.commentItemId ?? null}
           responses={responses}
-          setResponse={setResponse}
           setItemComment={setItemComment}
-          onClose={() => setInfoPanelItemId(null)}
+          onClose={() => setInfoPanelTarget(null)}
         />
       </div>
     </div>

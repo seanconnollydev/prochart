@@ -4,8 +4,13 @@ import type {
   AssessmentGroup,
   AssessmentItem,
   AssessmentTemplate,
+  LocationScopedField,
 } from "@/lib/types/assessment-template";
-import type { AssessmentItemResponse } from "@/lib/types/assessment-submission";
+import type {
+  AssessmentItemResponse,
+  LocationScopedFindingEntry,
+  LocationScopedFindingValue,
+} from "@/lib/types/assessment-submission";
 
 /** Synthetic choice id appended to WDL gate rows for exception documentation. */
 export const FLOWSHEET_EXCEPTION_CHOICE_ID = "ch_exception";
@@ -24,6 +29,10 @@ export function isFlowsheetWdlGateItem(item: AssessmentItem): boolean {
 
 export function isFlowsheetWdlXComboboxItem(item: AssessmentItem): boolean {
   return isFlowsheetWdlGateItem(item);
+}
+
+export function isLocationScopedItem(item: AssessmentItem): boolean {
+  return item.responseType === "locationScoped";
 }
 
 /** Flowsheet grid + panel: multiselect UI for `multiChoice` and leaf (non-gate) `choice` rows. */
@@ -45,6 +54,110 @@ export function coerceFlowsheetMultiselectValue(raw: unknown): string[] {
     return [raw];
   }
   return [];
+}
+
+function isRecord(v: unknown): v is Record<string, unknown> {
+  return typeof v === "object" && v !== null && !Array.isArray(v);
+}
+
+/** Normalize stored `locationScoped` response value. */
+export function coerceLocationScopedFindingValue(
+  raw: unknown,
+): LocationScopedFindingValue {
+  if (!Array.isArray(raw)) {
+    return [];
+  }
+  const out: LocationScopedFindingValue = [];
+  for (const entry of raw) {
+    if (!isRecord(entry) || typeof entry.locationId !== "string") {
+      continue;
+    }
+    const fieldsRaw = entry.fields;
+    const fields: Record<string, string[]> = {};
+    if (isRecord(fieldsRaw)) {
+      for (const [k, v] of Object.entries(fieldsRaw)) {
+        fields[k] = coerceFlowsheetMultiselectValue(v);
+      }
+    }
+    out.push({ locationId: entry.locationId, fields });
+  }
+  return out;
+}
+
+/** Selected location ids from a location-scoped value (selection order). */
+export function locationScopedSelectedLocationIds(
+  value: LocationScopedFindingValue,
+): string[] {
+  return value.map((e) => e.locationId);
+}
+
+/**
+ * Sync location picker selection with nested field state: add empty entries for
+ * new locations (append order), drop removed locations and their fields.
+ */
+export function setLocationScopedLocations(
+  prev: LocationScopedFindingValue,
+  nextLocationIds: string[],
+): LocationScopedFindingValue {
+  const prevById = new Map(prev.map((e) => [e.locationId, e]));
+  const next: LocationScopedFindingValue = [];
+  for (const locationId of nextLocationIds) {
+    const existing = prevById.get(locationId);
+    if (existing) {
+      next.push(existing);
+    } else {
+      next.push({ locationId, fields: {} });
+    }
+  }
+  return next;
+}
+
+/** Update one nested field's multiselect under a location. */
+export function setLocationScopedFieldValue(
+  prev: LocationScopedFindingValue,
+  locationId: string,
+  fieldKey: string,
+  choiceIds: string[],
+): LocationScopedFindingValue {
+  return prev.map((entry) => {
+    if (entry.locationId !== locationId) {
+      return entry;
+    }
+    return {
+      ...entry,
+      fields: {
+        ...entry.fields,
+        [fieldKey]: choiceIds,
+      },
+    };
+  });
+}
+
+export function getLocationScopedFieldValue(
+  entry: LocationScopedFindingEntry | undefined,
+  fieldKey: string,
+): string[] {
+  if (!entry) {
+    return [];
+  }
+  return coerceFlowsheetMultiselectValue(entry.fields[fieldKey]);
+}
+
+export function locationChoiceLabel(
+  item: AssessmentItem,
+  locationId: string,
+): string {
+  return (
+    (item.locationChoices ?? []).find((c) => c.id === locationId)?.label ??
+    locationId
+  );
+}
+
+export function findLocationScopedField(
+  item: AssessmentItem,
+  fieldKey: string,
+): LocationScopedField | undefined {
+  return (item.locationScopedFields ?? []).find((f) => f.key === fieldKey);
 }
 
 /** Multiselect options for flowsheet UI. */

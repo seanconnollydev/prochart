@@ -11,8 +11,18 @@ export type AssessmentResponseType =
   | "boolean"
   | "choice"
   | "multiChoice"
+  | "locationScoped"
   | "text"
   | string;
+
+/** One nested multiselect field under a location-scoped item (e.g. Skin Integrity). */
+export type LocationScopedField = {
+  key: string;
+  prompt: string;
+  choices: AssessmentChoice[];
+  /** Optional WDL narrative shown in the flowsheet info panel. */
+  wdlListDefinition?: string;
+};
 
 /** One node in the section-heading tree (flat list + parent pointers). */
 export type AssessmentGroup = {
@@ -35,6 +45,10 @@ export type AssessmentItem = {
   flowsheetSectionAggregateWdlDefinition?: string;
   /** Flowsheet: WDL narrative for multiselect exception rows (not stored as a `WDL=` choice). */
   wdlListDefinition?: string;
+  /** Anatomical sites for `locationScoped` items (location-first findings). */
+  locationChoices?: AssessmentChoice[];
+  /** Nested multiselect fields documented per selected location. */
+  locationScopedFields?: LocationScopedField[];
 };
 
 export type AssessmentTemplate = {

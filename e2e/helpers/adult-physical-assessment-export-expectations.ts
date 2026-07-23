@@ -25,6 +25,9 @@ export type AdultPhysicalAssessmentExportScenario = {
   commentText: string;
   multiRowPrompt: string;
   multiChoiceLabel: string;
+  skinLocationLabel?: string;
+  skinIntegrityChoiceLabel?: string;
+  skinColorChoiceLabel?: string;
 };
 
 /** Collapses whitespace like PDF/text extractors typically do across line breaks and cells. */
@@ -105,6 +108,52 @@ function scenarioResponsesFromTemplate(
     );
   }
   responses[abdomen.id] = { value: [distended.id] };
+
+  if (
+    scenario.skinLocationLabel &&
+    scenario.skinIntegrityChoiceLabel &&
+    scenario.skinColorChoiceLabel
+  ) {
+    const skinScoped = prepared.items.find(
+      (i) => i.responseType === "locationScoped",
+    );
+    if (!skinScoped?.id) {
+      throw new Error(
+        "Adult physical assessment export scenario: missing locationScoped Skin item.",
+      );
+    }
+    const location = skinScoped.locationChoices?.find(
+      (c) => c.label === scenario.skinLocationLabel,
+    );
+    const integrityField = skinScoped.locationScopedFields?.find(
+      (f) => f.key === "integrity",
+    );
+    const colorField = skinScoped.locationScopedFields?.find(
+      (f) => f.key === "color",
+    );
+    const bruising = integrityField?.choices.find(
+      (c) => c.label === scenario.skinIntegrityChoiceLabel,
+    );
+    const pale = colorField?.choices.find(
+      (c) => c.label === scenario.skinColorChoiceLabel,
+    );
+    if (!location?.id || !bruising?.id || !pale?.id) {
+      throw new Error(
+        "Adult physical assessment export scenario: Skin location/integrity/color choice missing.",
+      );
+    }
+    responses[skinScoped.id] = {
+      value: [
+        {
+          locationId: location.id,
+          fields: {
+            integrity: [bruising.id],
+            color: [pale.id],
+          },
+        },
+      ],
+    };
+  }
 
   const rollup = prepared.items.find(
     (it) =>

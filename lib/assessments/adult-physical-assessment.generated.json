@@ -3,8 +3,8 @@
   "id": "adult_physical_assessment_v1",
   "title": "Adult Physical Assessment",
   "description": "Adult physical assessment — grouped by body system and sub-system.",
-  "createdAt": "2026-07-23T21:07:38.304Z",
-  "updatedAt": "2026-07-23T21:07:38.304Z",
+  "createdAt": "2026-07-23T21:33:19.007Z",
+  "updatedAt": "2026-07-23T21:33:19.007Z",
   "status": "published",
   "groups": [
     {
@@ -3264,218 +3264,6 @@
       "flowsheetSectionAggregateWdlDefinition": "No symptoms reported  (output is documented in I/0, use Zero in I/o for anuria, bladder scanner results in I/O, incontinence might also be in I/O...needs discussion or keep here?)"
     },
     {
-      "id": "itm_f634cdc0900b44ce",
-      "groupId": "grp_23c7579f5e2bfbb1",
-      "prompt": "Locations",
-      "responseType": "choice",
-      "choices": [
-        {
-          "id": "ch_8dbc23da6994a975",
-          "label": "Abdomen"
-        },
-        {
-          "id": "ch_0df82708ff8ee0a9",
-          "label": "Anus"
-        },
-        {
-          "id": "ch_c4d355933394a56f",
-          "label": "Back"
-        },
-        {
-          "id": "ch_1288738f26f1e93a",
-          "label": "Buttocks"
-        },
-        {
-          "id": "ch_4bb8018760bc61a0",
-          "label": "Chest"
-        },
-        {
-          "id": "ch_4b11acd67c180d74",
-          "label": "Face"
-        },
-        {
-          "id": "ch_6917f9259c37663d",
-          "label": "Flank"
-        },
-        {
-          "id": "ch_4a637f44fb8e4a5f",
-          "label": "Genitalia"
-        },
-        {
-          "id": "ch_f984164b0f5e2b78",
-          "label": "Head"
-        },
-        {
-          "id": "ch_81c9661f2a9468b8",
-          "label": "L foot"
-        },
-        {
-          "id": "ch_a04cb96baaab96b8",
-          "label": "L forearm"
-        },
-        {
-          "id": "ch_f5516334be0fdca1",
-          "label": "L hand"
-        },
-        {
-          "id": "ch_7b266c5ecf272f65",
-          "label": "L hip"
-        },
-        {
-          "id": "ch_1b4a0802e39a4b42",
-          "label": "L lower leg"
-        },
-        {
-          "id": "ch_227dab62311c8270",
-          "label": "L shoulder"
-        },
-        {
-          "id": "ch_6399b13d7fad82a1",
-          "label": "L upper arm"
-        },
-        {
-          "id": "ch_d4b6350e6eb27397",
-          "label": "L upper leg"
-        },
-        {
-          "id": "ch_52fe33e92d55477e",
-          "label": "Neck"
-        },
-        {
-          "id": "ch_bd2595127b8d702b",
-          "label": "Pelvis"
-        },
-        {
-          "id": "ch_0475ecd1f7b44fb8",
-          "label": "R foot"
-        },
-        {
-          "id": "ch_d54817678080ac78",
-          "label": "R forearm"
-        },
-        {
-          "id": "ch_421847f6d9cec917",
-          "label": "R hand"
-        },
-        {
-          "id": "ch_5d224440281e7529",
-          "label": "R hip"
-        },
-        {
-          "id": "ch_c9f39a4e29e243b5",
-          "label": "R lower leg"
-        },
-        {
-          "id": "ch_743f90cce0b8d208",
-          "label": "R shoulder"
-        },
-        {
-          "id": "ch_71020c24964845a6",
-          "label": "R upper arm"
-        },
-        {
-          "id": "ch_8ef170da39394a79",
-          "label": "R upper leg"
-        }
-      ]
-    },
-    {
-      "id": "itm_5d7ec004e60ef10b",
-      "groupId": "grp_23c7579f5e2bfbb1",
-      "prompt": "Skin Integrity Exceptions (Minor findings when LDA not needed)",
-      "responseType": "choice",
-      "choices": [
-        {
-          "id": "ch_38603b119f742840",
-          "label": "Bruising"
-        },
-        {
-          "id": "ch_834091f525a07834",
-          "label": "Drainage"
-        },
-        {
-          "id": "ch_d85f2be5ccd75a76",
-          "label": "Flaky"
-        },
-        {
-          "id": "ch_3aac14e519b6c806",
-          "label": "Hematoma"
-        },
-        {
-          "id": "ch_f830a5172469f2c4",
-          "label": "Hemorrhoid(s)"
-        },
-        {
-          "id": "ch_0b6f388c00b33974",
-          "label": "Hives"
-        },
-        {
-          "id": "ch_18b17b0fd818a4ed",
-          "label": "Lesion(s)"
-        },
-        {
-          "id": "ch_f9047c02212eb2e0",
-          "label": "Mass(es) or bulge(s)"
-        },
-        {
-          "id": "ch_f522822cc372cf5d",
-          "label": "Peeling"
-        },
-        {
-          "id": "ch_0f0d72435fc3e3eb",
-          "label": "Petechiae"
-        },
-        {
-          "id": "ch_e5855347ff6d3edb",
-          "label": "Pustule"
-        },
-        {
-          "id": "ch_15e9342c2bad71c6",
-          "label": "Rash (including as more general term than hives)"
-        },
-        {
-          "id": "ch_f6cc35bc60272aa9",
-          "label": "Redness"
-        },
-        {
-          "id": "ch_83550b265e1cd337",
-          "label": "Scaling"
-        },
-        {
-          "id": "ch_6135c67132820be6",
-          "label": "Superficial Abrasion (includes scratches)"
-        },
-        {
-          "id": "ch_4f47b35292f64514",
-          "label": "Swelling"
-        },
-        {
-          "id": "ch_1862cd93c2baf27d",
-          "label": "Weeping"
-        }
-      ]
-    },
-    {
-      "id": "itm_dce88477a123192a",
-      "groupId": "grp_23c7579f5e2bfbb1",
-      "prompt": "Skin Symptom",
-      "responseType": "choice",
-      "choices": [
-        {
-          "id": "ch_a6a93e9a0f6455c7",
-          "label": "Clammy"
-        },
-        {
-          "id": "ch_a3e33b5ccaacd615",
-          "label": "Diaphoretic"
-        },
-        {
-          "id": "ch_ede83acba4807263",
-          "label": "Itchy"
-        }
-      ]
-    },
-    {
       "id": "itm_80a4c27cc9f4712a",
       "groupId": "grp_23c7579f5e2bfbb1",
       "prompt": "Skin WDL",
@@ -3490,58 +3278,264 @@
       "flowsheetSectionAggregateWdlDefinition": "Warm, dry, intact, with appropriate, even tone. No generalized skin abnormalities. No minor skin integrity findings (see table).  Major skin findings documented in LDA."
     },
     {
-      "id": "itm_4c3bd43057c46ae6",
+      "id": "itm_c33b0c0d081b6fc4",
       "groupId": "grp_23c7579f5e2bfbb1",
-      "prompt": "General Skin Color",
-      "responseType": "multiChoice",
-      "choices": [
+      "prompt": "Skin findings by location",
+      "responseType": "locationScoped",
+      "locationChoices": [
         {
-          "id": "ch_64cbe30773bfb81b",
-          "label": "Dusky"
+          "id": "ch_4819a459a359ccf8",
+          "label": "Abdomen"
         },
         {
-          "id": "ch_62bbe8cd3ed6a675",
-          "label": "Generalized cyanosis"
+          "id": "ch_9ce035caea1810bf",
+          "label": "Anus"
         },
         {
-          "id": "ch_fc915d714c5b4752",
-          "label": "Jaundiced"
+          "id": "ch_b66b16f91876abac",
+          "label": "Back"
         },
         {
-          "id": "ch_31f0421b386229d2",
-          "label": "Mottled"
+          "id": "ch_ee661273b75152fc",
+          "label": "Buttocks"
         },
         {
-          "id": "ch_77934043e6c47627",
-          "label": "Pale"
+          "id": "ch_0493b285ce6e127d",
+          "label": "Chest"
         },
         {
-          "id": "ch_d21dec398c842e67",
-          "label": "Ruddy"
+          "id": "ch_1c5c564ab11ea470",
+          "label": "Face"
+        },
+        {
+          "id": "ch_389b4c5c6cdd7703",
+          "label": "Flank"
+        },
+        {
+          "id": "ch_e18b2367a3e60c57",
+          "label": "Genitalia"
+        },
+        {
+          "id": "ch_68cb543bc44b8555",
+          "label": "Head"
+        },
+        {
+          "id": "ch_065f60f7e13e33ed",
+          "label": "L foot"
+        },
+        {
+          "id": "ch_bf6f61d92404a52d",
+          "label": "L forearm"
+        },
+        {
+          "id": "ch_fc1bef17cc7278ce",
+          "label": "L hand"
+        },
+        {
+          "id": "ch_894ef411a3c3af0f",
+          "label": "L hip"
+        },
+        {
+          "id": "ch_a6bd676d6750f1e0",
+          "label": "L lower leg"
+        },
+        {
+          "id": "ch_fbff873d1817d636",
+          "label": "L shoulder"
+        },
+        {
+          "id": "ch_42fe935f330e16f5",
+          "label": "L upper arm"
+        },
+        {
+          "id": "ch_d80a6041149c3fe0",
+          "label": "L upper leg"
+        },
+        {
+          "id": "ch_a6224ea756c9722d",
+          "label": "Neck"
+        },
+        {
+          "id": "ch_c55525a8d864e121",
+          "label": "Pelvis"
+        },
+        {
+          "id": "ch_c168d9f7097264a0",
+          "label": "R foot"
+        },
+        {
+          "id": "ch_35a2d91ddd21b1df",
+          "label": "R forearm"
+        },
+        {
+          "id": "ch_b7a563140b70f0e6",
+          "label": "R hand"
+        },
+        {
+          "id": "ch_e1a6b80d1e969e67",
+          "label": "R hip"
+        },
+        {
+          "id": "ch_809349837ac3521d",
+          "label": "R lower leg"
+        },
+        {
+          "id": "ch_0326b6a9ef32621f",
+          "label": "R shoulder"
+        },
+        {
+          "id": "ch_52af71a676e1f189",
+          "label": "R upper arm"
+        },
+        {
+          "id": "ch_6427d853816e1000",
+          "label": "R upper leg"
         }
       ],
-      "wdlListDefinition": "Appropriate, even tone, No generalized skin abnormalities"
-    },
-    {
-      "id": "itm_be6380b56a7cfda6",
-      "groupId": "grp_23c7579f5e2bfbb1",
-      "prompt": "Skin Temp",
-      "responseType": "multiChoice",
-      "choices": [
+      "locationScopedFields": [
         {
-          "id": "ch_7a81dc38d8158261",
-          "label": "Cold"
+          "key": "integrity",
+          "prompt": "Skin Integrity Exceptions (Minor findings when LDA not needed)",
+          "choices": [
+            {
+              "id": "ch_9cff3706152b3742",
+              "label": "Bruising"
+            },
+            {
+              "id": "ch_57fab982cbcdbd91",
+              "label": "Drainage"
+            },
+            {
+              "id": "ch_639db9d02e6b7ad6",
+              "label": "Flaky"
+            },
+            {
+              "id": "ch_72b8ef633e1e116a",
+              "label": "Hematoma"
+            },
+            {
+              "id": "ch_4f042597bb2575eb",
+              "label": "Hemorrhoid(s)"
+            },
+            {
+              "id": "ch_68a021124cf43507",
+              "label": "Hives"
+            },
+            {
+              "id": "ch_88abaad762f6723d",
+              "label": "Lesion(s)"
+            },
+            {
+              "id": "ch_c36f5fd844a59f73",
+              "label": "Mass(es) or bulge(s)"
+            },
+            {
+              "id": "ch_f2c240f6b75d46ed",
+              "label": "Peeling"
+            },
+            {
+              "id": "ch_44cdeaf13aa64d0e",
+              "label": "Petechiae"
+            },
+            {
+              "id": "ch_e5957cc4a78d37de",
+              "label": "Pustule"
+            },
+            {
+              "id": "ch_b14fc855cd694286",
+              "label": "Rash (including as more general term than hives)"
+            },
+            {
+              "id": "ch_367a509792b04134",
+              "label": "Redness"
+            },
+            {
+              "id": "ch_c52caf850d0f938a",
+              "label": "Scaling"
+            },
+            {
+              "id": "ch_98eb01e0608a4f9e",
+              "label": "Superficial Abrasion (includes scratches)"
+            },
+            {
+              "id": "ch_ae9df6e968d02b8b",
+              "label": "Swelling"
+            },
+            {
+              "id": "ch_54dacd3e19352a29",
+              "label": "Weeping"
+            }
+          ]
         },
         {
-          "id": "ch_9a6f2f30cb09510c",
-          "label": "Cool"
+          "key": "symptom",
+          "prompt": "Skin Symptom",
+          "choices": [
+            {
+              "id": "ch_7d162c19414191ab",
+              "label": "Clammy"
+            },
+            {
+              "id": "ch_c680c1634efb30b0",
+              "label": "Diaphoretic"
+            },
+            {
+              "id": "ch_17f5d9b0251421e1",
+              "label": "Itchy"
+            }
+          ]
         },
         {
-          "id": "ch_1a6448e5d900b8ef",
-          "label": "Hot"
+          "key": "color",
+          "prompt": "General Skin Color",
+          "choices": [
+            {
+              "id": "ch_654ee6f678cfb4e2",
+              "label": "Dusky"
+            },
+            {
+              "id": "ch_150008b2d1030be2",
+              "label": "Generalized cyanosis"
+            },
+            {
+              "id": "ch_2fbeeffa51da26ce",
+              "label": "Jaundiced"
+            },
+            {
+              "id": "ch_aff6592175a50ef3",
+              "label": "Mottled"
+            },
+            {
+              "id": "ch_28053a465eb2edca",
+              "label": "Pale"
+            },
+            {
+              "id": "ch_26152c2264bdb341",
+              "label": "Ruddy"
+            }
+          ],
+          "wdlListDefinition": "Appropriate, even tone, No generalized skin abnormalities"
+        },
+        {
+          "key": "temp",
+          "prompt": "Skin Temp",
+          "choices": [
+            {
+              "id": "ch_a28e9c91170d9e78",
+              "label": "Cold"
+            },
+            {
+              "id": "ch_694c34d296c16dc8",
+              "label": "Cool"
+            },
+            {
+              "id": "ch_21aa975a3989cdeb",
+              "label": "Hot"
+            }
+          ],
+          "wdlListDefinition": "Warm, dry, intact, with appropriate, even tone. No generalized skin abnormalities. No minor skin integrity findings (see table).  Major skin findings documented in LDA."
         }
-      ],
-      "wdlListDefinition": "Warm, dry, intact, with appropriate, even tone. No generalized skin abnormalities. No minor skin integrity findings (see table).  Major skin findings documented in LDA."
+      ]
     },
     {
       "id": "itm_3c1bf28c5d9b9a11",
