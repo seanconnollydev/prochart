@@ -3,8 +3,8 @@
   "id": "adult_physical_assessment_v1",
   "title": "Adult Physical Assessment",
   "description": "Adult physical assessment — grouped by body system and sub-system.",
-  "createdAt": "2026-07-23T21:07:38.304Z",
-  "updatedAt": "2026-07-23T21:07:38.304Z",
+  "createdAt": "2026-07-23T22:30:56.829Z",
+  "updatedAt": "2026-07-23T22:30:56.829Z",
   "status": "published",
   "groups": [
     {
@@ -102,11 +102,11 @@
       "flowsheetSectionRollup": true,
       "choices": [
         {
-          "id": "ch_fc011545cabfd6aa",
-          "label": "Alert, oriented x4.  Appropriate for age.  Face is symmetrical.  Follows commands, no memory loss noted or reported (document formal memory assessment separately if completed). No difficulities swallowing.  Pupils equal, reactive, and round.  Speech is clear."
+          "id": "ch_cf7087bb249d089e",
+          "label": "Alert, oriented x4. Appropriate for age. Face is symmetrical. Follows commands, no memory loss noted or reported (document formal memory assessment separately if completed). No difficulities swallowing. Pupils equal, reactive, and round. Speech is clear."
         }
       ],
-      "flowsheetSectionAggregateWdlDefinition": "Alert, oriented x4.  Appropriate for age.  Face is symmetrical.  Follows commands, no memory loss noted or reported (document formal memory assessment separately if completed). No difficulities swallowing.  Pupils equal, reactive, and round.  Speech is clear."
+      "flowsheetSectionAggregateWdlDefinition": "Alert, oriented x4. Appropriate for age. Face is symmetrical. Follows commands, no memory loss noted or reported (document formal memory assessment separately if completed). No difficulities swallowing. Pupils equal, reactive, and round. Speech is clear."
     },
     {
       "id": "itm_c7b23483eace271a",
@@ -427,7 +427,7 @@
           "label": "Weakness"
         }
       ],
-      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists.  Full range of motion."
+      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists. Full range of motion."
     },
     {
       "id": "itm_161d7ddf57ae6783",
@@ -505,7 +505,7 @@
           "label": "Weakness"
         }
       ],
-      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists.  Full range of motion."
+      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists. Full range of motion."
     },
     {
       "id": "itm_c95e363778c74343",
@@ -554,7 +554,7 @@
           "label": "Weakness"
         }
       ],
-      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists.  Full range of motion."
+      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists. Full range of motion."
     },
     {
       "id": "itm_57460b5facb2add8",
@@ -603,7 +603,7 @@
           "label": "Weakness"
         }
       ],
-      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists.  Full range of motion."
+      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists. Full range of motion."
     },
     {
       "id": "itm_f04336aa3cba7a70",
@@ -653,7 +653,7 @@
           "label": "Ruddy"
         }
       ],
-      "wdlListDefinition": "Appropriate, even tone.  No generalized skin abnormalities."
+      "wdlListDefinition": "Appropriate, even tone. No generalized skin abnormalities."
     },
     {
       "id": "itm_aa025ae7d0357b54",
@@ -798,7 +798,7 @@
           "label": "Weakness"
         }
       ],
-      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists.  Full range of motion."
+      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists. Full range of motion."
     },
     {
       "id": "itm_dd5920031fa3d8f4",
@@ -889,7 +889,7 @@
           "label": "Ruddy"
         }
       ],
-      "wdlListDefinition": "Appropriate, even tone.  No generalized skin abnormalities."
+      "wdlListDefinition": "Appropriate, even tone. No generalized skin abnormalities."
     },
     {
       "id": "itm_b322c4aee0549f5a",
@@ -1038,7 +1038,7 @@
           "label": "Weakness"
         }
       ],
-      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists.  Full range of motion."
+      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists. Full range of motion."
     },
     {
       "id": "itm_9dcb31cb0c27f1b7",
@@ -1087,7 +1087,7 @@
           "label": "Weakness"
         }
       ],
-      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists.  Full range of motion."
+      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists. Full range of motion."
     },
     {
       "id": "itm_652c3b1effbc3ced",
@@ -1136,7 +1136,7 @@
           "label": "Weakness"
         }
       ],
-      "wdlListDefinition": "No swelling, pain, weakness or injury in extremities, ankles, elbows, fingers, hips, knees, shoulders, toes, and wrists.  Full range of motion."
+      "wdlListDefinition": "No swelling, pain, weakness or injury in extremities, ankles, elbows, fingers, hips, knees, shoulders, toes, and wrists. Full range of motion."
     },
     {
       "id": "itm_fca30678672d90b9",
@@ -1214,7 +1214,7 @@
           "label": "Weakness"
         }
       ],
-      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists.  Full range of motion."
+      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists. Full range of motion."
     },
     {
       "id": "itm_05431da13f2a4c13",
@@ -1263,7 +1263,7 @@
           "label": "Weakness"
         }
       ],
-      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists.  Full range of motion."
+      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists. Full range of motion."
     },
     {
       "id": "itm_edf9161a799225a4",
@@ -1324,7 +1324,7 @@
           "label": "Weakness"
         }
       ],
-      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists.  Full range of motion."
+      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists. Full range of motion."
     },
     {
       "id": "itm_f0aa45175ad90352",
@@ -1402,7 +1402,7 @@
           "label": "Weakness"
         }
       ],
-      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists.  Full range of motion."
+      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists. Full range of motion."
     },
     {
       "id": "itm_b8f664b96c09dcce",
@@ -1451,7 +1451,7 @@
           "label": "Weakness"
         }
       ],
-      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists.  Full range of motion."
+      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists. Full range of motion."
     },
     {
       "id": "itm_bebbeb9c185f5fa7",
@@ -1500,7 +1500,7 @@
           "label": "Weakness"
         }
       ],
-      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists.  Full range of motion."
+      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists. Full range of motion."
     },
     {
       "id": "itm_019bef1596ec5957",
@@ -1550,7 +1550,7 @@
           "label": "Ruddy"
         }
       ],
-      "wdlListDefinition": "Appropriate, even tone.  No generalized skin abnormalities."
+      "wdlListDefinition": "Appropriate, even tone. No generalized skin abnormalities."
     },
     {
       "id": "itm_53862b53feded55a",
@@ -1724,7 +1724,7 @@
           "label": "Weakness"
         }
       ],
-      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists.  Full range of motion."
+      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists. Full range of motion."
     },
     {
       "id": "itm_c481ead4ceee96a8",
@@ -1935,7 +1935,7 @@
           "label": "Weakness"
         }
       ],
-      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists.  Full range of motion."
+      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists. Full range of motion."
     },
     {
       "id": "itm_52eb63a11583fb30",
@@ -1984,7 +1984,7 @@
           "label": "Limited Movement"
         }
       ],
-      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists.  Full range of motion."
+      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists. Full range of motion."
     },
     {
       "id": "itm_2b147021521d20b5",
@@ -2062,7 +2062,7 @@
           "label": "Weakness"
         }
       ],
-      "wdlListDefinition": "No swelling, pain, weakness or injury in extremities, ankles, elbows, fingers, hips, knees, shoulders, toes, and wrists.  Full range of motion."
+      "wdlListDefinition": "No swelling, pain, weakness or injury in extremities, ankles, elbows, fingers, hips, knees, shoulders, toes, and wrists. Full range of motion."
     },
     {
       "id": "itm_8ef93c71c8dadd8f",
@@ -2111,7 +2111,7 @@
           "label": "Weakness"
         }
       ],
-      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists.  Full range of motion."
+      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists. Full range of motion."
     },
     {
       "id": "itm_705283e1e94d6c54",
@@ -2160,7 +2160,7 @@
           "label": "Weakness"
         }
       ],
-      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists.  Full range of motion."
+      "wdlListDefinition": "No swelling, pain, weakness, or injury in extremities, ankles, back, chest, elbows, fingers, hips, knees, shoulders, toes, trunk, and wrists. Full range of motion."
     },
     {
       "id": "itm_c38a2ccc76b759f6",
@@ -2209,7 +2209,7 @@
           "label": "Weakness"
         }
       ],
-      "wdlListDefinition": "No swelling, pain, weakness or injury in back.  Full range of motion"
+      "wdlListDefinition": "No swelling, pain, weakness or injury in back. Full range of motion"
     },
     {
       "id": "itm_f0ac14391dfd5e79",
@@ -2246,7 +2246,7 @@
           "label": "Paralysis"
         }
       ],
-      "wdlListDefinition": "No swelling, pain, weakness or injury in C-spine.  Full range of motion"
+      "wdlListDefinition": "No swelling, pain, weakness or injury in C-spine. Full range of motion"
     },
     {
       "id": "itm_3d17d4c4cd782422",
@@ -2283,7 +2283,7 @@
           "label": "Weakness"
         }
       ],
-      "wdlListDefinition": "No swelling, pain, weakness or injury in L-spine.  Full range of motion"
+      "wdlListDefinition": "No swelling, pain, weakness or injury in L-spine. Full range of motion"
     },
     {
       "id": "itm_24c20f03108ce777",
@@ -2293,11 +2293,11 @@
       "flowsheetSectionRollup": true,
       "choices": [
         {
-          "id": "ch_db9c51175e18d63e",
-          "label": "No bleeding, trauma, drainage, congestion, dryness, redness, swelling, or tenderness. Mucosa and lips intact.  Neck symmetrical, soft.  No acute hearing changes, tinnitus or ear obstruction.  No involuntary movements in head and face.  Sclera white, no eye drooping, no acute vision change. Voice intact"
+          "id": "ch_133f937335b81eb7",
+          "label": "No bleeding, trauma, drainage, congestion, dryness, redness, swelling, or tenderness. Mucosa and lips intact. Neck symmetrical, soft. No acute hearing changes, tinnitus or ear obstruction. No involuntary movements in head and face. Sclera white, no eye drooping, no acute vision change. Voice intact"
         }
       ],
-      "flowsheetSectionAggregateWdlDefinition": "No bleeding, trauma, drainage, congestion, dryness, redness, swelling, or tenderness. Mucosa and lips intact.  Neck symmetrical, soft.  No acute hearing changes, tinnitus or ear obstruction.  No involuntary movements in head and face.  Sclera white, no eye drooping, no acute vision change. Voice intact"
+      "flowsheetSectionAggregateWdlDefinition": "No bleeding, trauma, drainage, congestion, dryness, redness, swelling, or tenderness. Mucosa and lips intact. Neck symmetrical, soft. No acute hearing changes, tinnitus or ear obstruction. No involuntary movements in head and face. Sclera white, no eye drooping, no acute vision change. Voice intact"
     },
     {
       "id": "itm_0334977a5548a19b",
@@ -2351,7 +2351,7 @@
           "label": "Tinnitus"
         }
       ],
-      "wdlListDefinition": "No drainage, Redness, swelling, obstruction.  No acute hearing changes"
+      "wdlListDefinition": "No drainage, Redness, swelling, obstruction. No acute hearing changes"
     },
     {
       "id": "itm_0993e4f6459b5c72",
@@ -2521,7 +2521,7 @@
           "label": "Nasal Dryness"
         }
       ],
-      "wdlListDefinition": "No drainage, congestion, dryness, postnasal drip.  No involuntary movements in head and face"
+      "wdlListDefinition": "No drainage, congestion, dryness, postnasal drip. No involuntary movements in head and face"
     },
     {
       "id": "itm_ca382c779aac5447",
@@ -2554,7 +2554,7 @@
           "label": "Tinnitus"
         }
       ],
-      "wdlListDefinition": "No drainage, Redness, swelling, obstruction.  No acute hearing changes"
+      "wdlListDefinition": "No drainage, Redness, swelling, obstruction. No acute hearing changes"
     },
     {
       "id": "itm_f723c1c337baf608",
@@ -2609,11 +2609,11 @@
       "flowsheetSectionRollup": true,
       "choices": [
         {
-          "id": "ch_a9a68bffcaa2f60d",
-          "label": "Chest excursion and trachea symmetrical.  No cough.  No sputum.  Clear lung sounds.  Unlabored, no shortness of breath, no retractions.  Regular respiratory pattern."
+          "id": "ch_7297939cfd8c85ca",
+          "label": "Chest excursion and trachea symmetrical. No cough. No sputum. Clear lung sounds. Unlabored, no shortness of breath, no retractions. Regular respiratory pattern."
         }
       ],
-      "flowsheetSectionAggregateWdlDefinition": "Chest excursion and trachea symmetrical.  No cough.  No sputum.  Clear lung sounds.  Unlabored, no shortness of breath, no retractions.  Regular respiratory pattern."
+      "flowsheetSectionAggregateWdlDefinition": "Chest excursion and trachea symmetrical. No cough. No sputum. Clear lung sounds. Unlabored, no shortness of breath, no retractions. Regular respiratory pattern."
     },
     {
       "id": "itm_8915321db33fa560",
@@ -3047,11 +3047,11 @@
       "flowsheetSectionRollup": true,
       "choices": [
         {
-          "id": "ch_ff857266eebc358e",
-          "label": "No cardiac symptoms. Regular rate.  S1, S2, no adventitious heart sounds."
+          "id": "ch_8a208aac0779bc46",
+          "label": "No cardiac symptoms. Regular rate. S1, S2, no adventitious heart sounds."
         }
       ],
-      "flowsheetSectionAggregateWdlDefinition": "No cardiac symptoms. Regular rate.  S1, S2, no adventitious heart sounds."
+      "flowsheetSectionAggregateWdlDefinition": "No cardiac symptoms. Regular rate. S1, S2, no adventitious heart sounds."
     },
     {
       "id": "itm_0053f4d8db821149",
@@ -3132,11 +3132,11 @@
       "flowsheetSectionRollup": true,
       "choices": [
         {
-          "id": "ch_4f1889ca11e7e88e",
-          "label": "Abdomen non-tender, non-distended and soft unless gravid.  Bowel sounds audible, bowel movements per patient's baseline.  No subjective GI symptoms reported (output is not documented here)"
+          "id": "ch_e0e4a6d732707b7b",
+          "label": "Abdomen non-tender, non-distended and soft unless gravid. Bowel sounds audible, bowel movements per patient's baseline. No subjective GI symptoms reported (output is not documented here)"
         }
       ],
-      "flowsheetSectionAggregateWdlDefinition": "Abdomen non-tender, non-distended and soft unless gravid.  Bowel sounds audible, bowel movements per patient's baseline.  No subjective GI symptoms reported (output is not documented here)"
+      "flowsheetSectionAggregateWdlDefinition": "Abdomen non-tender, non-distended and soft unless gravid. Bowel sounds audible, bowel movements per patient's baseline. No subjective GI symptoms reported (output is not documented here)"
     },
     {
       "id": "itm_c2fcc7b71bc2d750",
@@ -3257,11 +3257,11 @@
       "flowsheetSectionRollup": true,
       "choices": [
         {
-          "id": "ch_dfbbcf18564fdd6a",
-          "label": "No symptoms reported  (output is documented in I/0, use Zero in I/o for anuria, bladder scanner results in I/O, incontinence might also be in I/O...needs discussion or keep here?)"
+          "id": "ch_ee21f94d6860280b",
+          "label": "No symptoms reported (output is documented in I/0, use Zero in I/o for anuria, bladder scanner results in I/O, incontinence might also be in I/O...needs discussion or keep here?)"
         }
       ],
-      "flowsheetSectionAggregateWdlDefinition": "No symptoms reported  (output is documented in I/0, use Zero in I/o for anuria, bladder scanner results in I/O, incontinence might also be in I/O...needs discussion or keep here?)"
+      "flowsheetSectionAggregateWdlDefinition": "No symptoms reported (output is documented in I/0, use Zero in I/o for anuria, bladder scanner results in I/O, incontinence might also be in I/O...needs discussion or keep here?)"
     },
     {
       "id": "itm_f634cdc0900b44ce",
@@ -3483,11 +3483,11 @@
       "flowsheetSectionRollup": true,
       "choices": [
         {
-          "id": "ch_6d3f787d2f72e327",
-          "label": "Warm, dry, intact, with appropriate, even tone. No generalized skin abnormalities. No minor skin integrity findings (see table).  Major skin findings documented in LDA."
+          "id": "ch_1f53df1386bd8685",
+          "label": "Warm, dry, intact, with appropriate, even tone. No generalized skin abnormalities. No minor skin integrity findings. Major skin findings documented in LDA."
         }
       ],
-      "flowsheetSectionAggregateWdlDefinition": "Warm, dry, intact, with appropriate, even tone. No generalized skin abnormalities. No minor skin integrity findings (see table).  Major skin findings documented in LDA."
+      "flowsheetSectionAggregateWdlDefinition": "Warm, dry, intact, with appropriate, even tone. No generalized skin abnormalities. No minor skin integrity findings. Major skin findings documented in LDA."
     },
     {
       "id": "itm_4c3bd43057c46ae6",
@@ -3541,7 +3541,7 @@
           "label": "Hot"
         }
       ],
-      "wdlListDefinition": "Warm, dry, intact, with appropriate, even tone. No generalized skin abnormalities. No minor skin integrity findings (see table).  Major skin findings documented in LDA."
+      "wdlListDefinition": "Warm, dry, intact, with appropriate, even tone. No generalized skin abnormalities. No minor skin integrity findings. Major skin findings documented in LDA."
     },
     {
       "id": "itm_3c1bf28c5d9b9a11",
@@ -3551,11 +3551,11 @@
       "flowsheetSectionRollup": true,
       "choices": [
         {
-          "id": "ch_5fb090fb000b08c8",
-          "label": "Behavior appropriate to the situation, cooperative, appropriate eye contact; no unusual gestures, mannerisms or speech; no socially inappropriate behavior, verbal or physical aggressiveness toward self or others.  Mood and affect appropriate for situation; affect consistent with mood; no agitation, anxiety, euphoria, lability. Thought Process:  Thought processes appropriate to situation, logical, relevant; no delusions and hallucinations; no spontaneous self-reported suicidal thoughts (not asked q shift, full suicide assessment via risk tool)"
+          "id": "ch_cead0a16d949c566",
+          "label": "Behavior appropriate to the situation, cooperative, appropriate eye contact; no unusual gestures, mannerisms or speech; no socially inappropriate behavior, verbal or physical aggressiveness toward self or others. Mood and affect appropriate for situation; affect consistent with mood; no agitation, anxiety, euphoria, lability. Thought Process: Thought processes appropriate to situation, logical, relevant; no delusions and hallucinations; no spontaneous self-reported suicidal thoughts (not asked q shift, full suicide assessment via risk tool)"
         }
       ],
-      "flowsheetSectionAggregateWdlDefinition": "Behavior appropriate to the situation, cooperative, appropriate eye contact; no unusual gestures, mannerisms or speech; no socially inappropriate behavior, verbal or physical aggressiveness toward self or others.  Mood and affect appropriate for situation; affect consistent with mood; no agitation, anxiety, euphoria, lability. Thought Process:  Thought processes appropriate to situation, logical, relevant; no delusions and hallucinations; no spontaneous self-reported suicidal thoughts (not asked q shift, full suicide assessment via risk tool)"
+      "flowsheetSectionAggregateWdlDefinition": "Behavior appropriate to the situation, cooperative, appropriate eye contact; no unusual gestures, mannerisms or speech; no socially inappropriate behavior, verbal or physical aggressiveness toward self or others. Mood and affect appropriate for situation; affect consistent with mood; no agitation, anxiety, euphoria, lability. Thought Process: Thought processes appropriate to situation, logical, relevant; no delusions and hallucinations; no spontaneous self-reported suicidal thoughts (not asked q shift, full suicide assessment via risk tool)"
     },
     {
       "id": "itm_f2374e816f1ea8de",
