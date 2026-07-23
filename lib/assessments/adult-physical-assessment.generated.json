@@ -3,8 +3,8 @@
   "id": "adult_physical_assessment_v1",
   "title": "Adult Physical Assessment",
   "description": "Adult physical assessment — grouped by body system and sub-system.",
-  "createdAt": "2026-07-23T20:47:52.367Z",
-  "updatedAt": "2026-07-23T20:47:52.367Z",
+  "createdAt": "2026-07-23T21:07:38.304Z",
+  "updatedAt": "2026-07-23T21:07:38.304Z",
   "status": "published",
   "groups": [
     {
@@ -362,11 +362,11 @@
       "flowsheetSectionRollup": true,
       "choices": [
         {
-          "id": "ch_d8fe3877b3ba06d4",
-          "label": "All extremities with full 5 out of 5 and equal strength and range of motion. Capillary refill time less than, equal to 3 seconds. Pulses +3 palpable. No edema, pain, weakness, numbness and tingling, sensation intact"
+          "id": "ch_12eef09c529319f3",
+          "label": "All extremities with full 5 out of 5 and equal strength and range of motion. Capillary refill time less than, equal to 3 seconds. Pulses + 3 palpable. No edema, pain, weakness, numbness and tingling, sensation intact"
         }
       ],
-      "flowsheetSectionAggregateWdlDefinition": "All extremities with full 5 out of 5 and equal strength and range of motion. Capillary refill time less than, equal to 3 seconds. Pulses +3 palpable. No edema, pain, weakness, numbness and tingling, sensation intact"
+      "flowsheetSectionAggregateWdlDefinition": "All extremities with full 5 out of 5 and equal strength and range of motion. Capillary refill time less than, equal to 3 seconds. Pulses + 3 palpable. No edema, pain, weakness, numbness and tingling, sensation intact"
     },
     {
       "id": "itm_81cc60be88c80cbe",
@@ -436,16 +436,16 @@
       "responseType": "choice",
       "choices": [
         {
-          "id": "ch_2888c10720ca7dbd",
-          "label": "+1 =Weak"
+          "id": "ch_5c09887af472bc03",
+          "label": "+ 1 = Weak"
         },
         {
-          "id": "ch_ec7ebc9069f8c900",
-          "label": "+2 = Moderate"
+          "id": "ch_f454103d1ba99752",
+          "label": "+ 2 = Moderate"
         },
         {
-          "id": "ch_53c7a4dd687c49b5",
-          "label": "+4 = Bounding"
+          "id": "ch_58ad23751d086f42",
+          "label": "+ 4 = Bounding"
         },
         {
           "id": "ch_be222747f65a3c2d",
@@ -456,7 +456,7 @@
           "label": "Only detectable via doppler"
         }
       ],
-      "wdlListDefinition": "Pulses +3 Palpable"
+      "wdlListDefinition": "Pulses + 3 Palpable"
     },
     {
       "id": "itm_cb8c89e13ccecde0",
@@ -662,20 +662,20 @@
       "responseType": "choice",
       "choices": [
         {
-          "id": "ch_a26d553048e4f2d9",
-          "label": "+ 1 Mild pitting, slight indentation"
+          "id": "ch_1a929b86aa508ec4",
+          "label": "+ 1 = Mild pitting, slight indentation"
         },
         {
-          "id": "ch_8d8c23b65cbc18e5",
+          "id": "ch_22b795d948bf87b4",
+          "label": "+ 2 = Moderate pitting, indentation subsides rapidly"
+        },
+        {
+          "id": "ch_a7156173bebdac1a",
           "label": "+ 3 = Deep pitting, indentation remains for a short time"
         },
         {
-          "id": "ch_385b9ef27866af38",
+          "id": "ch_47b17798c7c1c1f4",
           "label": "+ 4 = Very Deep pitting, indentiation lasts a long time"
-        },
-        {
-          "id": "ch_b563d2182519d579",
-          "label": "+2 = Moderate pitting, indentation subsides rapidly"
         }
       ],
       "wdlListDefinition": "No edema"
@@ -807,16 +807,16 @@
       "responseType": "choice",
       "choices": [
         {
-          "id": "ch_07394c3b12437859",
-          "label": "+1 =Weak"
+          "id": "ch_8f031928d89f71f6",
+          "label": "+ 1 = Weak"
         },
         {
-          "id": "ch_5a909fc8056c7d74",
-          "label": "+2 = Moderate"
+          "id": "ch_545d1d0a0b1d6ceb",
+          "label": "+ 2 = Moderate"
         },
         {
-          "id": "ch_93e112086310c81c",
-          "label": "+4 = Bounding"
+          "id": "ch_3a38083c4be523d6",
+          "label": "+ 4 = Bounding"
         },
         {
           "id": "ch_e42d31c44fdb3f36",
@@ -827,7 +827,7 @@
           "label": "Only detectable via doppler"
         }
       ],
-      "wdlListDefinition": "Pulses +3 Palpable"
+      "wdlListDefinition": "Pulses + 3 Palpable"
     },
     {
       "id": "itm_8f6ab8ba187cf463",
@@ -898,20 +898,20 @@
       "responseType": "choice",
       "choices": [
         {
-          "id": "ch_000baa92042c3b3a",
-          "label": "+ 1 Mild pitting, slight indentation"
+          "id": "ch_a172e1bd47b1546a",
+          "label": "+ 1 = Mild pitting, slight indentation"
         },
         {
-          "id": "ch_1c09d0f696a2eb12",
+          "id": "ch_2839795fd5c63844",
+          "label": "+ 2 = Moderate pitting, indentation subsides rapidly"
+        },
+        {
+          "id": "ch_c8a5a64e508cc2de",
           "label": "+ 3 = Deep pitting, indentation remains for a short time"
         },
         {
-          "id": "ch_25c7637030910570",
+          "id": "ch_a1487f60f0c32e02",
           "label": "+ 4 = Very Deep pitting, indentiation lasts a long time"
-        },
-        {
-          "id": "ch_bc3e8409cf09de90",
-          "label": "+2 = Moderate pitting, indentation subsides rapidly"
         }
       ],
       "wdlListDefinition": "No edema"
@@ -1145,16 +1145,16 @@
       "responseType": "choice",
       "choices": [
         {
-          "id": "ch_a8860b9259cf3401",
-          "label": "+1 =Weak"
+          "id": "ch_4ae145fbade2c4a5",
+          "label": "+ 1 = Weak"
         },
         {
-          "id": "ch_d7a1b8a4ab502da5",
-          "label": "+2 = Moderate"
+          "id": "ch_070d92ffc3cea6c0",
+          "label": "+ 2 = Moderate"
         },
         {
-          "id": "ch_10ee12985bfa09b3",
-          "label": "+4 = Bounding"
+          "id": "ch_b98716258ae9badf",
+          "label": "+ 4 = Bounding"
         },
         {
           "id": "ch_5f8bbc9776010ed0",
@@ -1165,7 +1165,7 @@
           "label": "Only detectable via doppler"
         }
       ],
-      "wdlListDefinition": "pulses +3 Palpable"
+      "wdlListDefinition": "pulses + 3 Palpable"
     },
     {
       "id": "itm_154b34c5217d6ce6",
@@ -1333,16 +1333,16 @@
       "responseType": "choice",
       "choices": [
         {
-          "id": "ch_f38a6e8ad116347d",
-          "label": "+1 =Weak"
+          "id": "ch_6f496cf3d6f093ca",
+          "label": "+ 1 = Weak"
         },
         {
-          "id": "ch_9b32709458b14a37",
-          "label": "+2 = Moderate"
+          "id": "ch_ee79414c78b59e11",
+          "label": "+ 2 = Moderate"
         },
         {
-          "id": "ch_a8f51b91ebcf0685",
-          "label": "+4 = Bounding"
+          "id": "ch_d51261f50e1f3b3d",
+          "label": "+ 4 = Bounding"
         },
         {
           "id": "ch_271b02bfc97317c7",
@@ -1353,7 +1353,7 @@
           "label": "Only detectable via doppler"
         }
       ],
-      "wdlListDefinition": "Pulses +3 Palpable"
+      "wdlListDefinition": "Pulses + 3 Palpable"
     },
     {
       "id": "itm_4fc02c54c36a4132",
@@ -1559,20 +1559,20 @@
       "responseType": "choice",
       "choices": [
         {
-          "id": "ch_0c1f62909d33b220",
-          "label": "+ 1 Mild pitting, slight indentation"
+          "id": "ch_a88ce2212589ce98",
+          "label": "+ 1 = Mild pitting, slight indentation"
         },
         {
-          "id": "ch_b4a859ab5ce01715",
+          "id": "ch_a81afc26ad560d67",
+          "label": "+ 2 = Moderate pitting, indentation subsides rapidly"
+        },
+        {
+          "id": "ch_39671cb437de3b48",
           "label": "+ 3 = Deep pitting, indentation remains for a short time"
         },
         {
-          "id": "ch_f59f6723aad14660",
+          "id": "ch_980e1aa94e13b5d9",
           "label": "+ 4 = Very Deep pitting, indentiation lasts a long time"
-        },
-        {
-          "id": "ch_bfb5cc4448d58eb4",
-          "label": "+2 = Moderate pitting, indentation subsides rapidly"
         }
       ],
       "wdlListDefinition": "No edema"
@@ -1655,16 +1655,16 @@
       "responseType": "choice",
       "choices": [
         {
-          "id": "ch_dc901c38b515768e",
-          "label": "+1 =Weak"
+          "id": "ch_89ac6cf482be82c0",
+          "label": "+ 1 = Weak"
         },
         {
-          "id": "ch_6e9bb88aa05df591",
-          "label": "+2 = Moderate"
+          "id": "ch_df1c4d9e3417ffee",
+          "label": "+ 2 = Moderate"
         },
         {
-          "id": "ch_31a9b2283b78eb06",
-          "label": "+4 = Bounding"
+          "id": "ch_cc8451efca71347a",
+          "label": "+ 4 = Bounding"
         },
         {
           "id": "ch_14a23dbdef5fd06f",
@@ -1675,7 +1675,7 @@
           "label": "Only detectable via doppler"
         }
       ],
-      "wdlListDefinition": "pulses +3 Palpable"
+      "wdlListDefinition": "pulses + 3 Palpable"
     },
     {
       "id": "itm_d32bb206f2c255df",
@@ -1795,20 +1795,20 @@
       "responseType": "choice",
       "choices": [
         {
-          "id": "ch_502f1c02622812a0",
-          "label": "+ 1 Mild pitting, slight indentation"
+          "id": "ch_2f4bd75de99d12fe",
+          "label": "+ 1 = Mild pitting, slight indentation"
         },
         {
-          "id": "ch_830204c0411b128f",
+          "id": "ch_08aa57757f6ab191",
+          "label": "+ 2 = Moderate pitting, indentation subsides rapidly"
+        },
+        {
+          "id": "ch_33ff44bb594bc0f5",
           "label": "+ 3 = Deep pitting, indentation remains for a short time"
         },
         {
-          "id": "ch_70500d382457808c",
+          "id": "ch_1abae7d58013711c",
           "label": "+ 4 = Very Deep pitting, indentiation lasts a long time"
-        },
-        {
-          "id": "ch_e10690b6e0747b28",
-          "label": "+2 = Moderate pitting, indentation subsides rapidly"
         }
       ],
       "wdlListDefinition": "No edema"
@@ -1993,27 +1993,27 @@
       "responseType": "choice",
       "choices": [
         {
-          "id": "ch_9dac39e3aa13f850",
+          "id": "ch_e021b30d19994cb0",
+          "label": "+ 1 = Weak"
+        },
+        {
+          "id": "ch_5df690ffa57c9dcb",
           "label": "+ 2 = moderate"
         },
         {
-          "id": "ch_88b971a0b5e320b1",
+          "id": "ch_9411195344fe5921",
           "label": "+ 4 = Bounding"
         },
         {
-          "id": "ch_27a3d5066149776a",
+          "id": "ch_87627ce9e1b55257",
           "label": "0 = Absent"
-        },
-        {
-          "id": "ch_e78566064569de10",
-          "label": "+1=Weak"
         },
         {
           "id": "ch_f0e93a167404e494",
           "label": "Only detectable via doppler"
         }
       ],
-      "wdlListDefinition": "Pulses +3 Palpable"
+      "wdlListDefinition": "Pulses + 3 Palpable"
     },
     {
       "id": "itm_a0baa23e4eceb223",

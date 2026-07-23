@@ -74,6 +74,72 @@ function choiceId(itemId_, label, idx) {
 const WDL_EQUALS_PREFIX = /^\s*WDL\s*=\s*/i;
 
 /**
+ * Normalize spacing on grading-style list labels from the workbook.
+ * Prefer `+ N` (space after plus) and ` = ` (spaces around equals).
+ * Insert a missing `=` after `+ N` when followed by description text
+ * (e.g. `+ 1 Mild pitting…` → `+ 1 = Mild pitting…`).
+ * Do not apply to raw cells that still contain a `WDL=` prefix.
+ * @param {string} label
+ */
+function normalizeListChoiceLabel(label) {
+  const t = String(label).trim();
+  if (WDL_EQUALS_PREFIX.test(t)) {
+    return t;
+  }
+  return t
+    .replace(/\s*=\s*/g, " = ")
+    .replace(/\+\s*(?=\d)/g, "+ ")
+    .replace(/^(\+\s*\d+)\s+(?!=)/, "$1 = ");
+}
+
+/**
+ * Sort key for grading-style choices: +N by grade, then 0=…, then other text.
+ * @param {string} label
+ * @returns {[number, number]}
+ */
+function listChoiceSortKey(label) {
+  const t = normalizeListChoiceLabel(label);
+  const plus = t.match(/^\+\s*(\d+)/);
+  if (plus) {
+    return [0, Number(plus[1])];
+  }
+  if (/^0(\s|=|$)/.test(t)) {
+    return [1, 0];
+  }
+  return [2, 0];
+}
+
+/**
+ * When 2+ labels are +N grades, sort by grade number (fixes workbook row-order
+ * mistakes such as Radial Pulse R and edema +2 after +4). Stable for other text.
+ * @param {string[]} labels
+ */
+function sortListChoiceLabels(labels) {
+  const gradeCount = labels.filter((l) =>
+    /^\+\s*\d/.test(normalizeListChoiceLabel(l)),
+  ).length;
+  if (gradeCount < 2) {
+    return labels;
+  }
+  return [...labels].sort((a, b) => {
+    const ka = listChoiceSortKey(a);
+    const kb = listChoiceSortKey(b);
+    return ka[0] - kb[0] || ka[1] - kb[1];
+  });
+}
+
+/**
+ * @param {string} itemId_
+ * @param {string[]} labels
+ */
+function choiceObjsFromLabels(itemId_, labels) {
+  return sortListChoiceLabels(labels).map((raw, idx) => {
+    const label = normalizeListChoiceLabel(raw);
+    return { id: choiceId(itemId_, label, idx), label };
+  });
+}
+
+/**
  * @param {string[]} labels
  * @returns {{ wdl: string[], exc: string[] }}
  */
@@ -96,10 +162,11 @@ function partitionWdlChoices(labels) {
 function narrativeAfterWdlEquals(label) {
   const t = label.trim();
   const match = t.match(WDL_EQUALS_PREFIX);
-  if (match && match.index !== undefined) {
-    return t.slice(match.index + match[0].length).trim();
-  }
-  return t;
+  const body =
+    match && match.index !== undefined
+      ? t.slice(match.index + match[0].length).trim()
+      : t;
+  return normalizeListChoiceLabel(body);
 }
 
 /** Strip `WDL=` prefixes from workbook aggregate lines; join into side-panel narrative. */
@@ -459,10 +526,7 @@ function pushWdlCluster(bodySystem, bodySub, primaryConceptRow, wdlLKeys) {
       wdlNarrative = narrativeAfterWdlEquals(firstAgg);
     }
     const mid = itemId(bodySystem, bodySub, `${conceptRow}\0exc_multi`);
-    const choiceObjs = exc.map((label, idx) => ({
-      id: choiceId(mid, label, idx),
-      label,
-    }));
+    const choiceObjs = choiceObjsFromLabels(mid, exc);
     const prompt = conceptRow.replace(/ WDL$/, "");
     items.push({
       id: mid,
@@ -642,10 +706,7 @@ function pushNvMskBlock() {
       }
 
       if (wdl.length >= 1 && exc.length >= 1) {
-        const choiceObjs = exc.map((label, idx) => ({
-          id: choiceId(mid, label, idx),
-          label,
-        }));
+        const choiceObjs = choiceObjsFromLabels(mid, exc);
         items.push({
           id: mid,
           groupId: gid,
@@ -670,10 +731,7 @@ function pushNvMskBlock() {
             .split(/\n\n/)
             .find((line) => String(line).trim() !== "") ?? "";
         const wdlListDef = narrativeAfterWdlEquals(firstAgg.trim());
-        const choiceObjs = exc.map((label, idx) => ({
-          id: choiceId(mid, label, idx),
-          label,
-        }));
+        const choiceObjs = choiceObjsFromLabels(mid, exc);
         items.push({
           id: mid,
           groupId: gid,
@@ -692,10 +750,7 @@ function pushNvMskBlock() {
       }
 
       const iid = itemId(NV_MSK_SYSTEM, sub, conceptRowRaw);
-      const choiceObjs = rawChoicesRaw.map((label, idx) => ({
-        id: choiceId(iid, label, idx),
-        label,
-      }));
+      const choiceObjs = choiceObjsFromLabels(iid, rawChoicesRaw);
       items.push({
         id: iid,
         groupId: gid,
@@ -759,10 +814,7 @@ function pushItemsForSystem(bodySystem) {
     }
 
     const iid = itemId(bodySystem, bodySub, conceptRow);
-    const choiceObjs = choices.map((label, idx) => ({
-      id: choiceId(iid, label, idx),
-      label,
-    }));
+    const choiceObjs = choiceObjsFromLabels(iid, choices);
     items.push({
       id: iid,
       groupId: grpChild(bodySystem, bodySub),
