@@ -184,7 +184,12 @@ test.describe("Adult Physical Assessment", () => {
       ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT,
       "WDL",
     );
-
+    await setFlowsheetWdlGate(
+      page,
+      ADULT_PHYSICAL_ASSESSMENT_COMMENT_GATE_PROMPT,
+      "Exception",
+    );
+    await openAbdomenInfoPanel(page);
     await expect(
       abdomenPanelOptions(page).getByRole("checkbox", {
         name: ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_CHOICE,
@@ -219,6 +224,10 @@ test.describe("Adult Physical Assessment", () => {
     await expect(abdomenCombo).toHaveAccessibleName(
       new RegExp(ADULT_PHYSICAL_ASSESSMENT_GI_PANEL_MULTI_CHOICE),
     );
+
+    // Multiselect stays open after selection; close before other clicks.
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("listbox")).toBeHidden();
 
     await setFlowsheetWdlGate(
       page,

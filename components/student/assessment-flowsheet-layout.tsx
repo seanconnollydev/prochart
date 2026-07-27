@@ -56,6 +56,7 @@ function FlowsheetItemTableRow({
   setResponse,
   onWdlXChoiceChange,
   onOpenInfoPanel,
+  onSyncInfoPanelOnFocus,
   indentLevel = 0,
 }: {
   item: AssessmentItem;
@@ -66,6 +67,7 @@ function FlowsheetItemTableRow({
     value: AssessmentItemResponse["value"],
   ) => void;
   onOpenInfoPanel: (itemId: string) => void;
+  onSyncInfoPanelOnFocus: (itemId: string) => void;
   /** Left padding for nested rows (e.g. details under a WDL/X gate). */
   indentLevel?: number;
 }) {
@@ -116,6 +118,7 @@ function FlowsheetItemTableRow({
           showWdl={showInfoPanelTrigger}
           ariaLabel={`View row information for ${item.prompt}`}
           onOpenInfo={() => onOpenInfoPanel(item.id)}
+          onSyncInfoPanelOnFocus={() => onSyncInfoPanelOnFocus(item.id)}
         >
           {item.responseType === "choice" && wdlGateCombo ? (
             <AssessmentChoiceCombobox
@@ -168,12 +171,14 @@ function FlowsheetValueWithWdl({
   showWdl,
   ariaLabel,
   onOpenInfo,
+  onSyncInfoPanelOnFocus,
   children,
 }: {
   reserveIconSpace: boolean;
   showWdl: boolean;
   ariaLabel: string;
   onOpenInfo: () => void;
+  onSyncInfoPanelOnFocus: () => void;
   children: ReactNode;
 }) {
   if (!reserveIconSpace) {
@@ -181,7 +186,14 @@ function FlowsheetValueWithWdl({
   }
   return (
     <div className="flex min-w-0 items-start gap-1">
-      <div className="min-w-0 flex-1">{children}</div>
+      <div
+        className="min-w-0 flex-1"
+        onFocusCapture={() => {
+          if (showWdl) onSyncInfoPanelOnFocus();
+        }}
+      >
+        {children}
+      </div>
       {showWdl ? (
         <Button
           type="button"
@@ -232,6 +244,12 @@ export function AssessmentFlowsheetLayout({
   const items = template.items;
   const [railQuery, setRailQuery] = useState("");
   const [infoPanelItemId, setInfoPanelItemId] = useState<string | null>(null);
+
+  function syncInfoPanelOnRowFocus(itemId: string) {
+    if (infoPanelItemId == null) return;
+    if (infoPanelItemId === itemId) return;
+    setInfoPanelItemId(itemId);
+  }
 
   const infoPanelItem = infoPanelItemId
     ? items.find((i) => i.id === infoPanelItemId)
@@ -381,6 +399,7 @@ export function AssessmentFlowsheetLayout({
                 setResponse,
                 onWdlXChoiceChange: handleFlowsheetResponse,
                 onOpenInfoPanel: setInfoPanelItemId,
+                onSyncInfoPanelOnFocus: syncInfoPanelOnRowFocus,
               };
 
               return (
