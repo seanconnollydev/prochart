@@ -489,8 +489,8 @@ export function SimulationViewer({ template }: Props) {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-start gap-3">
+    <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-hidden">
+      <div className="flex shrink-0 items-start gap-3">
         <Button
           asChild
           variant="ghost"
@@ -575,11 +575,11 @@ export function SimulationViewer({ template }: Props) {
       <Tabs
         defaultValue="summary"
         orientation="vertical"
-        className="gap-6"
+        className="min-h-0 flex-1 items-stretch gap-6"
       >
         <TabsList
           variant="line"
-          className="h-auto w-40 shrink-0 items-stretch"
+          className="h-auto w-40 shrink-0 items-stretch self-start"
         >
           <TabsTrigger value="summary">Summary</TabsTrigger>
           <TabsTrigger value="vitals">Vitals</TabsTrigger>
@@ -590,27 +590,29 @@ export function SimulationViewer({ template }: Props) {
           <TabsTrigger value="hp">H&amp;P</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="summary">
-          <PatientSummary patient={template.patient} />
-        </TabsContent>
-        <TabsContent value="vitals">
-          <VitalsPanel template={template} />
-        </TabsContent>
-        <TabsContent value="orders">
-          <OrdersPanel orders={template.orders} />
-        </TabsContent>
-        <TabsContent value="diagnostics">
-          <DiagnosticsPanel template={template} />
-        </TabsContent>
-        <TabsContent value="mar">
-          <MarPanel mar={template.mar} />
-        </TabsContent>
-        <TabsContent value="notes">
-          <ProgressNotesPanel notes={template.progressNotes} />
-        </TabsContent>
-        <TabsContent value="hp">
-          <HistoryAndPhysicalPanel hp={template.historyAndPhysical} />
-        </TabsContent>
+        <div className="min-h-0 min-w-0 flex-1 overflow-y-auto">
+          <TabsContent value="summary">
+            <PatientSummary patient={template.patient} />
+          </TabsContent>
+          <TabsContent value="vitals">
+            <VitalsPanel template={template} />
+          </TabsContent>
+          <TabsContent value="orders">
+            <OrdersPanel orders={template.orders} />
+          </TabsContent>
+          <TabsContent value="diagnostics">
+            <DiagnosticsPanel template={template} />
+          </TabsContent>
+          <TabsContent value="mar">
+            <MarPanel mar={template.mar} />
+          </TabsContent>
+          <TabsContent value="notes">
+            <ProgressNotesPanel notes={template.progressNotes} />
+          </TabsContent>
+          <TabsContent value="hp">
+            <HistoryAndPhysicalPanel hp={template.historyAndPhysical} />
+          </TabsContent>
+        </div>
       </Tabs>
     </div>
   );
