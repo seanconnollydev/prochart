@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, InfoIcon } from "lucide-react";
+import { ArrowLeft, InfoIcon, UserIcon } from "lucide-react";
 import type {
   SimulationHistoryAndPhysical,
   SimulationLabPanel,
@@ -96,7 +96,7 @@ function VitalsMap({ vitals }: { vitals?: Record<string, string> }) {
   );
 }
 
-function PatientBanner({ patient }: { patient: SimulationPatient }) {
+function PatientSummary({ patient }: { patient: SimulationPatient }) {
   const demographics = [
     patient.age != null ? `${patient.age} y/o` : null,
     patient.gender,
@@ -107,7 +107,7 @@ function PatientBanner({ patient }: { patient: SimulationPatient }) {
     .join(" · ");
 
   return (
-    <div className="border-border space-y-3 border-b pb-4">
+    <div className="flex flex-col gap-3">
       <div>
         <p className="text-lg font-semibold">
           {patient.displayName ?? "Unnamed patient"}
@@ -505,59 +505,83 @@ export function SimulationViewer({ template }: Props) {
         <h1 className="min-w-0 flex-1 text-2xl font-semibold break-words">
           {template.title}
         </h1>
-        <Sheet>
-          <SheetTrigger
-            className={cn(
-              buttonVariants({ variant: "ghost", size: "icon" }),
-              "text-muted-foreground mt-0.5 shrink-0",
-            )}
-            aria-label="Simulation details"
-          >
-            <InfoIcon className="size-4" aria-hidden />
-          </SheetTrigger>
-          <SheetContent side="right" className="overflow-y-auto">
-            <SheetHeader>
-              <SheetTitle>Simulation details</SheetTitle>
-            </SheetHeader>
-            <div className="flex flex-col gap-6 px-6 pb-6">
-              {template.description ? (
-                <div className="space-y-2">
-                  <h3 className="text-sm font-semibold">Description</h3>
-                  <p className="text-muted-foreground text-sm">
-                    {template.description}
-                  </p>
-                </div>
-              ) : null}
-              {metaBits.length > 0 ? (
-                <div className="space-y-2">
-                  <h3 className="text-sm font-semibold">Tags</h3>
-                  <div className="flex flex-wrap gap-1.5">
-                    {metaBits.map((bit) => (
-                      <Badge key={bit} variant="secondary">
-                        {bit}
-                      </Badge>
-                    ))}
+        <div className="mt-0.5 flex shrink-0 items-center gap-0.5">
+          <Sheet>
+            <SheetTrigger
+              className={cn(
+                buttonVariants({ variant: "ghost", size: "icon" }),
+                "text-muted-foreground shrink-0",
+              )}
+              aria-label="Patient summary"
+            >
+              <UserIcon className="size-4" aria-hidden />
+            </SheetTrigger>
+            <SheetContent side="right" className="overflow-y-auto">
+              <SheetHeader>
+                <SheetTitle>Patient summary</SheetTitle>
+              </SheetHeader>
+              <div className="px-6 pb-6">
+                <PatientSummary patient={template.patient} />
+              </div>
+            </SheetContent>
+          </Sheet>
+          <Sheet>
+            <SheetTrigger
+              className={cn(
+                buttonVariants({ variant: "ghost", size: "icon" }),
+                "text-muted-foreground shrink-0",
+              )}
+              aria-label="Simulation details"
+            >
+              <InfoIcon className="size-4" aria-hidden />
+            </SheetTrigger>
+            <SheetContent side="right" className="overflow-y-auto">
+              <SheetHeader>
+                <SheetTitle>Simulation details</SheetTitle>
+              </SheetHeader>
+              <div className="flex flex-col gap-6 px-6 pb-6">
+                {template.description ? (
+                  <div className="space-y-2">
+                    <h3 className="text-sm font-semibold">Description</h3>
+                    <p className="text-muted-foreground text-sm">
+                      {template.description}
+                    </p>
                   </div>
-                </div>
-              ) : null}
-              {template.licenseNotice ? (
-                <div className="space-y-2">
-                  <h3 className="text-sm font-semibold">License</h3>
-                  <LicenseNoticeProse text={template.licenseNotice} />
-                </div>
-              ) : null}
-            </div>
-          </SheetContent>
-        </Sheet>
+                ) : null}
+                {metaBits.length > 0 ? (
+                  <div className="space-y-2">
+                    <h3 className="text-sm font-semibold">Tags</h3>
+                    <div className="flex flex-wrap gap-1.5">
+                      {metaBits.map((bit) => (
+                        <Badge key={bit} variant="secondary">
+                          {bit}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+                {template.licenseNotice ? (
+                  <div className="space-y-2">
+                    <h3 className="text-sm font-semibold">License</h3>
+                    <LicenseNoticeProse text={template.licenseNotice} />
+                  </div>
+                ) : null}
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
 
-      <PatientBanner patient={template.patient} />
-
-      <Tabs defaultValue="vitals" className="gap-4">
+      <Tabs
+        defaultValue="summary"
+        orientation="vertical"
+        className="gap-6"
+      >
         <TabsList
           variant="line"
-          className="h-auto w-full flex-wrap justify-start gap-1"
+          className="h-auto w-40 shrink-0 items-stretch"
         >
+          <TabsTrigger value="summary">Summary</TabsTrigger>
           <TabsTrigger value="vitals">Vitals</TabsTrigger>
           <TabsTrigger value="orders">Orders</TabsTrigger>
           <TabsTrigger value="diagnostics">Diagnostics</TabsTrigger>
@@ -566,22 +590,25 @@ export function SimulationViewer({ template }: Props) {
           <TabsTrigger value="hp">H&amp;P</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="vitals" className="pt-2">
+        <TabsContent value="summary">
+          <PatientSummary patient={template.patient} />
+        </TabsContent>
+        <TabsContent value="vitals">
           <VitalsPanel template={template} />
         </TabsContent>
-        <TabsContent value="orders" className="pt-2">
+        <TabsContent value="orders">
           <OrdersPanel orders={template.orders} />
         </TabsContent>
-        <TabsContent value="diagnostics" className="pt-2">
+        <TabsContent value="diagnostics">
           <DiagnosticsPanel template={template} />
         </TabsContent>
-        <TabsContent value="mar" className="pt-2">
+        <TabsContent value="mar">
           <MarPanel mar={template.mar} />
         </TabsContent>
-        <TabsContent value="notes" className="pt-2">
+        <TabsContent value="notes">
           <ProgressNotesPanel notes={template.progressNotes} />
         </TabsContent>
-        <TabsContent value="hp" className="pt-2">
+        <TabsContent value="hp">
           <HistoryAndPhysicalPanel hp={template.historyAndPhysical} />
         </TabsContent>
       </Tabs>
