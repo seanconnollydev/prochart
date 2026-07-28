@@ -167,6 +167,8 @@ export type SimulationLabPanel = {
   name: string;
   orderedAt?: string;
   resultedAt?: string;
+  /** Optional screenshot of the lab panel (e.g. from source simulation materials). */
+  imageUrl?: string;
   results: SimulationLabResult[];
 };
 

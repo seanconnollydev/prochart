@@ -242,8 +242,16 @@ function LabPanelBlock({ panel }: { panel: SimulationLabPanel }) {
             .join(" · ") || null}
         </p>
       </div>
+      {panel.imageUrl ? (
+        // eslint-disable-next-line @next/next/no-img-element -- static simulation asset URLs
+        <img
+          src={panel.imageUrl}
+          alt={panel.name}
+          className="max-w-full rounded-md border border-border"
+        />
+      ) : null}
       {panel.results.length === 0 ? (
-        <EmptyState label="No results" />
+        panel.imageUrl ? null : <EmptyState label="No results" />
       ) : (
         <Table>
           <TableHeader>

@@ -417,7 +417,14 @@
       "order": "Plavix 75 mg PO daily"
     }
   ],
-  "labPanels": [],
+  "labPanels": [
+    {
+      "id": "labs_diagnostics",
+      "name": "Labs-Diagnostics",
+      "imageUrl": "/simulations/atypical-chest-pain-female/labs-diagnostics.png",
+      "results": []
+    }
+  ],
   "imagingResults": [],
   "ecgResults": [
     {
