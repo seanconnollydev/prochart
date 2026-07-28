@@ -9,8 +9,6 @@ import type {
   SimulationOrder,
   SimulationPatient,
   SimulationProgressNote,
-  SimulationSetup,
-  SimulationState,
   SimulationTemplate,
 } from "@/lib/types/simulation-template";
 import { LicenseNoticeProse } from "@/lib/format/linkify-plain-text";
@@ -480,196 +478,6 @@ function HistoryAndPhysicalPanel({
   );
 }
 
-function SetupPanel({ setup }: { setup?: SimulationSetup }) {
-  if (!setup) return <EmptyState label="No setup documented" />;
-  return (
-    <div className="space-y-6">
-      <div className="space-y-2">
-        <SectionHeading>Inside room</SectionHeading>
-        <BulletList items={setup.insideRoom} />
-      </div>
-      <div className="space-y-2">
-        <SectionHeading>Outside room</SectionHeading>
-        <BulletList items={setup.outsideRoom} />
-      </div>
-      <div className="space-y-2">
-        <SectionHeading>Patient setup</SectionHeading>
-        <BulletList items={setup.patientSetup} />
-      </div>
-      {setup.supplies ? (
-        <>
-          <div className="space-y-2">
-            <SectionHeading>General supplies</SectionHeading>
-            <BulletList items={setup.supplies.general} />
-          </div>
-          <div className="space-y-2">
-            <SectionHeading>Medication supplies</SectionHeading>
-            <BulletList items={setup.supplies.medications} />
-          </div>
-        </>
-      ) : null}
-      {setup.monitorSettings ? (
-        <div className="space-y-2">
-          <SectionHeading>Monitor settings</SectionHeading>
-          <VitalsMap vitals={setup.monitorSettings.initialVitals} />
-          {setup.monitorSettings.notes?.length ? (
-            <BulletList items={setup.monitorSettings.notes} />
-          ) : null}
-        </div>
-      ) : null}
-    </div>
-  );
-}
-
-function ScenarioPanel({ states }: { states: SimulationState[] }) {
-  if (!states.length) return <EmptyState label="No scenario states" />;
-  return (
-    <div className="space-y-8">
-      {states.map((state) => (
-        <section key={state.id} className="space-y-4">
-          <div>
-            <p className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
-              State {state.stateNumber}
-            </p>
-            <h3 className="text-base font-semibold">{state.title}</h3>
-          </div>
-          {state.patientOverview ? (
-            <p className="text-sm whitespace-pre-wrap">{state.patientOverview}</p>
-          ) : null}
-          {state.expectedStudentBehaviors?.length ? (
-            <div className="space-y-2">
-              <SectionHeading>Expected student behaviors</SectionHeading>
-              <BulletList items={state.expectedStudentBehaviors} />
-            </div>
-          ) : null}
-          {state.technicianPrompts?.length ? (
-            <div className="space-y-2">
-              <SectionHeading>Technician prompts</SectionHeading>
-              <ul className="space-y-3 text-sm">
-                {state.technicianPrompts.map((p) => (
-                  <li key={p.id}>
-                    {p.trigger ? (
-                      <p className="text-muted-foreground text-xs">
-                        Trigger: {p.trigger}
-                      </p>
-                    ) : null}
-                    <p className="whitespace-pre-wrap">{p.response}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
-          {state.facilitatorQuestions?.length ? (
-            <div className="space-y-2">
-              <SectionHeading>Facilitator questions</SectionHeading>
-              <BulletList items={state.facilitatorQuestions} />
-            </div>
-          ) : null}
-          {state.tabContentChanges?.length ? (
-            <div className="space-y-2">
-              <SectionHeading>Tab content changes</SectionHeading>
-              <ul className="space-y-3 text-sm">
-                {state.tabContentChanges.map((change, i) => (
-                  <li key={`${change.tab}-${i}`}>
-                    <p className="font-medium">{change.tab}</p>
-                    {change.condition ? (
-                      <p className="text-muted-foreground text-xs">
-                        {change.condition}
-                      </p>
-                    ) : null}
-                    <p className="whitespace-pre-wrap">{change.content}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
-          {state.levelUpTriggers?.length ? (
-            <div className="space-y-2">
-              <SectionHeading>Level-up triggers</SectionHeading>
-              <ul className="list-disc space-y-1 pl-5 text-sm">
-                {state.levelUpTriggers.map((t) => (
-                  <li key={t.id}>
-                    {t.condition}
-                    {t.advancesToStateId
-                      ? ` → ${t.advancesToStateId}`
-                      : null}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
-        </section>
-      ))}
-    </div>
-  );
-}
-
-function ObjectivesPanel({ template }: { template: SimulationTemplate }) {
-  const objectives = template.learningObjectives ?? [];
-  const curriculum = template.curriculumMapping ?? [];
-  if (!objectives.length && !curriculum.length) {
-    return <EmptyState label="No learning objectives" />;
-  }
-  return (
-    <div className="space-y-6">
-      {objectives.length > 0 ? (
-        <div className="space-y-2">
-          <SectionHeading>Learning objectives</SectionHeading>
-          <ol className="list-decimal space-y-2 pl-5 text-sm">
-            {objectives.map((lo) => (
-              <li key={lo.id}>{lo.text}</li>
-            ))}
-          </ol>
-        </div>
-      ) : null}
-      {curriculum.length > 0 ? (
-        <div className="space-y-4">
-          <SectionHeading>Curriculum mapping</SectionHeading>
-          {curriculum.map((cat) => (
-            <div key={cat.id} className="space-y-2">
-              <p className="text-sm font-medium">{cat.category}</p>
-              <BulletList items={cat.outcomes} />
-            </div>
-          ))}
-        </div>
-      ) : null}
-    </div>
-  );
-}
-
-function DebriefPanel({ template }: { template: SimulationTemplate }) {
-  const debrief = template.debrief;
-  if (!debrief?.questions?.length && !debrief?.facilitatorNotes) {
-    return <EmptyState label="No debrief materials" />;
-  }
-  return (
-    <div className="space-y-6">
-      {debrief.questions?.map((q, index) => (
-        <div key={q.id} className="space-y-2">
-          <p className="text-sm font-medium">
-            {index + 1}. {q.text}
-          </p>
-          {q.subQuestions?.length ? (
-            <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
-              {q.subQuestions.map((sq) => (
-                <li key={sq}>{sq}</li>
-              ))}
-            </ul>
-          ) : null}
-        </div>
-      ))}
-      {debrief.facilitatorNotes ? (
-        <div className="space-y-2">
-          <SectionHeading>Facilitator notes</SectionHeading>
-          <p className="text-sm whitespace-pre-wrap">
-            {debrief.facilitatorNotes}
-          </p>
-        </div>
-      ) : null}
-    </div>
-  );
-}
-
 export function SimulationViewer({ template }: Props) {
   const metaBits: string[] = [];
   if (template.meta?.discipline) metaBits.push(template.meta.discipline);
@@ -678,9 +486,6 @@ export function SimulationViewer({ template }: Props) {
   if (template.meta?.skillFocus) metaBits.push(template.meta.skillFocus);
   if (template.meta?.estimatedTimeMinutes != null) {
     metaBits.push(`${template.meta.estimatedTimeMinutes} min sim`);
-  }
-  if (template.meta?.debriefingTimeMinutes != null) {
-    metaBits.push(`${template.meta.debriefingTimeMinutes} min debrief`);
   }
 
   return (
@@ -759,10 +564,6 @@ export function SimulationViewer({ template }: Props) {
           <TabsTrigger value="mar">MAR</TabsTrigger>
           <TabsTrigger value="notes">Progress Notes</TabsTrigger>
           <TabsTrigger value="hp">H&amp;P</TabsTrigger>
-          <TabsTrigger value="setup">Setup</TabsTrigger>
-          <TabsTrigger value="scenario">Scenario</TabsTrigger>
-          <TabsTrigger value="objectives">Objectives</TabsTrigger>
-          <TabsTrigger value="debrief">Debrief</TabsTrigger>
         </TabsList>
 
         <TabsContent value="vitals" className="pt-2">
@@ -782,18 +583,6 @@ export function SimulationViewer({ template }: Props) {
         </TabsContent>
         <TabsContent value="hp" className="pt-2">
           <HistoryAndPhysicalPanel hp={template.historyAndPhysical} />
-        </TabsContent>
-        <TabsContent value="setup" className="pt-2">
-          <SetupPanel setup={template.setup} />
-        </TabsContent>
-        <TabsContent value="scenario" className="pt-2">
-          <ScenarioPanel states={template.states} />
-        </TabsContent>
-        <TabsContent value="objectives" className="pt-2">
-          <ObjectivesPanel template={template} />
-        </TabsContent>
-        <TabsContent value="debrief" className="pt-2">
-          <DebriefPanel template={template} />
         </TabsContent>
       </Tabs>
     </div>
