@@ -425,7 +425,17 @@
       "results": []
     }
   ],
-  "imagingResults": [],
+  "imagingResults": [
+    {
+      "id": "imaging_cxr",
+      "modality": "Chest X-Ray",
+      "title": "Pre-op Chest X-Ray",
+      "findings": "Normal pre-op chest Xray",
+      "impression": "Normal pre-op chest Xray",
+      "imageUrl": "/simulations/atypical-chest-pain-female/chest-xray.png",
+      "reportedAt": "Today, 2 hours ago"
+    }
+  ],
   "ecgResults": [
     {
       "id": "ecg_daily_record",
