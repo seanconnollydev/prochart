@@ -345,40 +345,22 @@ function MarPanel({ mar }: { mar?: SimulationMAREntry[] }) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Medication</TableHead>
-          <TableHead>Dose</TableHead>
-          <TableHead>Route</TableHead>
-          <TableHead>Frequency</TableHead>
-          <TableHead>PRN</TableHead>
-          <TableHead>Scheduled</TableHead>
-          <TableHead>Instructions</TableHead>
+          <TableHead>Order</TableHead>
+          <TableHead className="w-[28%]">Sch. Time</TableHead>
+          <TableHead className="w-[12%]">Dose</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {mar.map((entry) => (
           <TableRow key={entry.id}>
-            <TableCell className="align-top font-medium">
-              {entry.medication}
+            <TableCell className="align-top whitespace-pre-wrap">
+              {entry.order}
             </TableCell>
-            <TableCell className="align-top">{entry.dose ?? "—"}</TableCell>
-            <TableCell className="align-top">{entry.route ?? "—"}</TableCell>
-            <TableCell className="align-top">
-              {entry.frequency ?? "—"}
+            <TableCell className="align-top whitespace-pre-wrap">
+              {entry.scheduledTime ?? ""}
             </TableCell>
-            <TableCell className="align-top">
-              {entry.prn
-                ? entry.prnIndication
-                  ? `Yes — ${entry.prnIndication}`
-                  : "Yes"
-                : "No"}
-            </TableCell>
-            <TableCell className="align-top">
-              {entry.scheduledTimes?.length
-                ? entry.scheduledTimes.join(", ")
-                : "—"}
-            </TableCell>
-            <TableCell className="align-top text-muted-foreground whitespace-pre-wrap">
-              {entry.instructions ?? "—"}
+            <TableCell className="align-top whitespace-pre-wrap">
+              {entry.dose ?? ""}
             </TableCell>
           </TableRow>
         ))}

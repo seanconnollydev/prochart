@@ -135,17 +135,18 @@ export type SimulationOrder = {
 // MAR (Medication Administration Record)
 // ---------------------------------------------------------------------------
 
+/** Matches the chart MAR layout: Order | Sch. Time | Dose. */
 export type SimulationMAREntry = {
   id: string;
-  medication: string;
+  /** Full medication order text shown in the Order column. */
+  order: string;
+  /**
+   * Scheduled time or administration status shown in Sch. Time
+   * (e.g. "0800", "Given 4 hours ago", "Held").
+   */
+  scheduledTime?: string;
+  /** Dose documentation column; often blank until administered. */
   dose?: string;
-  route?: string;
-  frequency?: string;
-  /** Clock times at which the medication is scheduled (e.g. ["0800", "2000"]). */
-  scheduledTimes?: string[];
-  prn?: boolean;
-  prnIndication?: string;
-  instructions?: string;
 };
 
 // ---------------------------------------------------------------------------

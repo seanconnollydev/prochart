@@ -328,92 +328,93 @@
     {
       "id": "ord_hydrocodone_prn",
       "category": "medication",
-      "text": "Hydrocodone/acetaminophen 5/325 mg PO PRN pain"
+      "text": "Hydrocodone/acetaminophen 5/325 mg 1-2 tabs PO every 4 hours PRN pain"
     },
     {
       "id": "ord_morphine_prn",
       "category": "medication",
-      "text": "Morphine 5 mg IV PRN pain",
+      "text": "Morphine 1-2 mg IVP every 2 hours PRN chest pain",
       "details": "Preferred over oral analgesic given cardiac condition. Perform math calculation, consider dilution, and administer slowly."
     }
   ],
   "mar": [
     {
-      "id": "mar_metoprolol",
-      "medication": "Metoprolol",
-      "dose": "12.5 mg",
-      "route": "PO",
-      "frequency": "Daily",
-      "prn": false
+      "id": "mar_aspirin_stat",
+      "order": "Chewable non-enteric coated aspirin 81 mg four tabs PO STAT",
+      "scheduledTime": "Given 4 hours ago"
     },
     {
-      "id": "mar_lisinopril",
-      "medication": "Lisinopril",
-      "dose": "10 mg",
-      "route": "PO",
-      "frequency": "Daily",
-      "prn": false
+      "id": "mar_nitro_sl",
+      "order": "Nitroglycerin 0.4mg sublingually q5 minutes for 3 doses prn for chest pain",
+      "scheduledTime": "3 doses given 4 hours ago"
     },
     {
-      "id": "mar_atorvastatin",
-      "medication": "Atorvastatin",
-      "dose": "10 mg",
-      "route": "PO",
-      "frequency": "Daily",
-      "prn": false
-    },
-    {
-      "id": "mar_aspirin",
-      "medication": "Aspirin",
-      "dose": "81 mg",
-      "route": "PO",
-      "frequency": "Daily",
-      "prn": false
-    },
-    {
-      "id": "mar_clopidogrel",
-      "medication": "Clopidogrel (Plavix)",
-      "dose": "75 mg",
-      "route": "PO",
-      "frequency": "Daily",
-      "prn": false
-    },
-    {
-      "id": "mar_eptifibatide",
-      "medication": "Eptifibatide",
-      "dose": "2 mcg/kg/min (11.5 ml/hr for 72 kg patient)",
-      "route": "IV continuous infusion",
-      "frequency": "Continuous",
-      "prn": false,
-      "instructions": "Hanging at IV Site #2. Student must calculate rate and initiate infusion."
+      "id": "mar_heparin",
+      "order": "Heparin IV infusion 12 U/kg/hr (max 1000 units/hour)",
+      "scheduledTime": "Discontinued; Last received 2 hours ago"
     },
     {
       "id": "mar_ns",
-      "medication": "0.9% Normal Saline",
-      "dose": "75 ml/hr",
-      "route": "IV",
-      "frequency": "Continuous",
-      "prn": false,
-      "instructions": "Running at IV Site #1."
+      "order": "0.9% NS at 75 ml/hour rate",
+      "scheduledTime": "Started 2 hours ago"
+    },
+    {
+      "id": "mar_nitro_iv",
+      "order": "Nitroglycerin IV prn for chest pain not relieved by Nitroglycerin subl. Start at 5 mcg/min. Increase by 5 mcg every 5 minutes, up to 20 mcg/min, until response noted while maintaining SBP greater than 100",
+      "scheduledTime": "Discontinued; Last received 2 hours ago"
+    },
+    {
+      "id": "mar_famotidine",
+      "order": "Famotidine 20 mg IVP 15 minutes prior to procedure",
+      "scheduledTime": "Given prior to procedure"
+    },
+    {
+      "id": "mar_montelukast",
+      "order": "Montelukast 10 mg PO STAT",
+      "scheduledTime": "Given prior to procedure"
+    },
+    {
+      "id": "mar_promethazine",
+      "order": "Promethazine 12.5 mg IVP over 1 minute 15 minutes prior to procedure",
+      "scheduledTime": "Given prior to procedure"
+    },
+    {
+      "id": "mar_hold_metformin",
+      "order": "Hold Metformin the day of the procedure",
+      "scheduledTime": "Held"
+    },
+    {
+      "id": "mar_eptifibatide",
+      "order": "Eptifibatide 2 mcg/kg/minute",
+      "scheduledTime": "Started 2 hours ago"
     },
     {
       "id": "mar_hydrocodone_prn",
-      "medication": "Hydrocodone/Acetaminophen",
-      "dose": "5/325 mg",
-      "route": "PO",
-      "frequency": "PRN",
-      "prn": true,
-      "prnIndication": "Pain"
+      "order": "Hydrocodone/acetaminophen 5/325 mg 1-2 tabs PO every 4 hours prn"
     },
     {
       "id": "mar_morphine_prn",
-      "medication": "Morphine",
-      "dose": "5 mg",
-      "route": "IV",
-      "frequency": "PRN",
-      "prn": true,
-      "prnIndication": "Pain",
-      "instructions": "Preferred analgesic for this patient given cardiac condition. Perform math calculation, consider dilution, administer slowly."
+      "order": "Morphine 1-2 mg IVP q 2 hours prn for chest pain"
+    },
+    {
+      "id": "mar_metoprolol",
+      "order": "Metoprolol 12.5 mg PO daily"
+    },
+    {
+      "id": "mar_lisinopril",
+      "order": "Lisinopril 10 mg PO daily"
+    },
+    {
+      "id": "mar_atorvastatin",
+      "order": "Atorvastatin 10 mg PO daily"
+    },
+    {
+      "id": "mar_asa_daily",
+      "order": "ASA 81 mg PO daily"
+    },
+    {
+      "id": "mar_plavix",
+      "order": "Plavix 75 mg PO daily"
     }
   ],
   "labPanels": [],
