@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, InfoIcon } from "lucide-react";
 import type {
   SimulationHistoryAndPhysical,
   SimulationLabPanel,
@@ -14,8 +14,16 @@ import type {
   SimulationTemplate,
 } from "@/lib/types/simulation-template";
 import { LicenseNoticeProse } from "@/lib/format/linkify-plain-text";
+import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import {
   Table,
   TableBody,
@@ -689,23 +697,53 @@ export function SimulationViewer({ template }: Props) {
             <ArrowLeft className="size-4" aria-hidden />
           </Link>
         </Button>
-        <div className="min-w-0 space-y-2">
-          <h1 className="text-2xl font-semibold">{template.title}</h1>
-          {template.description ? (
-            <p className="text-muted-foreground text-sm">
-              {template.description}
-            </p>
-          ) : null}
-          {metaBits.length > 0 ? (
-            <div className="flex flex-wrap gap-1.5">
-              {metaBits.map((bit) => (
-                <Badge key={bit} variant="secondary">
-                  {bit}
-                </Badge>
-              ))}
+        <h1 className="min-w-0 flex-1 text-2xl font-semibold break-words">
+          {template.title}
+        </h1>
+        <Sheet>
+          <SheetTrigger
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "icon" }),
+              "text-muted-foreground mt-0.5 shrink-0",
+            )}
+            aria-label="Simulation details"
+          >
+            <InfoIcon className="size-4" aria-hidden />
+          </SheetTrigger>
+          <SheetContent side="right" className="overflow-y-auto">
+            <SheetHeader>
+              <SheetTitle>Simulation details</SheetTitle>
+            </SheetHeader>
+            <div className="flex flex-col gap-6 px-6 pb-6">
+              {template.description ? (
+                <div className="space-y-2">
+                  <h3 className="text-sm font-semibold">Description</h3>
+                  <p className="text-muted-foreground text-sm">
+                    {template.description}
+                  </p>
+                </div>
+              ) : null}
+              {metaBits.length > 0 ? (
+                <div className="space-y-2">
+                  <h3 className="text-sm font-semibold">Tags</h3>
+                  <div className="flex flex-wrap gap-1.5">
+                    {metaBits.map((bit) => (
+                      <Badge key={bit} variant="secondary">
+                        {bit}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+              {template.licenseNotice ? (
+                <div className="space-y-2">
+                  <h3 className="text-sm font-semibold">License</h3>
+                  <LicenseNoticeProse text={template.licenseNotice} />
+                </div>
+              ) : null}
             </div>
-          ) : null}
-        </div>
+          </SheetContent>
+        </Sheet>
       </div>
 
       <PatientBanner patient={template.patient} />
@@ -758,12 +796,6 @@ export function SimulationViewer({ template }: Props) {
           <DebriefPanel template={template} />
         </TabsContent>
       </Tabs>
-
-      {template.licenseNotice ? (
-        <footer className="border-border border-t pt-4">
-          <LicenseNoticeProse text={template.licenseNotice} />
-        </footer>
-      ) : null}
     </div>
   );
 }
