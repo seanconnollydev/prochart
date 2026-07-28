@@ -419,7 +419,15 @@
   ],
   "labPanels": [],
   "imagingResults": [],
-  "ecgResults": [],
+  "ecgResults": [
+    {
+      "id": "ecg_daily_record",
+      "title": "Daily Record — 12-lead ECG",
+      "interpretation": "Evolving ST elevation. Please correlate clinically.",
+      "imageUrl": "/simulations/atypical-chest-pain-female/daily-record-ecg.png",
+      "obtainedAt": "Today, 2 hours ago"
+    }
+  ],
   "progressNotes": [],
   "states": [
     {

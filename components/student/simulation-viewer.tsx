@@ -301,6 +301,14 @@ function DiagnosticsPanel({ template }: { template: SimulationTemplate }) {
                   ? ` (${img.modality})`
                   : null}
               </p>
+              {img.imageUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element -- static simulation asset URLs
+                <img
+                  src={img.imageUrl}
+                  alt={img.title ?? img.modality}
+                  className="max-w-full rounded-md border border-border"
+                />
+              ) : null}
               <DefinitionList
                 items={[
                   { label: "Findings", value: img.findings },
@@ -319,18 +327,24 @@ function DiagnosticsPanel({ template }: { template: SimulationTemplate }) {
           {ecgs.map((ecg) => (
             <div key={ecg.id} className="space-y-2">
               <p className="font-medium">{ecg.title ?? "ECG"}</p>
-              <DefinitionList
-                items={[
-                  { label: "Interpretation", value: ecg.interpretation },
-                  { label: "Obtained", value: ecg.obtainedAt },
-                  {
-                    label: "Status",
-                    value: ecg.awaitingInterpretation
-                      ? "Awaiting interpretation"
-                      : undefined,
-                  },
-                ]}
-              />
+              {ecg.imageUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element -- static simulation asset URLs
+                <img
+                  src={ecg.imageUrl}
+                  alt={ecg.title ?? "ECG"}
+                  className="max-w-full rounded-md border border-border"
+                />
+              ) : null}
+              {ecg.awaitingInterpretation ? (
+                <DefinitionList
+                  items={[
+                    {
+                      label: "Status",
+                      value: "Awaiting interpretation",
+                    },
+                  ]}
+                />
+              ) : null}
             </div>
           ))}
         </div>
