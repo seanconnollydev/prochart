@@ -34,12 +34,12 @@ export default function StudentPage() {
       </div>
       <div className="grid gap-4 sm:grid-cols-2 md:max-w-2xl">
         {practiceModes.map((mode) => (
-          <Card key={mode.title}>
+          <Card key={mode.title} className="h-full">
             <CardHeader>
               <CardTitle className="text-base">{mode.title}</CardTitle>
               <CardDescription>{mode.description}</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mt-auto">
               <Button asChild size="sm">
                 <Link href={mode.href}>{mode.actionLabel}</Link>
               </Button>
