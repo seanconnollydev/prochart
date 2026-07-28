@@ -2,6 +2,14 @@
 
 Use **npm** for this repository: `npm install` for dependencies, and **npx** to run one-off CLIs (e.g. `npx shadcn@latest add <component>`). Do **not** use pnpm, yarn, or bun for installs or shadcn unless the user explicitly says otherwise.
 
+## Interactive cursor
+
+Interactive controls must show `cursor: pointer`. This is enforced globally in `app/globals.css` for buttons, links, tabs, checkboxes, radios, selects, and related ARIA roles.
+
+- Do **not** override with `cursor-default` on clickable controls.
+- Custom clickable non-semantic elements (e.g. `div`/`span` with `onClick`) must use a real control (`button`/`Link`) or add `cursor-pointer`.
+- Disabled controls may use `cursor-not-allowed` or `pointer-events-none`.
+
 <!-- BEGIN:nextjs-agent-rules -->
 # This is NOT the Next.js you know
 
