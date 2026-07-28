@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BUILTIN_SIMULATION_CATALOG } from "@/lib/simulations/constants";
+import { StudentPageHeader } from "@/components/student/student-page-header";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,13 +13,12 @@ import {
 export default function StudentSimulationsPage() {
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold">Simulations</h1>
-        <p className="text-muted-foreground mt-1 text-sm">
-          Open a case-study EHR simulation to review the chart and scenario
-          materials.
-        </p>
-      </div>
+      <StudentPageHeader
+        title="Simulations"
+        description="Open a case-study EHR simulation to review the chart and scenario materials."
+        backHref="/student"
+        backLabel="Back to student area"
+      />
       <div className="grid gap-4 sm:grid-cols-1 md:max-w-lg">
         {BUILTIN_SIMULATION_CATALOG.map((sim) => (
           <Card key={sim.templateId}>
