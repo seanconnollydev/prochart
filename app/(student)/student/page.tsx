@@ -1,26 +1,21 @@
 import Link from "next/link";
+import { ClipboardList, Monitor } from "lucide-react";
 import { SiteFooter } from "@/components/site-footer";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 
 const practiceModes = [
   {
     title: "Assessments",
     description: "Practice individual assessments outside a case study.",
     href: "/student/assessments",
-    actionLabel: "Open assessments",
+    icon: ClipboardList,
+    iconBg: "bg-pink-500",
   },
   {
     title: "Simulations",
     description: "Case-study EHR simulations.",
     href: "/student/simulations",
-    actionLabel: "Open simulations",
+    icon: Monitor,
+    iconBg: "bg-indigo-500",
   },
 ] as const;
 
@@ -34,19 +29,28 @@ export default function StudentPage() {
             Select assessments or simulations to begin practicing.
           </p>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2 md:max-w-2xl">
+        <div className="grid gap-6 sm:grid-cols-2 md:max-w-2xl">
           {practiceModes.map((mode) => (
-            <Card key={mode.title} className="h-full">
-              <CardHeader>
-                <CardTitle className="text-base">{mode.title}</CardTitle>
-                <CardDescription>{mode.description}</CardDescription>
-              </CardHeader>
-              <CardContent className="mt-auto">
-                <Button asChild size="sm">
-                  <Link href={mode.href}>{mode.actionLabel}</Link>
-                </Button>
-              </CardContent>
-            </Card>
+            <Link
+              key={mode.title}
+              href={mode.href}
+              className="group relative flex gap-x-4 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <span
+                className={`flex size-10 shrink-0 items-center justify-center rounded-lg ${mode.iconBg}`}
+              >
+                <mode.icon className="size-5 text-white" aria-hidden="true" />
+              </span>
+              <div>
+                <h3 className="text-sm font-semibold text-foreground group-hover:text-foreground/80">
+                  {mode.title}
+                  <span aria-hidden="true"> →</span>
+                </h3>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {mode.description}
+                </p>
+              </div>
+            </Link>
           ))}
         </div>
       </div>
