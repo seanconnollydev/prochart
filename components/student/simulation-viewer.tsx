@@ -2,6 +2,14 @@
 
 import Link from "next/link";
 import { ArrowLeft, InfoIcon, UserIcon } from "lucide-react";
+import { toast } from "sonner";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { FileExportIcon } from "@hugeicons/core-free-icons";
+import { prepareFlowsheetTemplate } from "@/lib/assessments/flowsheet";
+import { buildFlowsheetExportRows } from "@/lib/assessments/flowsheet-export";
+import { readSubmission } from "@/lib/local-storage";
+import { exportSimulationSessionPdf } from "@/lib/simulations/simulation-pdf";
+import type { AssessmentSubmission } from "@/lib/types/assessment-submission";
 import type {
   SimulationHistoryAndPhysical,
   SimulationLabPanel,
@@ -500,6 +508,42 @@ export function SimulationViewer({
     metaBits.push(`${template.meta.estimatedTimeMinutes} min sim`);
   }
 
+  async function handleExportPdf() {
+    try {
+      const storageScope = {
+        kind: "simulation" as const,
+        simulationTemplateId: template.id,
+      };
+      const flowsheetAssessments = assessments.filter(
+        (a) => (a.template.presentation?.layout ?? "cards") === "flowsheet",
+      );
+      const assessmentSections = flowsheetAssessments.map((a) => {
+        const wrapped = readSubmission<AssessmentSubmission>(
+          a.templateId,
+          storageScope,
+        );
+        const responses = wrapped?.document.responses ?? {};
+        const prepared = prepareFlowsheetTemplate(a.template);
+        return {
+          title: a.template.title,
+          description: a.template.description?.trim() || undefined,
+          rows: buildFlowsheetExportRows(prepared, responses),
+        };
+      });
+
+      await exportSimulationSessionPdf({
+        simulationTitle: template.title,
+        description: template.description?.trim() || undefined,
+        patient: template.patient,
+        assessments: assessmentSections,
+        exportedAtLabel: new Date().toLocaleString(),
+      });
+      toast.success("PDF downloaded.");
+    } catch {
+      toast.error("Could not export PDF.");
+    }
+  }
+
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-hidden">
       <div className="flex shrink-0 items-start gap-3">
@@ -517,7 +561,21 @@ export function SimulationViewer({
         <h1 className="min-w-0 flex-1 text-2xl font-semibold break-words">
           {template.title}
         </h1>
-        <div className="mt-0.5 flex shrink-0 items-center gap-0.5">
+        <div className="mt-0.5 flex shrink-0 items-center gap-1">
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            title="Export to PDF"
+            aria-label="Export to PDF"
+            onClick={() => void handleExportPdf()}
+          >
+            <HugeiconsIcon
+              icon={FileExportIcon}
+              strokeWidth={2}
+              className="size-4"
+            />
+          </Button>
           <Sheet>
             <SheetTrigger
               className={cn(
