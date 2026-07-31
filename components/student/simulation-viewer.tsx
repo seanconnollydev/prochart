@@ -31,9 +31,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  SimulationAssessmentsPanel,
+  type SimulationAssessmentEntry,
+} from "@/components/student/simulation-assessments-panel";
 
 type Props = {
   template: SimulationTemplate;
+  assessments?: SimulationAssessmentEntry[];
 };
 
 function EmptyState({ label = "No data" }: { label?: string }) {
@@ -482,7 +487,10 @@ function HistoryAndPhysicalPanel({
   );
 }
 
-export function SimulationViewer({ template }: Props) {
+export function SimulationViewer({
+  template,
+  assessments = [],
+}: Props) {
   const metaBits: string[] = [];
   if (template.meta?.discipline) metaBits.push(template.meta.discipline);
   if (template.meta?.level != null)
@@ -592,29 +600,41 @@ export function SimulationViewer({ template }: Props) {
           <TabsTrigger value="mar">MAR</TabsTrigger>
           <TabsTrigger value="notes">Progress Notes</TabsTrigger>
           <TabsTrigger value="hp">H&amp;P</TabsTrigger>
+          <TabsTrigger value="assessments">Assessments</TabsTrigger>
         </TabsList>
 
-        <div className="min-h-0 min-w-0 flex-1 overflow-y-auto">
-          <TabsContent value="summary">
-            <PatientSummary patient={template.patient} />
-          </TabsContent>
-          <TabsContent value="vitals">
-            <VitalsPanel template={template} />
-          </TabsContent>
-          <TabsContent value="orders">
-            <OrdersPanel orders={template.orders} />
-          </TabsContent>
-          <TabsContent value="diagnostics">
-            <DiagnosticsPanel template={template} />
-          </TabsContent>
-          <TabsContent value="mar">
-            <MarPanel mar={template.mar} />
-          </TabsContent>
-          <TabsContent value="notes">
-            <ProgressNotesPanel notes={template.progressNotes} />
-          </TabsContent>
-          <TabsContent value="hp">
-            <HistoryAndPhysicalPanel hp={template.historyAndPhysical} />
+        <div className="relative min-h-0 min-w-0 flex-1">
+          <div className="absolute inset-0 overflow-y-auto">
+            <TabsContent value="summary">
+              <PatientSummary patient={template.patient} />
+            </TabsContent>
+            <TabsContent value="vitals">
+              <VitalsPanel template={template} />
+            </TabsContent>
+            <TabsContent value="orders">
+              <OrdersPanel orders={template.orders} />
+            </TabsContent>
+            <TabsContent value="diagnostics">
+              <DiagnosticsPanel template={template} />
+            </TabsContent>
+            <TabsContent value="mar">
+              <MarPanel mar={template.mar} />
+            </TabsContent>
+            <TabsContent value="notes">
+              <ProgressNotesPanel notes={template.progressNotes} />
+            </TabsContent>
+            <TabsContent value="hp">
+              <HistoryAndPhysicalPanel hp={template.historyAndPhysical} />
+            </TabsContent>
+          </div>
+          <TabsContent
+            value="assessments"
+            className="absolute inset-0 mt-0 flex min-h-0 flex-col overflow-hidden"
+          >
+            <SimulationAssessmentsPanel
+              simulationTemplateId={template.id}
+              assessments={assessments}
+            />
           </TabsContent>
         </div>
       </Tabs>

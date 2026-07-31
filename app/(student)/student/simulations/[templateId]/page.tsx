@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { getAssessmentTemplateById } from "@/lib/actions/assessment-template";
 import { getSimulationTemplateById } from "@/lib/actions/simulation-template";
+import { SIMULATION_LINKED_ASSESSMENTS } from "@/lib/simulations/constants";
 import { SimulationViewer } from "@/components/student/simulation-viewer";
+import type { SimulationAssessmentEntry } from "@/components/student/simulation-assessments-panel";
 import { Button } from "@/components/ui/button";
 
 type Props = {
@@ -31,5 +34,20 @@ export default async function StudentSimulationPage({ params }: Props) {
     );
   }
 
-  return <SimulationViewer template={template} />;
+  const linked = SIMULATION_LINKED_ASSESSMENTS[templateId] ?? [];
+  const assessments: SimulationAssessmentEntry[] = [];
+  for (const link of linked) {
+    const assessmentTemplate = await getAssessmentTemplateById(link.templateId);
+    if (assessmentTemplate) {
+      assessments.push({
+        templateId: link.templateId,
+        title: link.title,
+        template: assessmentTemplate,
+      });
+    }
+  }
+
+  return (
+    <SimulationViewer template={template} assessments={assessments} />
+  );
 }
