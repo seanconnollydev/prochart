@@ -5,7 +5,6 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { prepareFlowsheetTemplate } from "@/lib/assessments/flowsheet";
 import { buildFlowsheetExportRows } from "@/lib/assessments/flowsheet-export";
-import { exportFlowsheetAssessmentPdf } from "@/lib/assessments/flowsheet-pdf";
 import { groupPathLabels } from "@/lib/assessments/group-path";
 import { useLocalAssessmentSubmission } from "@/lib/hooks/use-local-assessment-submission";
 import { nowIso } from "@/lib/ids";
@@ -87,6 +86,9 @@ function FlowsheetPdfExportButton({
 }) {
   async function handleExportPdf() {
     try {
+      const { exportFlowsheetAssessmentPdf } = await import(
+        "@/lib/assessments/flowsheet-pdf"
+      );
       const prepared = prepareFlowsheetTemplate(templateForExport);
       const rows = buildFlowsheetExportRows(prepared, responses);
       await exportFlowsheetAssessmentPdf({

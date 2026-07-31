@@ -8,7 +8,6 @@ import { FileExportIcon } from "@hugeicons/core-free-icons";
 import { prepareFlowsheetTemplate } from "@/lib/assessments/flowsheet";
 import { buildFlowsheetExportRows } from "@/lib/assessments/flowsheet-export";
 import { readSubmission } from "@/lib/local-storage";
-import { exportSimulationSessionPdf } from "@/lib/simulations/simulation-pdf";
 import type { AssessmentSubmission } from "@/lib/types/assessment-submission";
 import type {
   SimulationHistoryAndPhysical,
@@ -510,6 +509,9 @@ export function SimulationViewer({
 
   async function handleExportPdf() {
     try {
+      const { exportSimulationSessionPdf } = await import(
+        "@/lib/simulations/simulation-pdf"
+      );
       const storageScope = {
         kind: "simulation" as const,
         simulationTemplateId: template.id,
