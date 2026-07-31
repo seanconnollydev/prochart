@@ -41,7 +41,7 @@ export default function RootLayout({
       )}
     >
       <body className="bg-background text-foreground flex h-dvh flex-col overflow-hidden">
-        <main className="mx-auto flex w-full max-w-6xl min-h-0 flex-1 flex-col overflow-y-auto px-4 py-6">
+        <main className="mx-auto flex w-full max-w-screen-2xl min-h-0 flex-1 flex-col overflow-y-auto px-4 py-6">
           {children}
         </main>
         <ToasterProvider />
