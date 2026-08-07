@@ -245,6 +245,60 @@ export function AssessmentRunner({
   }
 
   const groups = template.groups ?? [];
+  const isFlowsheet = layout === "flowsheet";
+  const canActOnResponses = hasMeaningfulResponses(document.responses);
+
+  const flowsheetActionCluster =
+    document.status !== "submitted" ? (
+      <div className="flex flex-wrap items-center gap-2">
+        {template.licenseNotice ? (
+          <FlowsheetLicenseNoticePopover notice={template.licenseNotice} />
+        ) : null}
+        <Button
+          type="button"
+          variant="outline"
+          disabled={!canActOnResponses}
+          onClick={() => setResetDialogOpen(true)}
+        >
+          Reset
+        </Button>
+        <FlowsheetPdfExportButton
+          disabled={!canActOnResponses}
+          template={template}
+          responses={document.responses}
+        />
+      </div>
+    ) : (
+      <div className="flex flex-wrap items-center gap-2">
+        {template.licenseNotice ? (
+          <FlowsheetLicenseNoticePopover notice={template.licenseNotice} />
+        ) : null}
+        <Badge>Submitted</Badge>
+        <FlowsheetPdfExportButton
+          disabled={!canActOnResponses}
+          template={template}
+          responses={document.responses}
+        />
+      </div>
+    );
+
+  const flowsheetToolbar = (
+    <div
+      className={cn(
+        "flex flex-wrap items-center gap-2",
+        embedded && meta?.syncError ? "justify-between" : "justify-end",
+      )}
+    >
+      {embedded && meta?.syncError ? (
+        <p className="text-destructive min-w-0 flex-1 text-sm">
+          {meta.syncError}
+        </p>
+      ) : null}
+      {flowsheetActionCluster}
+    </div>
+  );
+
+  const showOuterHeader = !isFlowsheet || !embedded;
 
   return (
     <div
@@ -258,87 +312,73 @@ export function AssessmentRunner({
           {previewBanner}
         </p>
       )}
-      <div
-        className={cn(
-          "flex flex-wrap gap-4",
-          embedded
-            ? "shrink-0 items-center justify-end"
-            : "items-start justify-between",
-        )}
-      >
-        {!embedded ? (
-          <div className="flex min-w-0 flex-1 gap-2">
-            <Button
-              asChild
-              variant="ghost"
-              size="icon"
-              className="mt-1 size-9 shrink-0 sm:mt-0.5"
-            >
-              <Link href={backHref} aria-label={backLabel}>
-                <ArrowLeft className="size-4" aria-hidden />
-              </Link>
-            </Button>
-            <div className="min-w-0 flex-1">
-              <h1 className="text-2xl font-semibold break-words">
-                {template.title}
-              </h1>
-              {template.description && (
-                <p className="text-muted-foreground mt-1 text-sm">
-                  {template.description}
-                </p>
-              )}
-              {showSubmissionStatus && (
-                <div className="mt-2 flex gap-2">
-                  <Badge variant="secondary">{document.status}</Badge>
-                </div>
-              )}
-              {meta?.syncError && (
-                <p className="text-destructive mt-1 text-sm">{meta.syncError}</p>
-              )}
+      {showOuterHeader ? (
+        <div
+          className={cn(
+            "flex flex-wrap gap-4",
+            embedded
+              ? "shrink-0 items-center justify-end"
+              : "items-start justify-between",
+          )}
+        >
+          {!embedded ? (
+            <div className="flex min-w-0 flex-1 gap-2">
+              <Button
+                asChild
+                variant="ghost"
+                size="icon"
+                className="mt-1 size-9 shrink-0 sm:mt-0.5"
+              >
+                <Link href={backHref} aria-label={backLabel}>
+                  <ArrowLeft className="size-4" aria-hidden />
+                </Link>
+              </Button>
+              <div className="min-w-0 flex-1">
+                <h1 className="text-2xl font-semibold break-words">
+                  {template.title}
+                </h1>
+                {template.description && (
+                  <p className="text-muted-foreground mt-1 text-sm">
+                    {template.description}
+                  </p>
+                )}
+                {showSubmissionStatus && (
+                  <div className="mt-2 flex gap-2">
+                    <Badge variant="secondary">{document.status}</Badge>
+                  </div>
+                )}
+                {meta?.syncError && (
+                  <p className="text-destructive mt-1 text-sm">
+                    {meta.syncError}
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
-        ) : meta?.syncError ? (
-          <p className="text-destructive min-w-0 flex-1 text-sm">
-            {meta.syncError}
-          </p>
-        ) : null}
-        {document.status !== "submitted" ? (
-          <div className="flex flex-wrap items-center gap-2">
-            {layout === "flowsheet" && template.licenseNotice ? (
-              <FlowsheetLicenseNoticePopover notice={template.licenseNotice} />
-            ) : null}
-            <Button
-              type="button"
-              variant="outline"
-              disabled={!hasMeaningfulResponses(document.responses)}
-              onClick={() => setResetDialogOpen(true)}
-            >
-              Reset
-            </Button>
-            {layout === "flowsheet" && (
-              <FlowsheetPdfExportButton
-                disabled={!hasMeaningfulResponses(document.responses)}
-                template={template}
-                responses={document.responses}
-              />
-            )}
-          </div>
-        ) : (
-          <div className="flex flex-wrap items-center gap-2">
-            {layout === "flowsheet" && template.licenseNotice ? (
-              <FlowsheetLicenseNoticePopover notice={template.licenseNotice} />
-            ) : null}
-            <Badge>Submitted</Badge>
-            {layout === "flowsheet" && (
-              <FlowsheetPdfExportButton
-                disabled={!hasMeaningfulResponses(document.responses)}
-                template={template}
-                responses={document.responses}
-              />
-            )}
-          </div>
-        )}
-      </div>
+          ) : meta?.syncError ? (
+            <p className="text-destructive min-w-0 flex-1 text-sm">
+              {meta.syncError}
+            </p>
+          ) : null}
+          {!isFlowsheet ? (
+            document.status !== "submitted" ? (
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={!canActOnResponses}
+                  onClick={() => setResetDialogOpen(true)}
+                >
+                  Reset
+                </Button>
+              </div>
+            ) : (
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge>Submitted</Badge>
+              </div>
+            )
+          ) : null}
+        </div>
+      ) : null}
 
       <AlertDialog open={resetDialogOpen} onOpenChange={setResetDialogOpen}>
         <AlertDialogContent>
@@ -371,6 +411,7 @@ export function AssessmentRunner({
             responses={document.responses}
             setResponse={setResponse}
             setItemComment={setItemComment}
+            toolbar={flowsheetToolbar}
           />
         </div>
       ) : layout === "worksheet" ? (
