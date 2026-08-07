@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { getAssessmentTemplateById } from "@/lib/actions/assessment-template";
@@ -48,6 +49,8 @@ export default async function StudentSimulationPage({ params }: Props) {
   }
 
   return (
-    <SimulationViewer template={template} assessments={assessments} />
+    <Suspense fallback={<p className="text-muted-foreground">Loading…</p>}>
+      <SimulationViewer template={template} assessments={assessments} />
+    </Suspense>
   );
 }

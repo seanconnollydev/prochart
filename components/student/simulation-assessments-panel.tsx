@@ -1,8 +1,13 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AssessmentRunner } from "@/components/student/assessment-runner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  buildSimulationTabHref,
+  parseAssessmentTab,
+} from "@/lib/simulations/tab-params";
 import type { AssessmentTemplate } from "@/lib/types/assessment-template";
 
 export type SimulationAssessmentEntry = {
@@ -20,6 +25,10 @@ export function SimulationAssessmentsPanel({
   simulationTemplateId,
   assessments,
 }: Props) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const storageScope = useMemo(
     () =>
       ({
@@ -29,6 +38,35 @@ export function SimulationAssessmentsPanel({
     [simulationTemplateId],
   );
 
+  const allowedIds = assessments.map((a) => a.templateId);
+
+  const assessmentParam = searchParams.get("assessment");
+  const chartTab = searchParams.get("tab");
+  const assessmentTab =
+    assessments.length > 0
+      ? parseAssessmentTab(assessmentParam, allowedIds)
+      : "";
+
+  useEffect(() => {
+    if (assessments.length === 0) return;
+    if (chartTab !== "assessments") return;
+    if (assessmentParam === assessmentTab) return;
+    router.replace(
+      buildSimulationTabHref(pathname, {
+        tab: "assessments",
+        assessment: assessmentTab,
+      }),
+      { scroll: false },
+    );
+  }, [
+    assessmentParam,
+    assessmentTab,
+    assessments.length,
+    chartTab,
+    pathname,
+    router,
+  ]);
+
   if (assessments.length === 0) {
     return (
       <p className="text-muted-foreground text-sm">
@@ -37,11 +75,18 @@ export function SimulationAssessmentsPanel({
     );
   }
 
-  const defaultValue = assessments[0]!.templateId;
-
   return (
     <Tabs
-      defaultValue={defaultValue}
+      value={assessmentTab}
+      onValueChange={(next) => {
+        router.push(
+          buildSimulationTabHref(pathname, {
+            tab: "assessments",
+            assessment: String(next),
+          }),
+          { scroll: false },
+        );
+      }}
       className="flex h-full min-h-0 flex-1 flex-col gap-4"
     >
       <TabsList variant="line" className="h-auto w-fit shrink-0">

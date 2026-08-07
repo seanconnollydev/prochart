@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, InfoIcon, UserIcon } from "lucide-react";
 import { toast } from "sonner";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -9,6 +10,10 @@ import { prepareFlowsheetTemplate } from "@/lib/assessments/flowsheet";
 import { buildFlowsheetExportRows } from "@/lib/assessments/flowsheet-export";
 import { readSubmission } from "@/lib/local-storage";
 import type { AssessmentSubmission } from "@/lib/types/assessment-submission";
+import {
+  buildSimulationTabHref,
+  parseChartTab,
+} from "@/lib/simulations/tab-params";
 import type {
   SimulationHistoryAndPhysical,
   SimulationLabPanel,
@@ -498,6 +503,11 @@ export function SimulationViewer({
   template,
   assessments = [],
 }: Props) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const tab = parseChartTab(searchParams.get("tab"));
+
   const metaBits: string[] = [];
   if (template.meta?.discipline) metaBits.push(template.meta.discipline);
   if (template.meta?.level != null)
@@ -645,7 +655,20 @@ export function SimulationViewer({
       </div>
 
       <Tabs
-        defaultValue="summary"
+        value={tab}
+        onValueChange={(next) => {
+          const nextTab = parseChartTab(String(next));
+          router.push(
+            buildSimulationTabHref(pathname, {
+              tab: nextTab,
+              assessment:
+                nextTab === "assessments"
+                  ? searchParams.get("assessment")
+                  : undefined,
+            }),
+            { scroll: false },
+          );
+        }}
         orientation="vertical"
         className="min-h-0 flex-1 items-stretch gap-6"
       >
