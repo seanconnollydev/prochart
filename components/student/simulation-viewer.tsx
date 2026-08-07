@@ -689,7 +689,7 @@ export function SimulationViewer({
         </aside>
 
         <div className="relative min-h-0 min-w-0 flex-1">
-          <div className="absolute inset-0 overflow-y-auto pl-4 pr-4 pt-4">
+          <div className="absolute inset-0 overflow-y-auto px-4 pt-4 pb-6">
             <TabsContent value="summary">
               <PatientSummary patient={template.patient} />
             </TabsContent>
@@ -714,7 +714,7 @@ export function SimulationViewer({
           </div>
           <TabsContent
             value="assessments"
-            className="absolute inset-0 mt-0 flex min-h-0 flex-col overflow-hidden pl-4 pr-4 pt-4"
+            className="absolute inset-0 mt-0 flex min-h-0 flex-col overflow-hidden px-4 pt-4 pb-6"
           >
             <SimulationAssessmentsPanel
               simulationTemplateId={template.id}
