@@ -557,8 +557,8 @@ export function SimulationViewer({
   }
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-hidden">
-      <div className="flex shrink-0 items-start gap-3">
+    <div className="-mx-4 -my-6 flex h-[calc(100%+3rem)] min-h-0 flex-col overflow-hidden">
+      <div className="flex shrink-0 items-start gap-3 border-b border-border px-4 pt-6 pb-4">
         <Button
           asChild
           variant="ghost"
@@ -670,24 +670,26 @@ export function SimulationViewer({
           );
         }}
         orientation="vertical"
-        className="min-h-0 flex-1 items-stretch gap-6"
+        className="min-h-0 flex-1 items-stretch gap-0"
       >
-        <TabsList
-          variant="line"
-          className="h-auto w-40 shrink-0 items-stretch self-start"
-        >
-          <TabsTrigger value="summary">Summary</TabsTrigger>
-          <TabsTrigger value="vitals">Vitals</TabsTrigger>
-          <TabsTrigger value="orders">Orders</TabsTrigger>
-          <TabsTrigger value="diagnostics">Diagnostics</TabsTrigger>
-          <TabsTrigger value="mar">MAR</TabsTrigger>
-          <TabsTrigger value="notes">Progress Notes</TabsTrigger>
-          <TabsTrigger value="hp">H&amp;P</TabsTrigger>
-          <TabsTrigger value="assessments">Assessments</TabsTrigger>
-        </TabsList>
+        <aside className="flex w-40 shrink-0 flex-col border-r border-border pl-4 pt-4">
+          <TabsList
+            variant="line"
+            className="h-auto w-full shrink-0 items-stretch self-start pr-4"
+          >
+            <TabsTrigger value="summary">Summary</TabsTrigger>
+            <TabsTrigger value="vitals">Vitals</TabsTrigger>
+            <TabsTrigger value="orders">Orders</TabsTrigger>
+            <TabsTrigger value="diagnostics">Diagnostics</TabsTrigger>
+            <TabsTrigger value="mar">MAR</TabsTrigger>
+            <TabsTrigger value="notes">Progress Notes</TabsTrigger>
+            <TabsTrigger value="hp">H&amp;P</TabsTrigger>
+            <TabsTrigger value="assessments">Assessments</TabsTrigger>
+          </TabsList>
+        </aside>
 
         <div className="relative min-h-0 min-w-0 flex-1">
-          <div className="absolute inset-0 overflow-y-auto">
+          <div className="absolute inset-0 overflow-y-auto pl-4 pr-4 pt-4">
             <TabsContent value="summary">
               <PatientSummary patient={template.patient} />
             </TabsContent>
@@ -712,7 +714,7 @@ export function SimulationViewer({
           </div>
           <TabsContent
             value="assessments"
-            className="absolute inset-0 mt-0 flex min-h-0 flex-col overflow-hidden"
+            className="absolute inset-0 mt-0 flex min-h-0 flex-col overflow-hidden pl-4 pr-4 pt-4"
           >
             <SimulationAssessmentsPanel
               simulationTemplateId={template.id}
