@@ -56,7 +56,7 @@ export default function StudentPage() {
           </div>
         </div>
       </div>
-      <SiteFooter className="border-0 px-0" />
+      <SiteFooter className="border-0 px-0 text-center" />
     </div>
   );
 }
