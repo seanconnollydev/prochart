@@ -139,6 +139,7 @@ function FlowsheetItemTableRow({
               choices={flowsheetMultiselectChoicesForItem(item)}
               value={coerceFlowsheetMultiselectValue(responses[item.id]?.value)}
               onChange={(ids) => setResponse(item.id, ids)}
+              onOpenInfoPanel={() => onOpenInfoPanel(item.id)}
               className="w-full min-w-0"
             />
           ) : null}

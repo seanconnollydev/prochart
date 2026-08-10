@@ -10,9 +10,9 @@ import {
   isFlowsheetWdlGateItem,
   segmentWdlDefinitionText,
 } from "@/lib/assessments/flowsheet";
+import { FlowsheetMultiselectOptionsList } from "@/components/student/flowsheet-multiselect-options-list";
 import { useIsMdUp } from "@/lib/hooks/use-media-query";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -234,39 +234,14 @@ function InfoPanelBody({
                   <p className="text-muted-foreground mb-2 text-[10px] font-medium tracking-wide uppercase">
                     Options
                   </p>
-                  <div
-                    className="mb-3 space-y-2"
-                    role="group"
-                    aria-label={`Options for ${item.prompt}`}
-                  >
-                    {panelChoices.map((ch) => {
-                      const checked = selectedIds.includes(ch.id);
-                      return (
-                        <div key={ch.id} className="flex items-center gap-2">
-                          <Checkbox
-                            id={`flowsheet-info-${item.id}-${ch.id}`}
-                            checked={checked}
-                            onCheckedChange={(c) => {
-                              const next = new Set(selectedIds);
-                              if (c === true) {
-                                next.add(ch.id);
-                              } else {
-                                next.delete(ch.id);
-                              }
-                              setResponse(item.id, [...next]);
-                            }}
-                            className="cursor-pointer"
-                          />
-                          <Label
-                            htmlFor={`flowsheet-info-${item.id}-${ch.id}`}
-                            className="text-foreground cursor-pointer text-xs font-normal leading-snug"
-                          >
-                            {ch.label}
-                          </Label>
-                        </div>
-                      );
-                    })}
-                  </div>
+                  <FlowsheetMultiselectOptionsList
+                    idPrefix={`flowsheet-info-${item.id}`}
+                    groupLabel={item.prompt}
+                    choices={panelChoices}
+                    selectedIds={selectedIds}
+                    onChange={(ids) => setResponse(item.id, ids)}
+                    className="mb-3"
+                  />
                   {hasWdlDefinition ? <Separator className="mb-3" /> : null}
                 </>
               );
