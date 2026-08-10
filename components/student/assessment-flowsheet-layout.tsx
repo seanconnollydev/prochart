@@ -349,7 +349,7 @@ export function AssessmentFlowsheetLayout({
         </div>
       ) : null}
       <div className="flex min-h-0 flex-1 gap-0 overflow-x-clip">
-        <aside className="bg-muted/40 flex w-52 shrink-0 flex-col border-r">
+        <aside className="bg-muted/40 hidden w-52 shrink-0 flex-col border-r md:flex">
           <div className="border-b p-2">
             <Input
               placeholder="Search categories…"
