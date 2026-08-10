@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, InfoIcon, UserIcon } from "lucide-react";
@@ -8,10 +9,12 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { FileExportIcon } from "@hugeicons/core-free-icons";
 import { prepareFlowsheetTemplate } from "@/lib/assessments/flowsheet";
 import { buildFlowsheetExportRows } from "@/lib/assessments/flowsheet-export";
+import { useIsMdUp } from "@/lib/hooks/use-media-query";
 import { readSubmission } from "@/lib/local-storage";
 import type { AssessmentSubmission } from "@/lib/types/assessment-submission";
 import {
   buildSimulationTabHref,
+  type ChartTab,
   parseChartTab,
 } from "@/lib/simulations/tab-params";
 import type {
@@ -47,6 +50,17 @@ import {
   SimulationAssessmentsPanel,
   type SimulationAssessmentEntry,
 } from "@/components/student/simulation-assessments-panel";
+
+const CHART_TAB_TRIGGERS: ReadonlyArray<{ value: ChartTab; label: string }> = [
+  { value: "summary", label: "Summary" },
+  { value: "vitals", label: "Vitals" },
+  { value: "orders", label: "Orders" },
+  { value: "diagnostics", label: "Diagnostics" },
+  { value: "mar", label: "MAR" },
+  { value: "notes", label: "Progress Notes" },
+  { value: "hp", label: "H&P" },
+  { value: "assessments", label: "Assessments" },
+];
 
 type Props = {
   template: SimulationTemplate;
@@ -507,6 +521,20 @@ export function SimulationViewer({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const tab = parseChartTab(searchParams.get("tab"));
+  const isMdUp = useIsMdUp();
+  const tabsListRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isMdUp) return;
+    const active = tabsListRef.current?.querySelector<HTMLElement>(
+      '[data-slot="tabs-trigger"][data-active]',
+    );
+    active?.scrollIntoView({
+      inline: "center",
+      block: "nearest",
+      behavior: "smooth",
+    });
+  }, [tab, isMdUp]);
 
   const metaBits: string[] = [];
   if (template.meta?.discipline) metaBits.push(template.meta.discipline);
@@ -669,24 +697,47 @@ export function SimulationViewer({
             { scroll: false },
           );
         }}
-        orientation="vertical"
+        orientation={isMdUp ? "vertical" : "horizontal"}
         className="min-h-0 flex-1 items-stretch gap-0"
       >
-        <aside className="flex w-40 shrink-0 flex-col border-r border-border pl-4 pt-4">
-          <TabsList
-            variant="line"
-            className="h-auto w-full shrink-0 items-stretch self-start pr-4"
+        <nav
+          aria-label="Chart sections"
+          className={cn(
+            "shrink-0",
+            isMdUp
+              ? "flex w-40 flex-col border-r border-border pl-4 pt-4"
+              : "border-b border-border",
+          )}
+        >
+          <div
+            className={cn(
+              isMdUp ? "contents" : "no-scrollbar overflow-x-auto px-4 pb-1.5",
+            )}
           >
-            <TabsTrigger value="summary">Summary</TabsTrigger>
-            <TabsTrigger value="vitals">Vitals</TabsTrigger>
-            <TabsTrigger value="orders">Orders</TabsTrigger>
-            <TabsTrigger value="diagnostics">Diagnostics</TabsTrigger>
-            <TabsTrigger value="mar">MAR</TabsTrigger>
-            <TabsTrigger value="notes">Progress Notes</TabsTrigger>
-            <TabsTrigger value="hp">H&amp;P</TabsTrigger>
-            <TabsTrigger value="assessments">Assessments</TabsTrigger>
-          </TabsList>
-        </aside>
+            <TabsList
+              ref={tabsListRef}
+              variant="line"
+              className={cn(
+                "shrink-0",
+                isMdUp
+                  ? "h-auto w-full items-stretch self-start pr-4"
+                  : "h-auto w-max min-w-full justify-start gap-0 rounded-none py-0",
+              )}
+            >
+              {CHART_TAB_TRIGGERS.map(({ value, label }) => (
+                <TabsTrigger
+                  key={value}
+                  value={value}
+                  className={cn(
+                    !isMdUp && "flex-none rounded-none px-3 py-2.5",
+                  )}
+                >
+                  {label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </div>
+        </nav>
 
         <div className="relative min-h-0 min-w-0 flex-1">
           <div className="absolute inset-0 overflow-y-auto px-4 pt-4 pb-6">
