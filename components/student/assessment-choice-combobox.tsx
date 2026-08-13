@@ -67,7 +67,7 @@ export function AssessmentChoiceCombobox({
         align="start"
         side="bottom"
         sideOffset={4}
-        className="max-h-72 w-[min(100vw-2rem,28rem)] min-w-[var(--anchor-width)] max-w-[min(100vw-2rem,36rem)]"
+        className="max-h-72 w-(--anchor-width) max-w-(--anchor-width)"
       >
         {choices.map((ch) => (
           <SelectItem

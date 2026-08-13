@@ -6,7 +6,7 @@ export function SiteFooter({ className }: { className?: string }) {
   return (
     <footer
       className={cn(
-        "border-border text-muted-foreground mx-auto w-full max-w-6xl border-t px-4 py-6 text-sm",
+        "border-border text-muted-foreground mx-auto w-full max-w-screen-2xl border-t px-4 py-6 text-sm",
         className,
       )}
     >

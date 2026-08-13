@@ -46,6 +46,8 @@ type Props = {
     clearItemIds?: string[],
   ) => void;
   setItemComment: (itemId: string, comment: string | undefined) => void;
+  /** Assessment-scoped actions (info / reset / export) rendered above the category rail and table. */
+  toolbar?: ReactNode;
   /** Merged onto the root layout wrapper (e.g. height constraints from the parent page). */
   className?: string;
 };
@@ -137,6 +139,7 @@ function FlowsheetItemTableRow({
               choices={flowsheetMultiselectChoicesForItem(item)}
               value={coerceFlowsheetMultiselectValue(responses[item.id]?.value)}
               onChange={(ids) => setResponse(item.id, ids)}
+              onOpenInfoPanel={() => onOpenInfoPanel(item.id)}
               className="w-full min-w-0"
             />
           ) : null}
@@ -234,6 +237,7 @@ export function AssessmentFlowsheetLayout({
   responses,
   setResponse,
   setItemComment,
+  toolbar,
   className,
 }: Props) {
   const template = useMemo(
@@ -336,142 +340,152 @@ export function AssessmentFlowsheetLayout({
   return (
     <div
       className={cn(
-        "flex min-h-[min(70vh,720px)] max-h-full gap-0 overflow-x-clip overflow-y-visible rounded-md border",
+        "flex min-h-[min(70vh,720px)] max-h-full flex-col rounded-md border",
         className,
       )}
     >
-      <aside className="bg-muted/40 flex w-52 shrink-0 flex-col border-r">
-        <div className="border-b p-2">
-          <Input
-            placeholder="Search categories…"
-            value={railQuery}
-            onChange={(e) => setRailQuery(e.target.value)}
-            className="h-8 text-xs"
-            aria-label="Filter body system categories"
-          />
+      {toolbar != null ? (
+        <div className="bg-background shrink-0 rounded-t-md border-b px-2 py-1.5">
+          {toolbar}
         </div>
-        <ScrollArea className="min-h-0 flex-1">
-          <nav
-            className="flex flex-col gap-0.5 p-2"
-            aria-label="Assessment categories"
-          >
-            {filteredRoots.map((r) => (
-              <button
-                key={r.id}
-                type="button"
-                onClick={() => handleRailClick(r.id)}
-                className="hover:bg-muted text-foreground cursor-pointer rounded-md px-2 py-1.5 text-left text-xs leading-tight transition-colors"
-              >
-                {r.label}
-              </button>
-            ))}
-          </nav>
-        </ScrollArea>
-      </aside>
-
-      <div className="flex h-full min-h-0 min-w-0 flex-1">
-        <div className="bg-background min-w-0 flex-1 overflow-auto">
-          <Table className="table-fixed">
-            {blocks.map((block) => {
-              const groupLabel =
-                groups.find((g) => g.id === block.groupId)?.label ?? "";
-              const sectionGate = findSectionRollupGate(
-                block.groupId,
-                groupLabel,
-                block.items,
-              );
-              const bodyItems = sectionGate
-                ? block.items.filter((i) => i.id !== sectionGate.id)
-                : block.items;
-              const sectionExpanded =
-                !sectionGate ||
-                isFlowsheetExceptionSelected(responses, sectionGate.id);
-              const rowSegments = segmentFlowsheetRowItems(bodyItems);
-              /** Body rows render under optional section rollup; shift them right when expanded. */
-              const sectionBodyIndent =
-                Boolean(sectionGate) && sectionExpanded ? 1 : 0;
-
-              const pathLine =
-                block.path.length > 0 ? block.path.join(" → ") : "—";
-
-              const rowProps = {
-                responses,
-                setResponse,
-                onWdlXChoiceChange: handleFlowsheetResponse,
-                onOpenInfoPanel: setInfoPanelItemId,
-                onSyncInfoPanelOnFocus: syncInfoPanelOnRowFocus,
-              };
-
-              return (
-                <TableBody
-                  key={block.groupId || "ungrouped"}
-                  className="border-b"
-                  id={`flowsheet-section-${block.groupId}`}
+      ) : null}
+      <div className="flex min-h-0 flex-1 gap-0 overflow-x-clip">
+        <aside className="bg-muted/40 hidden w-52 shrink-0 flex-col border-r md:flex">
+          <div className="border-b p-2">
+            <Input
+              placeholder="Search categories…"
+              value={railQuery}
+              onChange={(e) => setRailQuery(e.target.value)}
+              className="h-8 text-xs"
+              aria-label="Filter body system categories"
+            />
+          </div>
+          <ScrollArea className="min-h-0 flex-1">
+            <nav
+              className="flex flex-col gap-0.5 p-2"
+              aria-label="Assessment categories"
+            >
+              {filteredRoots.map((r) => (
+                <button
+                  key={r.id}
+                  type="button"
+                  onClick={() => handleRailClick(r.id)}
+                  className="hover:bg-muted text-foreground cursor-pointer rounded-md px-2 py-1.5 text-left text-xs leading-tight transition-colors"
                 >
-                  <TableRow className="bg-muted/80 hover:bg-muted/80 border-b-0">
-                    <TableCell
-                      colSpan={2}
-                      className="text-foreground min-w-0 break-words py-1.5 text-xs font-semibold tracking-wide whitespace-normal uppercase"
-                    >
-                      {pathLine}
-                    </TableCell>
-                  </TableRow>
-                  {sectionGate ? (
-                    <FlowsheetItemTableRow item={sectionGate} {...rowProps} />
-                  ) : null}
-                  {sectionExpanded
-                    ? rowSegments.flatMap((seg) => {
-                        if (seg.gate) {
-                          const out = [
+                  {r.label}
+                </button>
+              ))}
+            </nav>
+          </ScrollArea>
+        </aside>
+
+        <div className="flex h-full min-h-0 min-w-0 flex-1">
+          <div className="bg-background min-w-0 flex-1 overflow-auto">
+            <Table className="table-fixed">
+              {blocks.map((block) => {
+                const groupLabel =
+                  groups.find((g) => g.id === block.groupId)?.label ?? "";
+                const sectionGate = findSectionRollupGate(
+                  block.groupId,
+                  groupLabel,
+                  block.items,
+                );
+                const bodyItems = sectionGate
+                  ? block.items.filter((i) => i.id !== sectionGate.id)
+                  : block.items;
+                const sectionExpanded =
+                  !sectionGate ||
+                  isFlowsheetExceptionSelected(responses, sectionGate.id);
+                const rowSegments = segmentFlowsheetRowItems(bodyItems);
+                /** Body rows render under optional section rollup; shift them right when expanded. */
+                const sectionBodyIndent =
+                  Boolean(sectionGate) && sectionExpanded ? 1 : 0;
+
+                const pathLine =
+                  block.path.length > 0 ? block.path.join(" → ") : "—";
+
+                const rowProps = {
+                  responses,
+                  setResponse,
+                  onWdlXChoiceChange: handleFlowsheetResponse,
+                  onOpenInfoPanel: setInfoPanelItemId,
+                  onSyncInfoPanelOnFocus: syncInfoPanelOnRowFocus,
+                };
+
+                return (
+                  <TableBody
+                    key={block.groupId || "ungrouped"}
+                    className="border-b"
+                    id={`flowsheet-section-${block.groupId}`}
+                  >
+                    <TableRow className="bg-muted/80 hover:bg-muted/80 border-b-0">
+                      <TableCell
+                        colSpan={2}
+                        className="text-foreground min-w-0 break-words py-1.5 text-xs font-semibold tracking-wide whitespace-normal uppercase"
+                      >
+                        {pathLine}
+                      </TableCell>
+                    </TableRow>
+                    {sectionGate ? (
+                      <FlowsheetItemTableRow item={sectionGate} {...rowProps} />
+                    ) : null}
+                    {sectionExpanded
+                      ? rowSegments.flatMap((seg) => {
+                          if (seg.gate) {
+                            const out = [
+                              <FlowsheetItemTableRow
+                                key={seg.gate.id}
+                                item={seg.gate}
+                                indentLevel={sectionBodyIndent}
+                                {...rowProps}
+                              />,
+                            ];
+                            if (
+                              isFlowsheetExceptionSelected(
+                                responses,
+                                seg.gate.id,
+                              )
+                            ) {
+                              for (const d of seg.details) {
+                                out.push(
+                                  <FlowsheetItemTableRow
+                                    key={d.id}
+                                    item={d}
+                                    indentLevel={sectionBodyIndent + 1}
+                                    {...rowProps}
+                                  />,
+                                );
+                              }
+                            }
+                            return out;
+                          }
+                          return seg.details.map((d) => (
                             <FlowsheetItemTableRow
-                              key={seg.gate.id}
-                              item={seg.gate}
+                              key={d.id}
+                              item={d}
                               indentLevel={sectionBodyIndent}
                               {...rowProps}
-                            />,
-                          ];
-                          if (
-                            isFlowsheetExceptionSelected(responses, seg.gate.id)
-                          ) {
-                            for (const d of seg.details) {
-                              out.push(
-                                <FlowsheetItemTableRow
-                                  key={d.id}
-                                  item={d}
-                                  indentLevel={sectionBodyIndent + 1}
-                                  {...rowProps}
-                                />,
-                              );
-                            }
-                          }
-                          return out;
-                        }
-                        return seg.details.map((d) => (
-                          <FlowsheetItemTableRow
-                            key={d.id}
-                            item={d}
-                            indentLevel={sectionBodyIndent}
-                            {...rowProps}
-                          />
-                        ));
-                      })
-                    : null}
-                </TableBody>
-              );
-            })}
-          </Table>
-        </div>
+                            />
+                          ));
+                        })
+                      : null}
+                  </TableBody>
+                );
+              })}
+            </Table>
+          </div>
 
-        <AssessmentFlowsheetInfoPanel
-          open={Boolean(infoPanelItemId)}
-          item={infoPanelItem ?? null}
-          definition={infoPanelDefinition ?? null}
-          pathLine={infoPanelPathLine}
-          responses={responses}
-          setResponse={setResponse}
-          setItemComment={setItemComment}
-          onClose={() => setInfoPanelItemId(null)}
-        />
+          <AssessmentFlowsheetInfoPanel
+            open={Boolean(infoPanelItemId)}
+            item={infoPanelItem ?? null}
+            definition={infoPanelDefinition ?? null}
+            pathLine={infoPanelPathLine}
+            responses={responses}
+            setResponse={setResponse}
+            setItemComment={setItemComment}
+            onClose={() => setInfoPanelItemId(null)}
+          />
+        </div>
       </div>
     </div>
   );

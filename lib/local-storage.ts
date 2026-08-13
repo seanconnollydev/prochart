@@ -11,7 +11,18 @@ function key(ns: StorageNamespace, id: string): string {
   return `${PREFIX}${ns}:${id}`;
 }
 
-function submissionKey(templateId: string): string {
+export type AssessmentSubmissionStorageScope = {
+  kind: "simulation";
+  simulationTemplateId: string;
+};
+
+function submissionKey(
+  templateId: string,
+  scope?: AssessmentSubmissionStorageScope,
+): string {
+  if (scope?.kind === "simulation") {
+    return `${PREFIX}assessment-submission:sim:${scope.simulationTemplateId}:${templateId}`;
+  }
   return `${PREFIX}assessment-submission:${templateId}`;
 }
 
@@ -49,11 +60,14 @@ export function readWrapped<T>(
   }
 }
 
-export function readSubmission<T>(templateId: string): LocalWrapped<T> | null {
+export function readSubmission<T>(
+  templateId: string,
+  scope?: AssessmentSubmissionStorageScope,
+): LocalWrapped<T> | null {
   if (typeof window === "undefined") {
     return null;
   }
-  const raw = localStorage.getItem(submissionKey(templateId));
+  const raw = localStorage.getItem(submissionKey(templateId, scope));
   if (!raw) {
     return null;
   }
@@ -82,11 +96,15 @@ export function writeWrapped<T>(
 export function writeSubmission<T>(
   templateId: string,
   wrapped: LocalWrapped<T>,
+  scope?: AssessmentSubmissionStorageScope,
 ): void {
   if (typeof window === "undefined") {
     return;
   }
-  localStorage.setItem(submissionKey(templateId), JSON.stringify(wrapped));
+  localStorage.setItem(
+    submissionKey(templateId, scope),
+    JSON.stringify(wrapped),
+  );
 }
 
 export function removeWrapped(ns: StorageNamespace, id: string): void {

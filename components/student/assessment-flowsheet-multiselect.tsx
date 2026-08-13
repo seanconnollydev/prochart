@@ -14,7 +14,9 @@ import {
   ComboboxValue,
   useComboboxAnchor,
 } from "@/components/ui/combobox";
+import { useIsMdUp } from "@/lib/hooks/use-media-query";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -23,11 +25,15 @@ type Props = {
   choices: AssessmentChoice[];
   value: string[];
   onChange: (ids: string[]) => void;
+  /** Opens the flowsheet info / WDL panel (used on mobile instead of inline editing). */
+  onOpenInfoPanel?: () => void;
   disabled?: boolean;
   className?: string;
 };
 
 const MAX_VISIBLE_CHIPS = 8;
+/** Minimum width for a readable chip (label truncate + remove control). */
+const MIN_READABLE_CHIP_WIDTH_PX = 96;
 
 /** How many leading selections can show as chips before "+N", based on measured chip row width. */
 function visibleChipCountForWidth(
@@ -36,13 +42,12 @@ function visibleChipCountForWidth(
 ): number {
   if (totalSelected <= 0) return 0;
   const w = containerWidthPx;
-  if (!Number.isFinite(w) || w < 40) return 1;
+  if (!Number.isFinite(w) || w < 40) return 0;
 
   const horizontalPadding = 16;
   const inputMinWidthPx = 72;
   const overflowBadgeWidthPx = 40;
   const gapPx = 4;
-  const minChipWidthPx = 52;
 
   const ceiling = Math.min(totalSelected, MAX_VISIBLE_CHIPS);
 
@@ -54,7 +59,7 @@ function visibleChipCountForWidth(
     const neededWidthPx =
       horizontalPadding +
       inputMinWidthPx +
-      k * minChipWidthPx +
+      k * MIN_READABLE_CHIP_WIDTH_PX +
       (showOverflowBadge ? overflowBadgeWidthPx : 0) +
       totalGapsPx;
 
@@ -63,13 +68,39 @@ function visibleChipCountForWidth(
     }
   }
 
-  return 1;
+  return 0;
 }
 
-/**
- * Multiselect for flowsheet `multiChoice` items: shadcn Combobox (multiple) with chips.
- */
-export function AssessmentFlowsheetMultiselect({
+function selectionAriaLabel(label: string, selectedChoices: AssessmentChoice[]) {
+  const selectedLabelsText = selectedChoices.map((c) => c.label).join(", ");
+  if (selectedChoices.length === 0) return label;
+  if (selectedChoices.length === 1) {
+    return `${label}: ${selectedLabelsText}`;
+  }
+  return `${label}, ${selectedChoices.length} selected: ${selectedLabelsText}`;
+}
+
+function useSelectedChoices(
+  choices: AssessmentChoice[],
+  value: string[],
+): AssessmentChoice[] {
+  const byId = useMemo(
+    () => new Map(choices.map((c) => [c.id, c] as const)),
+    [choices],
+  );
+  return useMemo((): AssessmentChoice[] => {
+    const out: AssessmentChoice[] = [];
+    for (const id_ of value) {
+      const ch = byId.get(id_);
+      if (ch) {
+        out.push(ch);
+      }
+    }
+    return out;
+  }, [value, byId]);
+}
+
+function DesktopFlowsheetMultiselect({
   id,
   label,
   choices,
@@ -97,33 +128,14 @@ export function AssessmentFlowsheetMultiselect({
     return () => observer.disconnect();
   }, [anchorRef]);
 
-  const byId = useMemo(
-    () => new Map(choices.map((c) => [c.id, c] as const)),
-    [choices],
-  );
-  const selectedChoices = useMemo((): AssessmentChoice[] => {
-    const out: AssessmentChoice[] = [];
-    for (const id_ of value) {
-      const ch = byId.get(id_);
-      if (ch) {
-        out.push(ch);
-      }
-    }
-    return out;
-  }, [value, byId]);
+  const selectedChoices = useSelectedChoices(choices, value);
 
   const selectedLabelsText = useMemo(
     () => selectedChoices.map((c) => c.label).join(", "),
     [selectedChoices],
   );
 
-  const chipsInputAriaLabel =
-    selectedChoices.length === 0
-      ? label
-      : selectedChoices.length === 1
-        ? `${label}: ${selectedLabelsText}`
-        : `${label}, ${selectedChoices.length} selected: ${selectedLabelsText}`;
-
+  const chipsInputAriaLabel = selectionAriaLabel(label, selectedChoices);
   const chipsInputTitle =
     selectedChoices.length > 0 ? selectedLabelsText : undefined;
 
@@ -159,7 +171,6 @@ export function AssessmentFlowsheetMultiselect({
           className={cn(
             "flex h-8 max-h-8 min-h-8 w-full min-w-0 max-w-full flex-nowrap items-center gap-1 overflow-hidden rounded-md border border-input/80 bg-input/30 px-2 py-0 text-xs",
             "has-data-[slot=combobox-chip]:px-1.5",
-            "[&_[data-slot=combobox-chip]]:min-h-5.5 [&_[data-slot=combobox-chip]]:min-w-0 [&_[data-slot=combobox-chip]]:max-w-[min(14rem,58%)] [&_[data-slot=combobox-chip]]:shrink",
           )}
         >
           <ComboboxValue>
@@ -168,7 +179,7 @@ export function AssessmentFlowsheetMultiselect({
                 {visibleChoices.map((ch) => (
                   <ComboboxChip
                     key={ch.id}
-                    className="min-w-0 max-w-[min(14rem,58%)] shrink"
+                    className="max-w-[min(14rem,58%)] shrink-0"
                   >
                     <span className="min-w-0 truncate">{ch.label}</span>
                   </ComboboxChip>
@@ -183,6 +194,14 @@ export function AssessmentFlowsheetMultiselect({
                   </Badge>
                 ) : null}
               </>
+            ) : selectedChoices.length > 0 ? (
+              <Badge
+                variant="secondary"
+                className="pointer-events-none shrink-0 px-1.5 text-[10px] font-medium tabular-nums"
+                aria-hidden
+              >
+                {selectedChoices.length} selected
+              </Badge>
             ) : null}
           </ComboboxValue>
           <ComboboxChipsInput
@@ -214,4 +233,58 @@ export function AssessmentFlowsheetMultiselect({
       </Combobox>
     </div>
   );
+}
+
+function MobileFlowsheetMultiselect({
+  id,
+  label,
+  choices,
+  value,
+  onOpenInfoPanel,
+  disabled,
+  className,
+}: Props) {
+  const selectedChoices = useSelectedChoices(choices, value);
+  const selectedLabelsText = useMemo(
+    () => selectedChoices.map((c) => c.label).join(", "),
+    [selectedChoices],
+  );
+  const triggerAriaLabel = selectionAriaLabel(label, selectedChoices);
+  const triggerTitle =
+    selectedChoices.length > 0 ? selectedLabelsText : undefined;
+
+  return (
+    <div className={cn("w-full min-w-0", className)}>
+      <Button
+        type="button"
+        id={id}
+        variant="outline"
+        disabled={disabled || !onOpenInfoPanel}
+        aria-label={triggerAriaLabel}
+        title={triggerTitle}
+        aria-haspopup="dialog"
+        onClick={() => onOpenInfoPanel?.()}
+        className={cn(
+          "border-input/80 bg-input/30 hover:bg-input/50 h-8 w-full min-w-0 justify-start rounded-md px-2 text-xs font-normal",
+          selectedChoices.length === 0 && "text-muted-foreground",
+        )}
+      >
+        {selectedChoices.length === 0
+          ? "Add…"
+          : `${selectedChoices.length} selected`}
+      </Button>
+    </div>
+  );
+}
+
+/**
+ * Multiselect for flowsheet `multiChoice` items.
+ * Desktop: Combobox chips. Mobile: summary trigger that opens the info panel.
+ */
+export function AssessmentFlowsheetMultiselect(props: Props) {
+  const isMdUp = useIsMdUp();
+  if (isMdUp) {
+    return <DesktopFlowsheetMultiselect {...props} />;
+  }
+  return <MobileFlowsheetMultiselect {...props} />;
 }
