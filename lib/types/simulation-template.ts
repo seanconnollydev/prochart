@@ -113,22 +113,13 @@ export type SimulationHistoryAndPhysical = {
 // Orders
 // ---------------------------------------------------------------------------
 
-export type SimulationOrderCategory =
-  | "activity"
-  | "monitoring"
-  | "ivFluids"
-  | "medication"
-  | "diagnostic"
-  | "diet"
-  | "nursing"
-  | "other";
-
+/** Matches the chart Orders layout: Date | Time | Order. */
 export type SimulationOrder = {
   id: string;
-  category: SimulationOrderCategory;
-  text: string;
-  /** Additional clinical detail, instructions, or dosing calculations. */
-  details?: string;
+  date?: string;
+  time?: string;
+  /** Full order text shown in the Order column; may be multiline with bullets. */
+  order: string;
 };
 
 // ---------------------------------------------------------------------------

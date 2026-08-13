@@ -249,92 +249,90 @@
   },
   "orders": [
     {
-      "id": "ord_vs",
-      "category": "monitoring",
-      "text": "Vital signs every 30 minutes"
+      "id": "ord_earlier_labs",
+      "date": "Today",
+      "time": "Earlier today",
+      "order": "CK-MB, Troponin, CBC, Electrolytes, BUN, Creatinine, Glucose, Magnesium, INR, PTT STAT"
     },
     {
-      "id": "ord_cardiac_monitor",
-      "category": "monitoring",
-      "text": "Continuous cardiac monitor and pulse oximetry"
+      "id": "ord_earlier_cardiology",
+      "order": "Cardiology consult STAT for STEMI"
     },
     {
-      "id": "ord_extremity",
-      "category": "monitoring",
-      "text": "Assess insertion site and left extremity every 15 minutes",
-      "details": "Monitor color, warmth, sensation, and movement of left leg. Keep extremity straight for 6 hours post sheath pull. Monitor insertion site for bleeding and bruit."
+      "id": "ord_earlier_monitor",
+      "order": "Continuous cardiac monitoring and pulse oximetry"
     },
     {
-      "id": "ord_o2",
-      "category": "nursing",
-      "text": "Oxygen via nasal cannula at 1 lpm"
+      "id": "ord_earlier_stemi_activation",
+      "order": "Activation of STEMI protocol ————————————————— Dr. Bernard, M.D."
     },
     {
-      "id": "ord_ns",
-      "category": "ivFluids",
-      "text": "0.9% Normal Saline IV at 75 ml/hour (IV Site #1)"
+      "id": "ord_earlier_stemi_protocol",
+      "order": "STEMI Protocol Order Set:\n• ASA 325 mg PO (four 81 chewable non-enteric coated) if not already given\n• Two peripheral large bore IVs, one in right AC\n• NPO\n• 0.9% NS at TKO rate\n• O2 via NC titrated to keep O2 sat >94%\n• Portable AP Chest Xray STAT\n• Nitroglycerine 0.4 mg sublingually q 5minutes for total of 3 doses\n• Nitroglycerine IV prn for chest pain not resolved by Nitroglycerin sublingual doses. Start at 5 mcg/min and increase by 5 mcg every 5 minutes up to 20 mcg/min until response noted while maintaining SBP >100\n• Heparin IV infusion 12 U/kg/hr IV (max 1000 units/hour)"
     },
     {
-      "id": "ord_eptifibatide",
-      "category": "ivFluids",
-      "text": "Eptifibatide IV at 2 mcg/kg/minute (IV Site #2)",
-      "details": "Calculate infusion rate based on patient weight. For 72 kg patient: 11.5 ml/hr. Currently hanging but not running — start infusion."
+      "id": "ord_pre_cath",
+      "date": "Today",
+      "time": "Before procedure",
+      "order": "Prepare for cardiac catheterization with probable angioplasty STAT-Dr. Forssmann, MD"
     },
     {
-      "id": "ord_ecg",
-      "category": "diagnostic",
-      "text": "Post-procedure 12-lead ECG"
+      "id": "ord_pre_cardiology",
+      "order": "Cardiology consult STAT for STEMI"
     },
     {
-      "id": "ord_labs",
-      "category": "diagnostic",
-      "text": "Cardiac enzymes, CBC, BMP, lipid profile, Hemoglobin A1C"
+      "id": "ord_pre_monitor",
+      "order": "Continuous cardiac monitoring and pulse oximetry"
     },
     {
-      "id": "ord_cxr",
-      "category": "diagnostic",
-      "text": "Chest X-ray (optional review)"
+      "id": "ord_pre_stemi_activation",
+      "order": "Activation of STEMI protocol ————————————————— Dr. Bernard, M.D."
     },
     {
-      "id": "ord_diet",
-      "category": "diet",
-      "text": "Clear liquids; may advance to meal tray as tolerated"
+      "id": "ord_pre_surgical_prep",
+      "order": "Surgical prep: Cardiac Catheterization with Radiographic Contrast Sensitivity Prophylaxis for Emergent Procedure Order Set:\n• Confirm signed informed consent in chart\n• Clippers to remove hair at surgical site: bilateral groin\n• If patient has a history of minor reaction to iodine or other contrast (hives):\n  • Famotidine (Pepcid) 20 mg IVP over 1 minute 15 minutes prior to procedure\n  • Montelukast (Singulair) 10 mg by mouth STAT\n  • Promethazine (Phenergan) 12.5 mg IVP over 1 minute 15 minutes prior to procedure\n• Renal protection:\n  • If serum creatinine greater than 1.5 mg/dL or GFR less than 60 or patient sensitive to contrast, use Renal Protective Contrast Media\n  • 0.9% NS 3.5ml/kg/hour over one hour, start one hour prior to procedure and continue at 1.2 ml/kg/hr during the procedure and continue for 6 hours post procedure\n  • Hold Metformin(Glucophage) day of the procedure"
     },
     {
-      "id": "ord_metoprolol",
-      "category": "medication",
-      "text": "Metoprolol 12.5 mg PO"
+      "id": "ord_now_implement",
+      "date": "Today",
+      "time": "Now",
+      "order": "Implement Post-PCI Order Set"
     },
     {
-      "id": "ord_lisinopril",
-      "category": "medication",
-      "text": "Lisinopril 10 mg PO"
+      "id": "ord_now_metoprolol",
+      "order": "Metoprolol 12.5 mg PO daily"
     },
     {
-      "id": "ord_atorvastatin",
-      "category": "medication",
-      "text": "Atorvastatin 10 mg PO"
+      "id": "ord_now_lisinopril",
+      "order": "Lisinopril 10 mg PO daily"
     },
     {
-      "id": "ord_aspirin",
-      "category": "medication",
-      "text": "Aspirin 81 mg PO"
+      "id": "ord_now_atorvastatin",
+      "order": "Atorvastatin 10 mg PO daily"
     },
     {
-      "id": "ord_clopidogrel",
-      "category": "medication",
-      "text": "Clopidogrel (Plavix) 75 mg PO"
+      "id": "ord_now_asa",
+      "order": "ASA 81 mg PO daily"
     },
     {
-      "id": "ord_hydrocodone_prn",
-      "category": "medication",
-      "text": "Hydrocodone/acetaminophen 5/325 mg 1-2 tabs PO every 4 hours PRN pain"
+      "id": "ord_now_plavix",
+      "order": "Plavix 75 mg PO daily"
     },
     {
-      "id": "ord_morphine_prn",
-      "category": "medication",
-      "text": "Morphine 1-2 mg IVP every 2 hours PRN chest pain",
-      "details": "Preferred over oral analgesic given cardiac condition. Perform math calculation, consider dilution, and administer slowly."
+      "id": "ord_now_morphine",
+      "order": "Morphine 1-2 mg IVP q 2 hours prn for chest pain"
+    },
+    {
+      "id": "ord_now_lipid_a1c",
+      "order": "Lipid profile, Hemoglobin A1C in AM"
+    },
+    {
+      "id": "ord_now_smoking",
+      "order": "Smoking cessation referral ————————————————— Dr. Forssman, M.D."
+    },
+    {
+      "id": "ord_now_post_pci_set",
+      "order": "Post-PCI Order Set:\n• Coninuous cardiac monitoring and pulse oximetry\n• Vital signs every 15 minutes until sheath pulled and then every 15 minutes x 4, then every 30 minutes x2, then every hour x 2, then every 4 hours until discharge\n• Bedrest with affected extremity straight until sheath pulled. After sheath removal, bedrest and keep affected extremity straight for 6 hours. After bedrest completed, get patient up with assistance for the first time, then activity as tolerated\n• Clear liquids until sheath pulled then carb controlled, diabetic diet\n• Observe and palpate insertion site and affected extremity, including distal pulses, color, warmth and sensation every 15 minutes until sheath is pulled, then every 15 minutes x 4, then every 30 minutes x 2, then every hour x 2, then every 4 hours until discharge\n• Auscultate for bruit once sheath is removed, then after patient ambulates for the first time, then twice daily\n• 0.9% NS at 75 ml/hour\n• Discontinue Heparin infusion\n• Continue eptifibatide (Integrillin) infusion at 2 mcg/kg/minute and discontinue after current bottle complete\n• Hydrocodone/acetaminophen 5/325 tablet 1-2 tabs every 4 hours prn\n• Discontinue Nitroglycerin infusion\n• CBC, CK, CK MB, Troponin once 6 hours post procedure\n• BMP once in AM following procedure\n• ECG once post procedure\n• STAT ECG prn for chest pain\n• Consult Cardiac Rehabilitation\n• Notify provider if:\n  • Significant pain or bleeding at arterial site\n  • Excessive pain at arterial puncture site\n  • Change in distal limb color or warmth\n  • Chest pain or shortness of breath\n  • ECG changes or O2 sats less than 92%\n  • Systolic BP greater than 160 or less than 90 mmHg\n  • Heart rate greater than 100 or less than 50 beats/min"
     }
   ],
   "mar": [
