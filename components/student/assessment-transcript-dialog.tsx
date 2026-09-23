@@ -91,8 +91,8 @@ export function AssessmentTranscriptDialog({
           <DialogHeader className="shrink-0 pr-8">
             <DialogTitle>Assessment transcript</DialogTitle>
             <DialogDescription>
-              Paste a clinical transcript. TypeSafe Jev will fill related
-              assessment fields from the evidence in the text.
+              Paste a clinical transcript. The clinical AI assistant will fill
+              related assessment fields from the evidence in the text.
             </DialogDescription>
           </DialogHeader>
           <Textarea
