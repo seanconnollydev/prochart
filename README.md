@@ -10,6 +10,10 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+### Transcript → assessment fill (TypeSafe)
+
+Copy `.env.example` to `.env.local` and set `TYPESAFE_API_KEY` from [console.typesafe.ai](https://console.typesafe.ai). Without it, applying a transcript on the assessment page will fail.
+
 ## License
 
 Copyright (c) 2026 contributors to ProChart.

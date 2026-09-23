@@ -15,6 +15,7 @@ import {
 } from "@/lib/types/assessment-template";
 import type { AssessmentItemResponse } from "@/lib/types/assessment-submission";
 import { AssessmentFlowsheetLayout } from "@/components/student/assessment-flowsheet-layout";
+import { AssessmentTranscriptDialog } from "@/components/student/assessment-transcript-dialog";
 import { AssessmentWorksheetLayout } from "@/components/student/assessment-worksheet-layout";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -226,6 +227,27 @@ export function AssessmentRunner({
     setResetDialogOpen(false);
   }
 
+  function mergeTranscriptResponses(
+    incoming: Record<string, AssessmentItemResponse>,
+  ) {
+    setSyncError(null);
+    setDocument((d) => {
+      const nextResponses = { ...d.responses };
+      for (const [itemId, response] of Object.entries(incoming)) {
+        nextResponses[itemId] = {
+          ...nextResponses[itemId],
+          ...response,
+        };
+      }
+      return {
+        ...d,
+        responses: nextResponses,
+        updatedAt: nowIso(),
+      };
+    });
+    setFlowsheetRemountKey((k) => k + 1);
+  }
+
   if (!hydrated || !document) {
     return <p className="text-muted-foreground text-sm">Loading…</p>;
   }
@@ -280,6 +302,12 @@ export function AssessmentRunner({
             {layout === "flowsheet" && template.licenseNotice ? (
               <FlowsheetLicenseNoticePopover notice={template.licenseNotice} />
             ) : null}
+            {layout === "flowsheet" && (
+              <AssessmentTranscriptDialog
+                templateId={templateId}
+                onApply={mergeTranscriptResponses}
+              />
+            )}
             <Button
               type="button"
               variant="outline"
