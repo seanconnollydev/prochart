@@ -231,6 +231,48 @@ export function AssessmentRunner({
   }
 
   const groups = template.groups ?? [];
+  const isFlowsheet = layout === "flowsheet";
+  const canActOnResponses = hasMeaningfulResponses(document.responses);
+
+  const flowsheetActionCluster =
+    document.status !== "submitted" ? (
+      <div className="flex flex-wrap items-center gap-2">
+        {template.licenseNotice ? (
+          <FlowsheetLicenseNoticePopover notice={template.licenseNotice} />
+        ) : null}
+        <Button
+          type="button"
+          variant="outline"
+          disabled={!canActOnResponses}
+          onClick={() => setResetDialogOpen(true)}
+        >
+          Reset
+        </Button>
+        <FlowsheetPdfExportButton
+          disabled={!canActOnResponses}
+          template={template}
+          responses={document.responses}
+        />
+      </div>
+    ) : (
+      <div className="flex flex-wrap items-center gap-2">
+        {template.licenseNotice ? (
+          <FlowsheetLicenseNoticePopover notice={template.licenseNotice} />
+        ) : null}
+        <Badge>Submitted</Badge>
+        <FlowsheetPdfExportButton
+          disabled={!canActOnResponses}
+          template={template}
+          responses={document.responses}
+        />
+      </div>
+    );
+
+  const flowsheetToolbar = (
+    <div className="flex flex-wrap items-center justify-end gap-2">
+      {flowsheetActionCluster}
+    </div>
+  );
 
   return (
     <div
@@ -275,42 +317,24 @@ export function AssessmentRunner({
             )}
           </div>
         </div>
-        {document.status !== "submitted" ? (
-          <div className="flex flex-wrap items-center gap-2">
-            {layout === "flowsheet" && template.licenseNotice ? (
-              <FlowsheetLicenseNoticePopover notice={template.licenseNotice} />
-            ) : null}
-            <Button
-              type="button"
-              variant="outline"
-              disabled={!hasMeaningfulResponses(document.responses)}
-              onClick={() => setResetDialogOpen(true)}
-            >
-              Reset
-            </Button>
-            {layout === "flowsheet" && (
-              <FlowsheetPdfExportButton
-                disabled={!hasMeaningfulResponses(document.responses)}
-                template={template}
-                responses={document.responses}
-              />
-            )}
-          </div>
-        ) : (
-          <div className="flex flex-wrap items-center gap-2">
-            {layout === "flowsheet" && template.licenseNotice ? (
-              <FlowsheetLicenseNoticePopover notice={template.licenseNotice} />
-            ) : null}
-            <Badge>Submitted</Badge>
-            {layout === "flowsheet" && (
-              <FlowsheetPdfExportButton
-                disabled={!hasMeaningfulResponses(document.responses)}
-                template={template}
-                responses={document.responses}
-              />
-            )}
-          </div>
-        )}
+        {!isFlowsheet ? (
+          document.status !== "submitted" ? (
+            <div className="flex flex-wrap items-center gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                disabled={!canActOnResponses}
+                onClick={() => setResetDialogOpen(true)}
+              >
+                Reset
+              </Button>
+            </div>
+          ) : (
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge>Submitted</Badge>
+            </div>
+          )
+        ) : null}
       </div>
 
       <AlertDialog open={resetDialogOpen} onOpenChange={setResetDialogOpen}>
@@ -344,6 +368,7 @@ export function AssessmentRunner({
             responses={document.responses}
             setResponse={setResponse}
             setItemComment={setItemComment}
+            toolbar={flowsheetToolbar}
           />
         </div>
       ) : layout === "worksheet" ? (
