@@ -41,8 +41,8 @@ export default function RootLayout({
         publicSans.variable,
       )}
     >
-      <body className="bg-background text-foreground flex min-h-full flex-col">
-        <main className="mx-auto flex w-full max-w-6xl min-h-0 flex-1 flex-col px-4 py-6">
+      <body className="bg-background text-foreground flex h-dvh flex-col overflow-hidden">
+        <main className="mx-auto flex w-full max-w-screen-2xl min-h-0 flex-1 flex-col overflow-y-auto px-4 py-6">
           {children}
         </main>
         <SiteFooter />
