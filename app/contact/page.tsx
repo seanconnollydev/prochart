@@ -16,9 +16,10 @@ export default function ContactPage() {
           <ContactBackButton />
           <h1 className="text-2xl font-semibold">Contact</h1>
           <p className="text-muted-foreground text-sm">
-            We welcome feedback from faculty and simulation coordinators. Tell
-            us about assessment requests, how you use ProChart, features that
-            would help in your curriculum, or bugs you’ve run into.
+            We welcome feedback from students, faculty and simulation
+            coordinators. Tell us about assessment requests, how you use
+            ProChart, features that would help in your curriculum, or bugs
+            you&apos;ve run into.
           </p>
         </div>
         <ContactForm />
