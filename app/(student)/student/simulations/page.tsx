@@ -19,16 +19,16 @@ export default function StudentSimulationsPage() {
         backHref="/student"
         backLabel="Back to student area"
       />
-      <div className="grid gap-4 sm:grid-cols-1 md:max-w-lg">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {BUILTIN_SIMULATION_CATALOG.map((sim) => (
-          <Card key={sim.templateId}>
-            <CardHeader>
+          <Card key={sim.templateId} className="h-full">
+            <CardHeader className="flex-1">
               <CardTitle className="text-base">{sim.title}</CardTitle>
               {sim.description ? (
                 <CardDescription>{sim.description}</CardDescription>
               ) : null}
             </CardHeader>
-            <CardContent>
+            <CardContent className="mt-auto">
               <Button asChild size="sm">
                 <Link href={`/student/simulations/${sim.templateId}`}>
                   Open simulation
