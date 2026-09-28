@@ -28,12 +28,15 @@ ARISE scenarios use four levels:
 | ARISE scenario | Level | Local source PDF | Built-in template id |
 | -------------- | ----- | ---------------- | -------------------- |
 | Female Atypical Chest Pain | 4 | [`Atypical-Chest-Pain-Female_Simulation_Nursing_L4.pdf`](./Atypical-Chest-Pain-Female_Simulation_Nursing_L4.pdf) | `atypical_chest_pain_female_v1` |
+| End of Life | 1 | [`End-Of-Life_Simulation_Nursing_L1.pdf`](./End-Of-Life_Simulation_Nursing_L1.pdf) | `end_of_life_v1` |
 
 **Female Atypical Chest Pain — Level 4:** Post-PCI care. Students provide post-procedural care after cardiac angioplasty, develop discharge teaching after STEMI with PCI, recognize and respond to abnormal findings (including decreased perfusion of the leg), communicate therapeutically in a critical situation, and report pertinent information to the health care team.
 
+**End of Life — Level 1:** End-stage metastatic lung cancer. Students perform a full assessment focused on common end-of-life concerns (pain, dyspnea, GI symptoms, skin breakdown, advance directives), communicate therapeutically with the patient and mother about hospice and conflicting goals of care, and implement hospitalist admission orders.
+
 Implementation files:
 
-- Template data: [`lib/simulations/atypical-chest-pain-female.generated.json`](../lib/simulations/atypical-chest-pain-female.generated.json)
+- Template data: [`lib/simulations/atypical-chest-pain-female.generated.json`](../lib/simulations/atypical-chest-pain-female.generated.json), [`lib/simulations/end-of-life.generated.json`](../lib/simulations/end-of-life.generated.json)
 - Catalog entry: [`lib/simulations/constants.ts`](../lib/simulations/constants.ts)
 
 ## Suggested attribution

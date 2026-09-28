@@ -1,9 +1,11 @@
 import type { SimulationTemplate } from "@/lib/types/simulation-template";
 import { tryNormalizeSimulationTemplate } from "@/lib/types/simulation-template";
 import atypicalChestPainFemale from "./atypical-chest-pain-female.generated.json";
+import endOfLife from "./end-of-life.generated.json";
 
 const rawBuiltins: Record<string, unknown> = {
   atypical_chest_pain_female_v1: atypicalChestPainFemale,
+  end_of_life_v1: endOfLife,
 };
 
 export const BUILTIN_SIMULATION_TEMPLATE_IDS = Object.keys(

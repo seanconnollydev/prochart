@@ -1,0 +1,681 @@
+{
+  "schemaVersion": "simulationTemplate@0.1",
+  "id": "end_of_life_v1",
+  "title": "End of Life",
+  "description": "End-of-life care simulation. Laura C. Anderson, a 35-year-old with end-stage metastatic lung cancer, arrives in the ED with decreased level of consciousness and respiratory difficulty. Students assess common end-of-life symptoms, communicate therapeutically with Laura and her mother about hospice and advance directives, and implement hospitalist admission orders.",
+  "createdAt": "2016-10-03T00:00:00.000Z",
+  "updatedAt": "2016-10-03T00:00:00.000Z",
+  "status": "published",
+  "meta": {
+    "skillFocus": "End of Life Care",
+    "discipline": "Nursing",
+    "level": 1,
+    "estimatedTimeMinutes": 60,
+    "debriefingTimeMinutes": 60
+  },
+  "learningObjectives": [
+    {
+      "id": "lo_1",
+      "text": "Communicate effectively and compassionately with the patient, family, and health care team members about end-of-life issues"
+    },
+    {
+      "id": "lo_2",
+      "text": "Recognize one's own attitudes, feelings, values, and expectations about death and the individual, cultural, and spiritual diversity existing in these beliefs and customs"
+    },
+    {
+      "id": "lo_3",
+      "text": "Demonstrate respect for the patient's views and wishes during end-of-life care"
+    },
+    {
+      "id": "lo_4",
+      "text": "Assess symptoms (e.g., pain, dyspnea, constipation, anxiety, fatigue, nausea/vomiting, skin breakdown and altered cognition) commonly experienced by patients at the end of life and intervene appropriately according to evidence based palliative care practices"
+    },
+    {
+      "id": "lo_5",
+      "text": "Apply legal and ethical principles in end-of-life care, recognizing the influence of personal values, professional codes, and patient preferences"
+    },
+    {
+      "id": "lo_6",
+      "text": "Address spiritual health during end-of-life care"
+    }
+  ],
+  "curriculumMapping": [
+    {
+      "id": "cm_wtcs",
+      "category": "WTCS Nursing Program Outcomes",
+      "outcomes": [
+        "Implement one's role as a nurse in ways that reflect integrity, responsibility, ethical practices, and an evolving professional identity as a nurse committed to evidence-based practice, caring, advocacy and quality care",
+        "Demonstrate appropriate written, verbal, and nonverbal communication in a variety of clinical contexts",
+        "Integrate social, mathematical, and physical sciences, pharmacology, and pathophysiology in clinical decision making",
+        "Provide patient centered care by utilizing the nursing process across diverse populations and health care settings",
+        "Minimize risk of harm to patients, members of the healthcare team and self through safe individual performance and participation in system effectiveness",
+        "Lead the multidisciplinary health care team to provide effective patient care throughout the lifespan",
+        "Use information and technology to communicate, manage data, mitigate error, and support decision-making"
+      ]
+    },
+    {
+      "id": "cm_fundamentals",
+      "category": "Nursing Fundamentals",
+      "outcomes": [
+        "Maintain a safe, effective care environment for adults of all ages",
+        "Use appropriate communication techniques",
+        "Differentiate scopes of practice within the nursing profession",
+        "Use the nursing process",
+        "Provide nursing care for patients with comfort alterations",
+        "Provide nursing care for patients with nutritional, fluid, and electrolytes disturbances",
+        "Provide nursing care for patients with commonly occurring alterations in elimination patterns",
+        "Provide nursing care for patients and families experiencing grief and loss",
+        "Provide nursing care for patients with alterations in oxygenation",
+        "Provide nursing care for patients with sleep/rest/mobility alterations",
+        "Adapt nursing practice to meet the needs of diverse patients in a variety of settings",
+        "Provide nursing care for patients with integumentary disorders"
+      ]
+    }
+  ],
+  "patient": {
+    "displayName": "Laura C. Anderson",
+    "dateOfBirth": "04/16/19XX",
+    "age": 35,
+    "mrn": "0912",
+    "gender": "Female",
+    "height": "152.4 cm (65 inches)",
+    "weight": "47.62 kg (105 lbs)",
+    "codeStatus": "Full resuscitation",
+    "primaryLanguage": "English",
+    "allergies": ["NKDA"],
+    "currentMedications": ["None"],
+    "admittingDiagnoses": [
+      "Chronic Pain, neoplasm related (G89.3)"
+    ],
+    "medicalHistory": [
+      "Metastatic Lung Cancer (C34.0)"
+    ]
+  },
+  "setup": {
+    "insideRoom": [
+      "Patient is lying in bed, hospital exam room setting",
+      "Hand sanitizer or sink",
+      "Phone to call provider"
+    ],
+    "outsideRoom": [
+      "A printed copy of the Advance Directive form located in Appendix A"
+    ],
+    "patientSetup": [
+      "Wearing hospital gown",
+      "Moulage to appear gray, thin and emaciated",
+      "Bandana/turban on head (no hair)",
+      "ID band with QR code",
+      "Bible and rosary by bed (Catholic spiritual practice)",
+      "Nasal cannula in place and set to O2 1L/min",
+      "Bowel sounds: very hypoactive",
+      "Lung sounds: crackles",
+      "Heart sounds: normal S1S2"
+    ],
+    "monitorSettings": {
+      "initialVitals": {
+        "BP": "154/74",
+        "HR": "130",
+        "RR": "25",
+        "O2Sat": "89% on O2 1L",
+        "Temp": "38.1°C",
+        "Pain": "Severe / poorly managed"
+      },
+      "notes": [
+        "No bedside monitor in this scenario",
+        "Vitals: BP=154/74 T=38.1 C HR=130 RR=25 O2=89% on O2 1L/min",
+        "O2 sat can increase as student increases O2 flow rate but keep in low 90s",
+        "Mom (Jane Beckman) is present during this scenario"
+      ]
+    },
+    "supplies": {
+      "general": [
+        "Equipment to obtain vitals including oxygen saturation",
+        "Phone",
+        "Wound assessment tool(s)"
+      ],
+      "medications": [
+        "Hydromorphone 0.5 mg IV",
+        "Fentanyl patch 25 mcg",
+        "Oxycodone ER 80 mg PO",
+        "Docusate sodium 100 mg PO",
+        "Compazine (prochlorperazine) 10 mg PO",
+        "Dexamethasone 4 mg PO"
+      ]
+    }
+  },
+  "historyAndPhysical": {
+    "displayName": "Laura C. Anderson",
+    "mrn": "0912",
+    "dateOfBirth": "04/16/19XX",
+    "chiefComplaint": "Decrease in level of consciousness and respiratory difficulty",
+    "hpi": "This is a 35-year-old female brought to the ER with decrease in level of consciousness and respiratory difficulty. She has end stage lung cancer. Biopsy of right lower lobe 9 months ago revealed carcinoma that has now metastasized to the bone and brain. The patient has received eight monthly cycles of chemotherapy but requested hospice services one week ago according to her oncologist, Dr. Benton. She is accompanied by her mother who states she wants \"everything possible done for her daughter.\" No advance directives are in place.",
+    "pastMedicalHistory": "Lung Cancer with metastasis to brain and bone",
+    "pastSurgicalHistory": "No previous surgeries documented.",
+    "recentHospitalizations": "Not documented.",
+    "medications": [
+      "Fentanyl patch 25 mcg every 72 hours for pain",
+      "Oxycodone ER 80 mg PO every 12 hours PRN for pain",
+      "Docusate sodium 100 mg PO BID for constipation",
+      "Compazine 10mg PO every 4-6 hours for nausea PRN"
+    ],
+    "allergies": ["NKDA"],
+    "familyHistory": "Single; no children; lives alone. Mother Jane Beckman is emergency contact. Father (Jane's husband) passed away.",
+    "reviewOfSystems": [
+      {
+        "system": "HEENT",
+        "findings": "Mother reports change in level of consciousness. Denies headaches or change in vision."
+      },
+      {
+        "system": "Respiratory",
+        "findings": "Complains of productive cough of white, blood streaked sputum and worsening shortness of breath. Complains of chest pain worse on inspiration."
+      },
+      {
+        "system": "Cardiovascular",
+        "findings": "Denies palpitations."
+      },
+      {
+        "system": "Peripheral Vascular",
+        "findings": "Denies claudication, leg cramps, paresthesias or edema."
+      },
+      {
+        "system": "Gastrointestinal",
+        "findings": "Mother reports \"no appetite\" and \"has been losing a lot of weight.\" Patient complains of nausea and vomiting relieved with Compazine. Patient complains of constipation that she treats with docusate sodium."
+      },
+      {
+        "system": "Genitourinary",
+        "findings": "Patient reports dark, concentrated urine but no dysuria or hematuria."
+      }
+    ],
+    "examVitals": {
+      "BP": "154/74",
+      "Temp": "38.1°C",
+      "Pulse": "130",
+      "Respirations": "25",
+      "O2Sat": "85% on RA (paramedics); 89% on O2 1L in room",
+      "Height": "162.5 cm (65 inches)",
+      "Weight": "47.62 kg (105 lbs)"
+    },
+    "physicalExam": [
+      {
+        "system": "General Appearance",
+        "findings": "35-year-old female who appears emaciated and withdrawn. Alert but drowsy. Avoided eye contact and stated, \"Just let me die.\""
+      },
+      {
+        "system": "HEENT",
+        "findings": "Unremarkable, PERRLA"
+      },
+      {
+        "system": "Neurological",
+        "findings": "Eyes open to speech, oriented x3. Visibly fatigued. Flat affect. GCS 14."
+      },
+      {
+        "system": "Cardiovascular",
+        "findings": "Normal heart sounds. No murmurs."
+      },
+      {
+        "system": "Respiratory",
+        "findings": "Course crackles throughout with occasional wheeze."
+      },
+      {
+        "system": "Abdomen",
+        "findings": "Hypoactive, non-distended."
+      },
+      {
+        "system": "Vascular/Extremities",
+        "findings": "Strength 2/5. Sensation and reflexes intact. Skin dry."
+      },
+      {
+        "system": "Rectal",
+        "findings": "Deferred."
+      }
+    ],
+    "assessmentAndPlan": "End stage cancer; end of life.\n• Admit to medical floor for pain management.\n• Initiate home medications.\n• Hydromorphone IV 0.5mg STAT and every 2 hours PRN for severe pain.\n• Dexamethasone 20 mg PO.\n• Bedrest.\n• Diet as tolerated.\n• Oxygen therapy to maintain O2 sat >90%.\n• Consult for respiratory therapy.\n• Palliative care consult.\n\nI discussed with patient and mother her current end-stage lung cancer status and recommended hospice care, initiation of advance directives and DNR status. No decision was made so will order follow-up with palliative care consult.\n\nLaboratory and diagnostic studies: ABGs STAT, CBC, Chem 7.",
+    "signedBy": "Dr. Bennett, M.D."
+  },
+  "orders": [
+    {
+      "id": "ord_admit",
+      "date": "Today",
+      "time": "Now",
+      "order": "Admit to medical floor"
+    },
+    {
+      "id": "ord_bedrest",
+      "order": "Bedrest"
+    },
+    {
+      "id": "ord_diet",
+      "order": "Diet as tolerated"
+    },
+    {
+      "id": "ord_rt_consult",
+      "order": "Respiratory therapy consult"
+    },
+    {
+      "id": "ord_o2",
+      "order": "Maintain O2 sat > 90%, start O2 via NC at 2 L and titrate prn"
+    },
+    {
+      "id": "ord_abg",
+      "order": "ABGs STAT"
+    },
+    {
+      "id": "ord_palliative",
+      "order": "Palliative Care Consult"
+    },
+    {
+      "id": "ord_hydromorphone",
+      "order": "Hydromorphone 0.5mg IV every 2 hours PRN for severe pain"
+    },
+    {
+      "id": "ord_fentanyl",
+      "order": "Fentanyl patch 25 mcg every 72 hours for pain"
+    },
+    {
+      "id": "ord_oxycodone",
+      "order": "Oxycodone ER 80 mg PO every 12 hours PRN for pain"
+    },
+    {
+      "id": "ord_docusate",
+      "order": "Docusate sodium 100 mg PO BID for constipation"
+    },
+    {
+      "id": "ord_compazine",
+      "order": "Compazine 10mg PO every 4-6 hours for nausea PRN"
+    },
+    {
+      "id": "ord_dexamethasone",
+      "order": "Dexamethasone 4 mg PO daily"
+    },
+    {
+      "id": "ord_advance_directives",
+      "order": "Obtain advanced directives"
+    },
+    {
+      "id": "ord_labs",
+      "order": "CBC, Chem 7"
+    },
+    {
+      "id": "ord_signature",
+      "order": "———————————————— Dr. Bennett, M.D."
+    }
+  ],
+  "mar": [
+    {
+      "id": "mar_fentanyl",
+      "order": "Fentanyl patch 25 mcg every 72 hours for pain"
+    },
+    {
+      "id": "mar_oxycodone",
+      "order": "Oxycodone ER 80 mg PO every 12 hours PRN for pain"
+    },
+    {
+      "id": "mar_docusate",
+      "order": "Docusate sodium 100 mg PO BID for constipation"
+    },
+    {
+      "id": "mar_compazine",
+      "order": "Compazine 10mg PO every 4-6 hours for nausea PRN"
+    },
+    {
+      "id": "mar_hydromorphone",
+      "order": "Hydromorphone 0.5mg IV every 2 hours prn for severe pain"
+    },
+    {
+      "id": "mar_dexamethasone",
+      "order": "Dexamethasone 4 mg PO daily"
+    }
+  ],
+  "labPanels": [],
+  "imagingResults": [],
+  "ecgResults": [],
+  "progressNotes": [],
+  "states": [
+    {
+      "id": "state_1",
+      "stateNumber": 1,
+      "title": "Patient Assessment",
+      "patientOverview": "Patient is drowsy and is in severe pain that is not being managed by current medication. She desires hospice and states \"just want to stop hurting,\" but her mom still wants everything done. No advance directives are in place and patient is full code. End of life concerns include: pain, shortness of breath, anxiety/fear/depression, nausea, constipation, no appetite/weight loss, fever. Patient also has Stage 1 pressure ulcer on gluteus that has not yet been noticed.",
+      "expectedStudentBehaviors": [
+        "Introduce themselves",
+        "Verify the patient (Scan QR Code: Patient ID)",
+        "Obtain vital signs",
+        "Students must enter vitals on the iPad, but the accuracy of those vitals are not tied to iPad programming",
+        "Assess chief complaint: pain",
+        "Assess respiratory status and relate to patient condition",
+        "Titrate oxygen therapy",
+        "Perform a thorough skin assessment (Scan QR Code: Sacral)",
+        "Recognize Stage 1 pressure ulcer on gluteus and implement appropriate interventions for an end of life patient",
+        "Assess GI status: hypoactive bowel sounds, nausea, lack of appetite",
+        "Communicate therapeutically with mom and patient about end of life issues such as hospice and pain control; DNR; and advance directives",
+        "May watch patient education video about advance directives with the patient and/or mom",
+        "May assist patient to complete the advance directive form located in Appendix A",
+        "Call provider to advocate for pain medications",
+        "May address spiritual health and call a chaplain or pastor"
+      ],
+      "technicianPrompts": [
+        {
+          "id": "tp1_initial",
+          "trigger": "initial",
+          "response": "Patient is drowsy with flat, withdrawn affect."
+        },
+        {
+          "id": "tp1_sleep",
+          "trigger": "patient responses",
+          "response": "\"Just let me sleep.\""
+        },
+        {
+          "id": "tp1_hurts",
+          "trigger": "patient responses",
+          "response": "\"It hurts so bad, nothing helps.\""
+        },
+        {
+          "id": "tp1_stop_hurting",
+          "trigger": "patient responses",
+          "response": "\"I just want to stop hurting.\""
+        },
+        {
+          "id": "tp1_advance_directives",
+          "trigger": "if students assist with advanced directive form",
+          "response": "Use the completed copy (Appendix B) as prompts for answering the questions."
+        },
+        {
+          "id": "tp1_mom_life",
+          "trigger": "mother actor",
+          "response": "\"She still has a lot of life to live. I want everything done for her.\""
+        },
+        {
+          "id": "tp1_mom_floor",
+          "trigger": "mother actor",
+          "response": "\"I found her lying on the floor this morning. She barely recognized me.\""
+        },
+        {
+          "id": "tp1_mom_contact",
+          "trigger": "mother actor",
+          "response": "\"I am the emergency contact for Laura.\""
+        },
+        {
+          "id": "tp1_mom_alone",
+          "trigger": "mother actor",
+          "response": "\"My husband passed away. It's just Laura and me now.\""
+        },
+        {
+          "id": "tp1_mom_meds",
+          "trigger": "mother actor",
+          "response": "\"She uses a Fentanyl patch and oxycodone for pain.\""
+        },
+        {
+          "id": "tp1_mom_directives",
+          "trigger": "mother actor",
+          "response": "\"We don't need advanced directives. Do everything you can!\""
+        }
+      ],
+      "facilitatorQuestions": [
+        "What are your concerns based on your pain assessment findings?",
+        "What risk factors does Laura have for skin breakdown? How would you describe the skin changes on her gluteus? What interventions should be implemented?",
+        "What are some possible causes for Laura's constipation?",
+        "What are some possible causes for Laura's nausea and lack of appetite?",
+        "What stage of grief do you think Laura is experiencing today?",
+        "What stage of grief do you think Jane (her mom) is experiencing today?",
+        "What is hospice care? How would it benefit Laura and Jane?",
+        "What are \"comfort cares?\"",
+        "What are advance directives? How would they benefit Laura?",
+        "How can spirituality be addressed with Laura and Jane?",
+        "What is Laura's fluid and nutritional status? Are any interventions required at this time?"
+      ],
+      "tabContentChanges": [
+        {
+          "tab": "Vitals",
+          "condition": "before Patient ID scan",
+          "content": "You must verify the patient before vitals can be taken."
+        },
+        {
+          "tab": "H&P / Orders / MAR / Labs / Imaging / Progress Notes",
+          "condition": "State 1",
+          "content": "Not available"
+        },
+        {
+          "tab": "Health Care Directives",
+          "condition": "State 1",
+          "content": "Patient Education Video and blank Advance Directive Form (Appendix A) available."
+        },
+        {
+          "tab": "Level Up",
+          "condition": "after Patient ID scan, vitals entered, and Sacral QR scanned",
+          "content": "New orders have been received."
+        }
+      ],
+      "levelUpTriggers": [
+        {
+          "id": "lu1_assessment_complete",
+          "condition": "QR Code: Patient ID scanned AND vitals entered AND QR Code: Sacral scanned",
+          "advancesToStateId": "state_2"
+        }
+      ]
+    },
+    {
+      "id": "state_2",
+      "stateNumber": 2,
+      "title": "New Orders from the Hospitalist",
+      "patientOverview": "The student receives a message that reads, \"New orders have been received.\" The student(s) should review and implement the new admission orders. The patient continues to be drowsy and in pain. The patient wants to stop treatment for cancer and go home to die peacefully. The mother continues to want everything done for Laura.",
+      "expectedStudentBehaviors": [
+        "Prioritize implementation of new orders",
+        "Call RT for consult",
+        "Call palliative care for consult",
+        "Titrate oxygen PRN",
+        "Call lab for lab work",
+        "Determine what medications should be administered at this time"
+      ],
+      "technicianPrompts": [
+        {
+          "id": "tp2_hydromorphone_help",
+          "trigger": "patient responses",
+          "response": "\"How is hydromorphone going to help me?\""
+        },
+        {
+          "id": "tp2_hydromorphone_diff",
+          "trigger": "patient responses",
+          "response": "\"How is hydromorphone different from the oxycodone and Fentanyl that I'm already on?\""
+        },
+        {
+          "id": "tp2_side_effects",
+          "trigger": "patient responses",
+          "response": "\"Are there any side effects from the hydromorphone?\""
+        },
+        {
+          "id": "tp2_dexamethasone",
+          "trigger": "patient responses",
+          "response": "\"How will the Dexamethasone help me?\""
+        },
+        {
+          "id": "tp2_stop_hurting",
+          "trigger": "patient responses",
+          "response": "\"I just want to stop hurting.\""
+        },
+        {
+          "id": "tp2_refuse_labs",
+          "trigger": "when labs or ABGs offered",
+          "response": "Patient refuses lab work and ABGs stating, \"I don't want anyone else poking me.\""
+        },
+        {
+          "id": "tp2_queasy",
+          "trigger": "patient responses",
+          "response": "\"I feel queasy.\""
+        },
+        {
+          "id": "tp2_bloated",
+          "trigger": "patient responses",
+          "response": "\"I feel bloated.\""
+        },
+        {
+          "id": "tp2_bathroom",
+          "trigger": "patient responses",
+          "response": "\"I haven't been able to go to the bathroom.\""
+        },
+        {
+          "id": "tp2_hospice",
+          "trigger": "patient responses",
+          "response": "\"When will the hospice nurse get here? I want to talk to her.\""
+        },
+        {
+          "id": "tp2_mom_conflict",
+          "trigger": "patient responses",
+          "response": "\"I just want to go home, but my mom still wants everything done for me. What should I do?\""
+        },
+        {
+          "id": "tp2_die_home",
+          "trigger": "patient responses",
+          "response": "\"I want to die at home, not here in the hospital.\""
+        },
+        {
+          "id": "tp2_dnr_secret",
+          "trigger": "patient responses",
+          "response": "\"I want to be DNR, but don't tell my mother. It will upset her.\""
+        },
+        {
+          "id": "tp2_mom_pain",
+          "trigger": "mother actor",
+          "response": "\"Will the hydromorphone take away all her pain?\""
+        },
+        {
+          "id": "tp2_mom_labs",
+          "trigger": "mother actor",
+          "response": "\"Why hasn't any lab work been done?\""
+        },
+        {
+          "id": "tp2_mom_hospice",
+          "trigger": "mother actor",
+          "response": "\"We don't want to see the hospice nurse. We're not giving up on her!\""
+        },
+        {
+          "id": "tp2_mom_directives",
+          "trigger": "mother actor",
+          "response": "\"Laura doesn't need to complete the advanced directives. I still want everything possible done for her.\""
+        }
+      ],
+      "facilitatorQuestions": [
+        "Does Laura need oxygen administration? Why or why not?",
+        "Explain the difference between hydromorphone IV, oxycodone ER and Fentanyl patch?",
+        "How will the dexamethasone help Laura? (Answer: It will help reduce ICP, nausea and bone pain.)",
+        "What medications should be administered at this time? Why?",
+        "How will you manage Laura's constipation?",
+        "How will you manage Laura's nausea?",
+        "Who should make the decisions about hospice care and advanced directives?",
+        "What should you do when family member's wishes contradict patient wishes?"
+      ],
+      "tabContentChanges": [
+        {
+          "tab": "H&P",
+          "condition": "State 2",
+          "content": "Full History & Physical from Dr. Bennett available."
+        },
+        {
+          "tab": "Orders",
+          "condition": "State 2",
+          "content": "New admission orders from Dr. Bennett available."
+        },
+        {
+          "tab": "MAR",
+          "condition": "State 2",
+          "content": "Home medications plus hydromorphone and dexamethasone available."
+        },
+        {
+          "tab": "Health Care Directives",
+          "condition": "State 2",
+          "content": "Shows a copy of the completed advance directive form (Appendix B)."
+        },
+        {
+          "tab": "Exit",
+          "condition": "when Exit tab tapped",
+          "content": "Scenario objectives have been met. Are you sure you want to exit the game?"
+        }
+      ],
+      "levelUpTriggers": []
+    }
+  ],
+  "debrief": {
+    "questions": [
+      {
+        "id": "dbq_1",
+        "text": "How did you feel this scenario went?"
+      },
+      {
+        "id": "dbq_2",
+        "text": "Review understanding of learning objective: Communicate effectively and compassionately with the patient, family, and health care team members about end-of-life issues.",
+        "linkedObjectiveId": "lo_1",
+        "subQuestions": [
+          "What therapeutic techniques did you utilize today? Were they effective?",
+          "If you could \"do over,\" would you say anything differently to Laura or her mom?"
+        ]
+      },
+      {
+        "id": "dbq_3",
+        "text": "Review understanding of learning objective: Recognize one's own attitudes, feelings, values, and expectations about death and the individual, cultural, and spiritual diversity existing in these beliefs and customs.",
+        "linkedObjectiveId": "lo_2",
+        "subQuestions": [
+          "What did you learn about your own attitudes, feelings, values and expectation about death while participating in this scenario?"
+        ]
+      },
+      {
+        "id": "dbq_4",
+        "text": "Review understanding of learning objective: Demonstrate respect for the patient's views and wishes during end-of-life care.",
+        "linkedObjectiveId": "lo_3",
+        "subQuestions": [
+          "Whose decisions should be followed regarding Laura's care?",
+          "How did you advocate for Laura's wishes about her end of life care?"
+        ]
+      },
+      {
+        "id": "dbq_5",
+        "text": "Review understanding of learning objective: Assess symptoms (e.g., pain, dyspnea, constipation, anxiety, fatigue, nausea/vomiting, skin breakdown and altered cognition) commonly experienced by patients at the end of life and intervene appropriately according to evidence based palliative care practices.",
+        "linkedObjectiveId": "lo_4",
+        "subQuestions": [
+          "Pain: Explain how you performed a focused pain assessment on Laura. Do you believe her pain is well managed? Why or why not? How will hydromorphone IV and dexamethasone PO improve Laura's pain management?",
+          "Respiratory status: What was Laura's respiratory status? How did you address it?",
+          "GI status: How did you assess Laura's GI status? How does her GI status relate to her overall condition and treatments?",
+          "Anxiety/Fear/Depression/Cognitive status: What was Laura's psychosocial status? What stages of grief are Laura and her mom demonstrating today? Do you think Laura is demonstrating any signs of depression? Delirium? Explain?",
+          "Skin integrity: What are Laura's risk factors for skin breakdown? What number do you calculate using the Braden scale and what level of risk does this indicate? Did you find any areas of skin breakdown? How would you describe her sacral area? What interventions could be implemented to prevent further skin breakdown?"
+        ]
+      },
+      {
+        "id": "dbq_6",
+        "text": "Review understanding of learning objective: Apply legal and ethical principles in end-of-life care, recognizing the influence of personal values, professional codes, and patient preferences.",
+        "linkedObjectiveId": "lo_5",
+        "subQuestions": [
+          "Compare palliative care/hospice services.",
+          "Compare what is contained in a \"DNR,\" \"Living Will\" and \"Power of Attorney for Health Care.\"",
+          "What are the goals for end of life care? Are these goals currently being met for Laura?"
+        ]
+      },
+      {
+        "id": "dbq_7",
+        "text": "Review understanding of learning objective: Address spiritual health during end-of-life care",
+        "linkedObjectiveId": "lo_6",
+        "subQuestions": [
+          "What spiritual cues did you notice when interacting with Laura and her mom?",
+          "How could spiritual wellness be incorporated into end of life care for Laura and Jane?"
+        ]
+      },
+      {
+        "id": "dbq_8",
+        "text": "Tie the scenario back to the nursing process in a large group discussion. Concept mapping can be used to facilitate discussion.",
+        "subQuestions": [
+          "Identify priority nursing problems you identified for Laura.",
+          "Create a patient centered goal for each nursing problem you identified.",
+          "Discuss potential focused assessments for each nursing problem.",
+          "Discuss priority nursing interventions for each nursing diagnosis.",
+          "Re-evaluate the simulation in terms of the nursing process; what was actually accomplished? What could be improved in the future?"
+        ]
+      },
+      {
+        "id": "dbq_9",
+        "text": "Summary/Take Away Points",
+        "subQuestions": [
+          "\"Today you cared for a patient with end stage lung cancer who arrived in the ED with poorly managed pain. You addressed several end of life issues such as pain; dyspnea; advance directives; and an ethical dilemma when the patient's wishes are different from family's wishes. What is one thing you learned from participating in this scenario that you will take with you into your nursing practice?\" (Each student must share something different from what the others share.)"
+        ]
+      }
+    ],
+    "facilitatorNotes": "Debriefing technique is based on INACSL Standards for Debriefing and NLN Theory-Based Debriefing by Dreifuerst."
+  },
+  "licenseNotice": "This work by the Wisconsin Technical College System TAACCCT IV Consortium is licensed under a Creative Commons Attribution 4.0 International license. Medication information from National Library of Medicine: Daily Med at http://dailymed.nlm.nih.gov/dailymed/. Advanced directives document and \"Honoring Choices\" video available from the Wisconsin Medical Society, Honoring Choices Wisconsin, at https://www.wisconsinmedicalsociety.org/professional/hcw/. End of Life learning objectives from Peaceful Death: Recommended Competencies and Curricular Guidelines for End of Life Nursing Care, End of Life Nursing Education Consortium / AACN."
+}
