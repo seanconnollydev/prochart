@@ -1,6 +1,10 @@
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 const GNU_AGPL_URL = "https://www.gnu.org/licenses/agpl-3.0.html";
+
+const linkClassName =
+  "text-foreground underline underline-offset-4 hover:no-underline";
 
 export function SiteFooter({ className }: { className?: string }) {
   return (
@@ -10,13 +14,18 @@ export function SiteFooter({ className }: { className?: string }) {
         className,
       )}
     >
+      <p className="mb-3">
+        <Link href="/contact" className={linkClassName}>
+          Contact
+        </Link>
+      </p>
       <p>
         This software is licensed under the terms of the{" "}
         <a
           href={GNU_AGPL_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-foreground underline underline-offset-4 hover:no-underline"
+          className={linkClassName}
         >
           GNU Affero General Public License
         </a>{" "}
