@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Public_Sans } from "next/font/google";
-import { SiteFooter } from "@/components/site-footer";
 import { ToasterProvider } from "@/components/toaster-provider";
 import "./globals.css";
 import { cn } from "@/lib/utils";
@@ -45,7 +44,6 @@ export default function RootLayout({
         <main className="mx-auto flex w-full max-w-screen-2xl min-h-0 flex-1 flex-col overflow-y-auto px-4 py-6">
           {children}
         </main>
-        <SiteFooter />
         <ToasterProvider />
         <Analytics />
       </body>

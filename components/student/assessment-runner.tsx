@@ -5,10 +5,10 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { prepareFlowsheetTemplate } from "@/lib/assessments/flowsheet";
 import { buildFlowsheetExportRows } from "@/lib/assessments/flowsheet-export";
-import { exportFlowsheetAssessmentPdf } from "@/lib/assessments/flowsheet-pdf";
 import { groupPathLabels } from "@/lib/assessments/group-path";
 import { useLocalAssessmentSubmission } from "@/lib/hooks/use-local-assessment-submission";
 import { nowIso } from "@/lib/ids";
+import type { AssessmentSubmissionStorageScope } from "@/lib/local-storage";
 import {
   normalizeAssessmentTemplate,
   type AssessmentTemplate,
@@ -86,6 +86,9 @@ function FlowsheetPdfExportButton({
 }) {
   async function handleExportPdf() {
     try {
+      const { exportFlowsheetAssessmentPdf } = await import(
+        "@/lib/assessments/flowsheet-pdf"
+      );
       const prepared = prepareFlowsheetTemplate(templateForExport);
       const rows = buildFlowsheetExportRows(prepared, responses);
       await exportFlowsheetAssessmentPdf({
@@ -149,6 +152,13 @@ type Props = {
   backLabel?: string;
   /** When true, show submission status badges in the header. */
   showSubmissionStatus?: boolean;
+  /**
+   * `embedded` hides back/title chrome (parent provides assessment name).
+   * Default `standalone` keeps the full practice-area header.
+   */
+  mode?: "standalone" | "embedded";
+  /** Scopes localStorage so sim answers stay separate from standalone practice. */
+  storageScope?: AssessmentSubmissionStorageScope;
 };
 
 export function AssessmentRunner({
@@ -158,6 +168,8 @@ export function AssessmentRunner({
   backHref = "/student/assessments",
   backLabel = "Back to practice assessments",
   showSubmissionStatus = false,
+  mode = "standalone",
+  storageScope,
 }: Props) {
   const template = useMemo(
     () => normalizeAssessmentTemplate(templateRaw),
@@ -165,7 +177,9 @@ export function AssessmentRunner({
   );
 
   const { document, meta, setDocument, setSyncError, hydrated } =
-    useLocalAssessmentSubmission(templateId);
+    useLocalAssessmentSubmission(templateId, storageScope);
+
+  const embedded = mode === "embedded";
 
   const [resetDialogOpen, setResetDialogOpen] = useState(false);
   const [flowsheetRemountKey, setFlowsheetRemountKey] = useState(0);
@@ -269,10 +283,22 @@ export function AssessmentRunner({
     );
 
   const flowsheetToolbar = (
-    <div className="flex flex-wrap items-center justify-end gap-2">
+    <div
+      className={cn(
+        "flex flex-wrap items-center gap-2",
+        embedded && meta?.syncError ? "justify-between" : "justify-end",
+      )}
+    >
+      {embedded && meta?.syncError ? (
+        <p className="text-destructive min-w-0 flex-1 text-sm">
+          {meta.syncError}
+        </p>
+      ) : null}
       {flowsheetActionCluster}
     </div>
   );
+
+  const showOuterHeader = !isFlowsheet || !embedded;
 
   return (
     <div
@@ -286,56 +312,73 @@ export function AssessmentRunner({
           {previewBanner}
         </p>
       )}
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="flex min-w-0 flex-1 gap-2">
-          <Button
-            asChild
-            variant="ghost"
-            size="icon"
-            className="mt-1 size-9 shrink-0 sm:mt-0.5"
-          >
-            <Link href={backHref} aria-label={backLabel}>
-              <ArrowLeft className="size-4" aria-hidden />
-            </Link>
-          </Button>
-          <div className="min-w-0 flex-1">
-            <h1 className="text-2xl font-semibold break-words">
-              {template.title}
-            </h1>
-            {template.description && (
-              <p className="text-muted-foreground mt-1 text-sm">
-                {template.description}
-              </p>
-            )}
-            {showSubmissionStatus && (
-              <div className="mt-2 flex gap-2">
-                <Badge variant="secondary">{document.status}</Badge>
-              </div>
-            )}
-            {meta?.syncError && (
-              <p className="text-destructive mt-1 text-sm">{meta.syncError}</p>
-            )}
-          </div>
-        </div>
-        {!isFlowsheet ? (
-          document.status !== "submitted" ? (
-            <div className="flex flex-wrap items-center gap-2">
+      {showOuterHeader ? (
+        <div
+          className={cn(
+            "flex flex-wrap gap-4",
+            embedded
+              ? "shrink-0 items-center justify-end"
+              : "items-start justify-between",
+          )}
+        >
+          {!embedded ? (
+            <div className="flex min-w-0 flex-1 gap-2">
               <Button
-                type="button"
-                variant="outline"
-                disabled={!canActOnResponses}
-                onClick={() => setResetDialogOpen(true)}
+                asChild
+                variant="ghost"
+                size="icon"
+                className="mt-1 size-9 shrink-0 sm:mt-0.5"
               >
-                Reset
+                <Link href={backHref} aria-label={backLabel}>
+                  <ArrowLeft className="size-4" aria-hidden />
+                </Link>
               </Button>
+              <div className="min-w-0 flex-1">
+                <h1 className="text-2xl font-semibold break-words">
+                  {template.title}
+                </h1>
+                {template.description && (
+                  <p className="text-muted-foreground mt-1 text-sm">
+                    {template.description}
+                  </p>
+                )}
+                {showSubmissionStatus && (
+                  <div className="mt-2 flex gap-2">
+                    <Badge variant="secondary">{document.status}</Badge>
+                  </div>
+                )}
+                {meta?.syncError && (
+                  <p className="text-destructive mt-1 text-sm">
+                    {meta.syncError}
+                  </p>
+                )}
+              </div>
             </div>
-          ) : (
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge>Submitted</Badge>
-            </div>
-          )
-        ) : null}
-      </div>
+          ) : meta?.syncError ? (
+            <p className="text-destructive min-w-0 flex-1 text-sm">
+              {meta.syncError}
+            </p>
+          ) : null}
+          {!isFlowsheet ? (
+            document.status !== "submitted" ? (
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={!canActOnResponses}
+                  onClick={() => setResetDialogOpen(true)}
+                >
+                  Reset
+                </Button>
+              </div>
+            ) : (
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge>Submitted</Badge>
+              </div>
+            )
+          ) : null}
+        </div>
+      ) : null}
 
       <AlertDialog open={resetDialogOpen} onOpenChange={setResetDialogOpen}>
         <AlertDialogContent>

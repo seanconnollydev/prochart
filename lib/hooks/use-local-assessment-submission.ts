@@ -6,6 +6,7 @@ import {
   defaultMeta,
   readSubmission,
   writeSubmission,
+  type AssessmentSubmissionStorageScope,
 } from "../local-storage";
 import {
   emptyAssessmentSubmission,
@@ -27,12 +28,42 @@ function getStudentActorId(): string {
   return id;
 }
 
-export function useLocalAssessmentSubmission(templateId: string | undefined) {
+function scopeToKey(
+  storageScope?: AssessmentSubmissionStorageScope,
+): string {
+  if (storageScope?.kind === "simulation") {
+    return `sim:${storageScope.simulationTemplateId}`;
+  }
+  return "standalone";
+}
+
+function keyToScope(
+  scopeKey: string,
+): AssessmentSubmissionStorageScope | undefined {
+  if (scopeKey === "standalone") {
+    return undefined;
+  }
+  if (scopeKey.startsWith("sim:")) {
+    return {
+      kind: "simulation",
+      simulationTemplateId: scopeKey.slice("sim:".length),
+    };
+  }
+  return undefined;
+}
+
+export function useLocalAssessmentSubmission(
+  templateId: string | undefined,
+  storageScope?: AssessmentSubmissionStorageScope,
+) {
   const [wrapped, setWrapped] = useState<{
     document: AssessmentSubmission;
     meta: import("../types/local-meta").LocalDocumentMeta;
   } | null>(null);
   const [hydrated, setHydrated] = useState(false);
+
+  const scopeKey = scopeToKey(storageScope);
+  const resolvedScope = useMemo(() => keyToScope(scopeKey), [scopeKey]);
 
   const saveDebounced = useMemo(
     () =>
@@ -44,11 +75,11 @@ export function useLocalAssessmentSubmission(templateId: string | undefined) {
           if (!templateId) {
             return;
           }
-          writeSubmission(templateId, { document: doc, meta });
+          writeSubmission(templateId, { document: doc, meta }, resolvedScope);
         },
         400,
       ),
-    [templateId],
+    [templateId, resolvedScope],
   );
 
   useEffect(() => {
@@ -61,7 +92,10 @@ export function useLocalAssessmentSubmission(templateId: string | undefined) {
       return;
     }
     queueMicrotask(() => {
-      const existing = readSubmission<AssessmentSubmission>(templateId);
+      const existing = readSubmission<AssessmentSubmission>(
+        templateId,
+        resolvedScope,
+      );
       if (existing) {
         let doc = existing.document;
         let meta = existing.meta;
@@ -80,7 +114,7 @@ export function useLocalAssessmentSubmission(templateId: string | undefined) {
             syncedBasisAt: null,
             syncError: null,
           };
-          writeSubmission(templateId, { document: doc, meta });
+          writeSubmission(templateId, { document: doc, meta }, resolvedScope);
         }
         setWrapped({ document: doc, meta });
       } else {
@@ -92,14 +126,14 @@ export function useLocalAssessmentSubmission(templateId: string | undefined) {
         );
         const meta = defaultMeta(doc.updatedAt);
         setWrapped({ document: doc, meta });
-        writeSubmission(templateId, { document: doc, meta });
+        writeSubmission(templateId, { document: doc, meta }, resolvedScope);
       }
       setHydrated(true);
     });
     return () => {
       saveDebounced.flush();
     };
-  }, [templateId, saveDebounced]);
+  }, [templateId, resolvedScope, saveDebounced]);
 
   const setDocument = useCallback(
     (updater: (prev: AssessmentSubmission) => AssessmentSubmission) => {
@@ -131,11 +165,15 @@ export function useLocalAssessmentSubmission(templateId: string | undefined) {
           syncedBasisAt,
           syncError: null,
         };
-        writeSubmission(templateId, { document: w.document, meta });
+        writeSubmission(
+          templateId,
+          { document: w.document, meta },
+          resolvedScope,
+        );
         return { document: w.document, meta };
       });
     },
-    [templateId],
+    [templateId, resolvedScope],
   );
 
   const setSyncError = useCallback((message: string | null) => {
